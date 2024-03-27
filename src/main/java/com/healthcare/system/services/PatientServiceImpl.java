@@ -11,7 +11,7 @@ public class PatientServiceImpl implements PatientService{
     }
 
     @Override
-    public Patient findById(Integer id) {
+    public Patient findById(int id) {
         return patientRepository.findById(id);
     }
 
@@ -31,7 +31,7 @@ public class PatientServiceImpl implements PatientService{
     }
 
     @Override
-    public void deletePatientById(Integer id) {
+    public void deletePatientById(int id) {
         patientRepository.deleteById(id);
     }
 }
