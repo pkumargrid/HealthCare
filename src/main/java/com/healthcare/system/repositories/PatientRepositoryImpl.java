@@ -13,7 +13,7 @@ public class PatientRepositoryImpl implements PatientRepository{
         patients = new ArrayList<>();
     }
     @Override
-    public Patient findById(Integer id) {
+    public Patient findById(int id) {
         return patients.stream().filter(patient -> patient.getId() == id).findFirst().get();
     }
 
@@ -33,7 +33,7 @@ public class PatientRepositoryImpl implements PatientRepository{
     }
 
     @Override
-    public void deleteById(Integer id) {
+    public void deleteById(int id) {
         Patient patient = patients.stream().filter(patient1 -> patient1.getId() == id).findFirst().get();
         patients.remove(patient);
     }

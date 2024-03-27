@@ -3,17 +3,17 @@ package com.healthcare.system.entities;
 import java.util.List;
 
 public class Patient {
-    Integer id;
+    int id;
     String name;
     String password;
-    List<HealthProviders> healthProvidersList;
+    List<HealthProvider> healthProvidersList;
     List<Doctor> doctorList;
 
     public Integer getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -33,11 +33,11 @@ public class Patient {
         this.password = password;
     }
 
-    public List<HealthProviders> getHealthProvidersList() {
+    public List<HealthProvider> getHealthProvidersList() {
         return healthProvidersList;
     }
 
-    public void setHealthProvidersList(List<HealthProviders> healthProvidersList) {
+    public void setHealthProvidersList(List<HealthProvider> healthProvidersList) {
         this.healthProvidersList = healthProvidersList;
     }
 
