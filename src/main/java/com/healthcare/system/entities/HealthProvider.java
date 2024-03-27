@@ -1,5 +1,6 @@
 package com.healthcare.system.entities;
 
+
 import java.util.List;
 
 public class HealthProvider {
@@ -43,4 +44,5 @@ public class HealthProvider {
     public void setHealthRecords(List<HealthRecord> healthRecords) {
         this.healthRecords = healthRecords;
     }
+
 }
