@@ -2,7 +2,6 @@ package com.healthcare.system.repositories.implementation;
 
 import com.healthcare.system.entities.Nurse;
 import com.healthcare.system.repositories.NurseRepository;
-import com.healthcare.system.services.NurseServiceImpl;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,9 +1,11 @@
-package com.healthcare.system.services;
+package com.healthcare.system.services.implementation;
 
 import com.healthcare.system.entities.Patient;
 import com.healthcare.system.repositories.PatientRepository;
+import com.healthcare.system.services.PatientService;
+
 import java.util.List;
-public class PatientServiceImpl implements PatientService{
+public class PatientServiceImpl implements PatientService {
     private final PatientRepository patientRepository;
 
     public PatientServiceImpl(PatientRepository patientRepository) {

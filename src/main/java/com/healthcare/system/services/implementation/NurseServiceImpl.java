@@ -1,7 +1,8 @@
-package com.healthcare.system.services;
+package com.healthcare.system.services.implementation;
 
 import com.healthcare.system.entities.Nurse;
 import com.healthcare.system.repositories.NurseRepository;
+import com.healthcare.system.services.NurseService;
 
 import java.util.List;
 

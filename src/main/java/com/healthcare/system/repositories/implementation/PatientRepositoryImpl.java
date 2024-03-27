@@ -37,6 +37,12 @@ public class PatientRepositoryImpl implements PatientRepository {
         prevPatient.setHealthProvidersList(patient.getHealthProvidersList());
         prevPatient.setHealthRecordList(patient.getHealthRecordList());
         prevPatient.setPassword(patient.getPassword());
+        prevPatient.setId(patient.getId());
+        prevPatient.setDoctorList(patient.getDoctorList());
+        prevPatient.setName(patient.getName());
+        prevPatient.setNurse(patient.getNurse());
+        prevPatient.setPassword(patient.getPassword());
+        prevPatient.setHealthRecordList(patient.getHealthRecordList());
     }
 
     @Override

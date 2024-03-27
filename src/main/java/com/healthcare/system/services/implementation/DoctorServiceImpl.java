@@ -1,7 +1,8 @@
-package com.healthcare.system.services;
+package com.healthcare.system.services.implementation;
 
 import com.healthcare.system.entities.Doctor;
 import com.healthcare.system.repositories.DoctorRepository;
+import com.healthcare.system.services.DoctorService;
 
 import java.util.List;
 public class DoctorServiceImpl implements DoctorService {

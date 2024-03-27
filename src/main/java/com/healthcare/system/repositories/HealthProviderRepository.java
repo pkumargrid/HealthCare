@@ -1,8 +1,10 @@
-package com.healthcare.system.services;
+package com.healthcare.system.repositories;
 
 import com.healthcare.system.entities.HealthProvider;
+import java.util.List;
 
-public interface HealthProviderService {
+public interface HealthProviderRepository {
+
     void save(HealthProvider healthProvider);
 
     HealthProvider getById(int id);
@@ -14,4 +16,5 @@ public interface HealthProviderService {
     void updateById(int id, HealthProvider healthProvider);
 
     List<HealthProvider> findAll();
+
 }
