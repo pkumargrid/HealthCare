@@ -18,5 +18,7 @@ public interface DoctorService {
 
     void assignNurse(int id, Patient patient);
 
-    void attendTeleMedConsultation();
+    void confirmAppointment(int id);
+
+    void notifyReasonForComplaint(int id, String text);
 }

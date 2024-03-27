@@ -6,6 +6,16 @@ public class Reason {
 
     private String text;
 
+    private Complaint complaint;
+
+    public Complaint getComplaint() {
+        return complaint;
+    }
+
+    public void setComplaint(Complaint complaint) {
+        this.complaint = complaint;
+    }
+
     public Object getType() {
         return type;
     }

@@ -1,11 +1,10 @@
 package com.healthcare.system.entities;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class Appointment {
 
-
+    private boolean status;
     private  int id;
 
     public int getId() {
@@ -54,5 +53,13 @@ public class Appointment {
 
     public void setPatient(Patient patient) {
         this.patient = patient;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+    public boolean isStatus() {
+        return status;
     }
 }
