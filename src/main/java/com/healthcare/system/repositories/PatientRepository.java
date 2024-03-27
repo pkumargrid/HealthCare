@@ -8,6 +8,6 @@ public interface PatientRepository {
     Patient findById(int id);
     List<Patient> findAll();
     void save(Patient patient);
-    void update(Patient patient);
+    void update(int id, Patient patient);
     void deleteById(int id);
 }
