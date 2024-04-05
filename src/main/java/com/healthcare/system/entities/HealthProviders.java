@@ -3,7 +3,17 @@ package com.healthcare.system.entities;
 
 import java.util.List;
 
-public class HealthProvider {
+public class HealthProviders {
+
+    private int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     private List<Patient> patientList;
 

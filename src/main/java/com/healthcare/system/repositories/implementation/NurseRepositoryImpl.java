@@ -1,6 +1,8 @@
 package com.healthcare.system.repositories.implementation;
 
+import com.healthcare.system.entities.HealthRecord;
 import com.healthcare.system.entities.Nurse;
+import com.healthcare.system.entities.Patient;
 import com.healthcare.system.repositories.NurseRepository;
 
 import java.util.ArrayList;
@@ -36,4 +38,10 @@ public class NurseRepositoryImpl implements NurseRepository {
         Nurse nurse = nurseList.stream().filter(nurse1 -> nurse1.getId() == id).findFirst().get();
         nurseList.remove(nurse);
     }
+
+    @Override
+    public HealthRecord accessPatientRecord(Patient patient) {
+        return null;
+    }
+
 }

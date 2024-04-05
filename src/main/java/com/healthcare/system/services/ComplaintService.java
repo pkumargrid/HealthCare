@@ -2,6 +2,8 @@ package com.healthcare.system.services;
 
 import com.healthcare.system.entities.Complaint;
 
+import java.util.List;
+
 public interface ComplaintService {
     Complaint findById(int id);
 

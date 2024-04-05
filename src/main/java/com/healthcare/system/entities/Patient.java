@@ -3,23 +3,35 @@ package com.healthcare.system.entities;
 import java.util.List;
 
 public class Patient {
-<<<<<<< HEAD
-    int id;
-    String name;
-    String password;
-    List<HealthProvider> healthProvidersList;
-    List<Doctor> doctorList;
-=======
+
     private int id;
     private String name;
     private String password;
->>>>>>> health_provider
-
     private Nurse nurse;
     private List<HealthProviders> healthProvidersList;
     private List<Doctor> doctorList;
 
     private List<HealthRecord> healthRecordList;
+
+    private List<Appointment> appointmentList;
+
+    private List<Complaint> complaintList;
+
+    public List<Complaint> getComplaintList() {
+        return complaintList;
+    }
+
+    public void setComplaintList(List<Complaint> complaintList) {
+        this.complaintList = complaintList;
+    }
+
+    public List<Appointment> getAppointmentList() {
+        return appointmentList;
+    }
+
+    public void setAppointmentList(List<Appointment> appointmentList) {
+        this.appointmentList = appointmentList;
+    }
 
     public int getId() {
         return id;
@@ -45,11 +57,11 @@ public class Patient {
         this.password = password;
     }
 
-    public List<HealthProvider> getHealthProvidersList() {
+    public List<HealthProviders> getHealthProvidersList() {
         return healthProvidersList;
     }
 
-    public void setHealthProvidersList(List<HealthProvider> healthProvidersList) {
+    public void setHealthProvidersList(List<HealthProviders> healthProvidersList) {
         this.healthProvidersList = healthProvidersList;
     }
 

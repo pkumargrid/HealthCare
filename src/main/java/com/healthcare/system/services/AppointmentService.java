@@ -2,6 +2,8 @@ package com.healthcare.system.services;
 
 import com.healthcare.system.entities.Appointment;
 
+import java.util.List;
+
 public interface AppointmentService {
     Appointment findById(int id);
 

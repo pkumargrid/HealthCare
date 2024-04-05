@@ -15,7 +15,7 @@ public class Doctor {
 
     private List<Patient> patientList;
 
-    private HealthProvider healthProvider;
+    private HealthProviders healthProviders;
 
     private List<Complaint> complaintList;
 
@@ -61,12 +61,12 @@ public class Doctor {
         this.patientList = patientList;
     }
 
-    public HealthProvider getHealthProvider() {
-        return healthProvider;
+    public HealthProviders getHealthProvider() {
+        return healthProviders;
     }
 
-    public void setHealthProvider(HealthProvider healthProvider) {
-        this.healthProvider = healthProvider;
+    public void setHealthProvider(HealthProviders healthProviders) {
+        this.healthProviders = healthProviders;
     }
 
     public List<Complaint> getComplaintList() {

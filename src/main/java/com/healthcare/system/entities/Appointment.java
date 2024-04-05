@@ -1,5 +1,6 @@
 package com.healthcare.system.entities;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class Appointment {
@@ -15,27 +16,27 @@ public class Appointment {
         this.id = id;
     }
 
-    private LocalTime startTime;
+    private LocalDateTime startTime;
 
-    private LocalTime endTime;
+    private LocalDateTime endTime;
 
     private Doctor doctor;
 
     private Patient patient;
 
-    public LocalTime getStartTime() {
+    public LocalDateTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalTime startTime) {
+    public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
 
-    public LocalTime getEndTime() {
+    public LocalDateTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(LocalTime endTime) {
+    public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
     }
 

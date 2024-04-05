@@ -1,6 +1,8 @@
 package com.healthcare.system.services.implementation;
 
+import com.healthcare.system.entities.HealthRecord;
 import com.healthcare.system.entities.Nurse;
+import com.healthcare.system.entities.Patient;
 import com.healthcare.system.repositories.NurseRepository;
 import com.healthcare.system.services.NurseService;
 
@@ -37,5 +39,10 @@ public class NurseServiceImpl implements NurseService {
     @Override
     public void deleteNurseById(int id) {
         nurseRepository.deleteNurseById(id);
+    }
+
+    @Override
+    public HealthRecord accessPatientRecord(Patient patient) {
+        return nurseRepository.accessPatientRecord(patient);
     }
 }
