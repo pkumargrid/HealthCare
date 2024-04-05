@@ -5,7 +5,6 @@ import com.healthcare.system.repositories.AppointmentRepository;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class AppointmentRepositoryImpl implements AppointmentRepository {
 
@@ -20,8 +19,8 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
     }
 
     @Override
-    public void updateById(int id, Appointment appointment) {
-        Appointment prevAppointment = appointmentList.stream().filter(a -> a.getId() == id).findFirst().get();
+    public void update(Appointment appointment) {
+        Appointment prevAppointment = appointmentList.stream().filter(a -> a.getId() == appointment.getId()).findFirst().get();
         prevAppointment.setDoctor(appointment.getDoctor());
         prevAppointment.setEndTime(appointment.getEndTime());
         prevAppointment.setStartTime(appointment.getStartTime());
@@ -41,6 +40,9 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
 
     @Override
     public void save(Appointment appointment) {
+        if(appointmentList.stream().anyMatch(app -> app.getId() == appointment.getId())) {
+            update(appointment);
+        }
         appointmentList.add(appointment);
     }
 }

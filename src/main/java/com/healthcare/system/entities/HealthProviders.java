@@ -5,6 +5,16 @@ import java.util.List;
 
 public class HealthProvider {
 
+    private int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     private List<Patient> patientList;
 
     private List<Doctor> doctorList;

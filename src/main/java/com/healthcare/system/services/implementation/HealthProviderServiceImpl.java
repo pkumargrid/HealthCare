@@ -4,6 +4,8 @@ import com.healthcare.system.entities.HealthProvider;
 import com.healthcare.system.repositories.HealthProviderRepository;
 import com.healthcare.system.services.HealthProviderService;
 
+import java.util.List;
+
 public class HealthProviderServiceImpl implements HealthProviderService {
 
     private final HealthProviderRepository healthProviderRepository;
@@ -27,8 +29,8 @@ public class HealthProviderServiceImpl implements HealthProviderService {
     }
 
     @Override
-    public void updateById(int id, HealthProvider healthProvider) {
-        healthProviderRepository.updateById(id, healthProvider);
+    public void update(HealthProvider healthProvider) {
+        healthProviderRepository.updateById(healthProvider);
     }
 
     @Override

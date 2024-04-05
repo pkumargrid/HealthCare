@@ -5,7 +5,6 @@ import com.healthcare.system.repositories.HealthProviderRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Collection;
 
 public class HealthProviderRepositoryImpl implements HealthProviderRepository {
 
@@ -18,7 +17,7 @@ public class HealthProviderRepositoryImpl implements HealthProviderRepository {
 
     @Override
     public void save(HealthProvider healthProvider) {
-        healthProvider.add(healthProvider);
+        healthProviderList.add(healthProvider);
     }
 
     @Override
@@ -28,17 +27,17 @@ public class HealthProviderRepositoryImpl implements HealthProviderRepository {
 
     @Override
     public HealthProvider deleteById(int id) {
-        HealthProvider healthProvider = healthProviderList.stream().filter(h -> h.getId() == id).findFirst();
+        HealthProvider healthProvider = healthProviderList.stream().filter(h -> h.getId() == id).findFirst().get();
         healthProviderList.remove(healthProvider);
         return healthProvider;
     }
 
     @Override
-    public void updateById(int id, HealthProvider healthProvider) {
-        HealthProvider prevHealthProvider = healthProviderList.stream().filter(h -> h.getId() == id).findFirst();
+    public void updateById(HealthProvider healthProvider) {
+        HealthProvider prevHealthProvider = healthProviderList.stream().filter(h -> h.getId() == healthProvider.getId()).findFirst().get();
         prevHealthProvider.setHealthRecords(healthProvider.getHealthRecords());
         prevHealthProvider.setDoctorList(healthProvider.getDoctorList());
-        prevHealthProvider.setReasons(healthProvider.getDoctorList());
+        prevHealthProvider.setReasons(healthProvider.getReasons());
         prevHealthProvider.setPatientList(healthProvider.getPatientList());
     }
 
