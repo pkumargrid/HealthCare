@@ -3,9 +3,8 @@ package com.healthcare.system.repositories.implementation;
 import com.healthcare.system.entities.Doctor;
 import com.healthcare.system.repositories.DoctorRepository;
 
-import java.util.List;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 public class DoctorRepositoryImpl implements DoctorRepository {
 
@@ -17,6 +16,10 @@ public class DoctorRepositoryImpl implements DoctorRepository {
 
     @Override
     public void save(Doctor doctor) {
+        if(doctorList.contains(doctor)) {
+            update(doctor);
+            return;
+        }
         doctorList.add(doctor);
     }
 
@@ -38,8 +41,8 @@ public class DoctorRepositoryImpl implements DoctorRepository {
     }
 
     @Override
-    public void updateById(int id, Doctor doctor) {
-        Doctor prevDoctor = doctorList.stream().filter(d -> d.getId() == id).findFirst().get();
+    public void update(Doctor doctor) {
+        Doctor prevDoctor = doctorList.stream().filter(d -> d.getId() == doctor.getId()).findFirst().get();
         prevDoctor.setEmail(doctor.getEmail());
         prevDoctor.setName(doctor.getName());
         prevDoctor.setAppointmentList(doctor.getAppointmentList());

@@ -8,7 +8,7 @@ public interface ComplaintRepository {
 
     void deleteById(int id);
 
-    void updateId(int id, Complaint complaint);
+    void update(Complaint complaint);
 
     List<Complaint> findAll();
 

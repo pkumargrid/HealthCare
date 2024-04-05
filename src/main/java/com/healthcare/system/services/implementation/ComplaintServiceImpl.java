@@ -24,8 +24,8 @@ public class ComplaintServiceImpl implements ComplaintService {
     }
 
     @Override
-    public void updateId(int id, Complaint complaint) {
-        complaintRepository.updateId(id, complaint);
+    public void update(Complaint complaint) {
+        complaintRepository.update(complaint);
     }
 
     @Override

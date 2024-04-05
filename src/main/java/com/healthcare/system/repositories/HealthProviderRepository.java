@@ -13,7 +13,7 @@ public interface HealthProviderRepository {
 
     HealthProvider getByName(String name);
 
-    void updateById(int id, HealthProvider healthProvider);
+    void updateById(HealthProvider healthProvider);
 
     List<HealthProvider> findAll();
 

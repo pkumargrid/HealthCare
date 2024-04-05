@@ -2,8 +2,8 @@ package com.healthcare.system.services.implementation;
 
 import com.healthcare.system.entities.Appointment;
 import com.healthcare.system.repositories.AppointmentRepository;
-import com.healthcare.system.repositories.implementation.AppointmentRepositoryImpl;
 import com.healthcare.system.services.AppointmentService;
+
 import java.util.List;
 public class AppointmentServiceImpl implements AppointmentService {
 
@@ -17,8 +17,8 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public void updateById(int id, Appointment appointment) {
-        appointmentRepository.updateById(id, appointment);
+    public void update(Appointment appointment) {
+        appointmentRepository.update(appointment);
     }
 
     @Override

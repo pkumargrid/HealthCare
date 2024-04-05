@@ -2,6 +2,9 @@ package com.healthcare.system.services;
 
 import com.healthcare.system.entities.Doctor;
 import com.healthcare.system.entities.Patient;
+import com.healthcare.system.entities.Reason;
+import com.healthcare.system.exceptions.ReasonTypeException;
+import com.healthcare.system.exceptions.ResourceNotFoundException;
 
 import java.util.List;
 public interface DoctorService {
@@ -12,7 +15,7 @@ public interface DoctorService {
 
     List<Doctor> getByName(String name);
 
-    void updateById(int id, Doctor doctor);
+    void update(Doctor doctor);
 
     List<Doctor> findAll();
 
@@ -20,5 +23,5 @@ public interface DoctorService {
 
     void confirmAppointment(int id);
 
-    void notifyReasonForComplaint(int id, String text);
+    void notifyReasonForComplaint(Reason reason) throws ReasonTypeException, ResourceNotFoundException;
 }
