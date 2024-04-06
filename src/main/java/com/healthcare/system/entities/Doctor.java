@@ -1,5 +1,6 @@
 package com.healthcare.system.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -17,9 +18,36 @@ public class Doctor {
 
     private HealthProvider healthProvider;
 
+    private String sessionId;
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
+
+    public Doctor() {
+        this.patientList = new ArrayList<>();
+        this.appointmentList = new ArrayList<>();
+        this.reasons = new ArrayList<>();
+        this.complaintList = new ArrayList<>();
+    }
+
     private List<Complaint> complaintList;
 
     private List<Appointment> appointmentList;
+
+    private List<Reason> reasons;
+
+    public List<Reason> getReasons() {
+        return reasons;
+    }
+
+    public void setReasons(List<Reason> reasons) {
+        this.reasons = reasons;
+    }
 
     public int getId() {
         return id;

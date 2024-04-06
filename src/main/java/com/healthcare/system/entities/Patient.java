@@ -1,25 +1,42 @@
 package com.healthcare.system.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Patient {
-<<<<<<< HEAD
-    int id;
-    String name;
-    String password;
-    List<HealthProvider> healthProvidersList;
-    List<Doctor> doctorList;
-=======
     private int id;
     private String name;
     private String password;
->>>>>>> health_provider
+
+    private List<HealthProvider> healthProvidersList;
+    private List<Doctor> doctorList;
+    private String email;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     private Nurse nurse;
-    private List<HealthProviders> healthProvidersList;
-    private List<Doctor> doctorList;
 
     private List<HealthRecord> healthRecordList;
+    private String sessionId;
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
+
+    public Patient() {
+        this.healthProvidersList = new ArrayList<>();
+        this.doctorList = new ArrayList<>();
+    }
 
     public int getId() {
         return id;
