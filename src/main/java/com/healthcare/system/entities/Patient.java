@@ -4,11 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Patient {
-    int id;
-    String name;
-    String password;
-    List<HealthProvider> healthProvidersList;
-    List<Doctor> doctorList;
+    private int id;
+    private String name;
+    private String password;
+
+    private List<HealthProvider> healthProvidersList;
+    private List<Doctor> doctorList;
+    private String email;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     private Nurse nurse;
 
     private List<HealthRecord> healthRecordList;

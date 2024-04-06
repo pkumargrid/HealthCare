@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public class SessionManager {
-    private static final Map<Object, String> sessions = new HashMap<>();
+    private static final Map<String, String> sessions = new HashMap<>();
 
     public static boolean isAuthenticated(String sessionId) {
         return sessions.containsKey(sessionId);
