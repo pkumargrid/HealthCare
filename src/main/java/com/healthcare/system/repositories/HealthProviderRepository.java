@@ -11,9 +11,9 @@ public interface HealthProviderRepository {
 
     HealthProvider deleteById(int id);
 
-    HealthProvider getByName(String name);
+    List<HealthProvider> getByName(String name);
 
-    void updateById(HealthProvider healthProvider);
+    void update(HealthProvider healthProvider);
 
     List<HealthProvider> findAll();
 

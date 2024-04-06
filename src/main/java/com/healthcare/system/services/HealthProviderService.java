@@ -11,7 +11,7 @@ public interface HealthProviderService {
 
     HealthProvider deleteById(int id);
 
-    HealthProvider getByName(String name);
+    List<HealthProvider> getByName(String name);
 
     void update(HealthProvider healthProvider);
 

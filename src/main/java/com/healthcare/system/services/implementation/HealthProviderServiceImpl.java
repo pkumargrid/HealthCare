@@ -30,7 +30,7 @@ public class HealthProviderServiceImpl implements HealthProviderService {
 
     @Override
     public void update(HealthProvider healthProvider) {
-        healthProviderRepository.updateById(healthProvider);
+        healthProviderRepository.update(healthProvider);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class HealthProviderServiceImpl implements HealthProviderService {
     }
 
     @Override
-    public HealthProvider getByName(String name) {
+    public List<HealthProvider> getByName(String name) {
         return healthProviderRepository.getByName(name);
     }
 }

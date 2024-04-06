@@ -1,14 +1,17 @@
 package com.healthcare.system.services.implementation;
 
 import com.healthcare.system.entities.*;
-import com.healthcare.system.exceptions.ReasonTypeException;
-import com.healthcare.system.exceptions.ResourceNotFoundException;
+import com.healthcare.system.exceptions.*;
 import com.healthcare.system.repositories.*;
 import com.healthcare.system.services.DoctorService;
+import com.healthcare.system.session.SessionManager;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
+
+import static com.healthcare.system.util.Verification.*;
 
 public class DoctorServiceImpl implements DoctorService {
 
@@ -17,22 +20,28 @@ public class DoctorServiceImpl implements DoctorService {
 
     private final AppointmentRepository appointmentRepository;
 
-    private final ComplaintRepository complaintRepository;
-
-    private HealthProviderRepository healthProviderRepository;
+    private final HealthProviderRepository healthProviderRepository;
 
     private final ReasonRepository reasonRepository;
 
-    public DoctorServiceImpl(DoctorRepository doctorRepository, NurseRepository nurseRepository, AppointmentRepository appointmentRepository,
-                             ComplaintRepository complaintRepository, ReasonRepository reasonRepository) {
+    private final PatientRepository patientRepository;
+
+    public DoctorServiceImpl(DoctorRepository doctorRepository, NurseRepository nurseRepository, AppointmentRepository appointmentRepository, HealthProviderRepository healthProviderRepository,
+                             ReasonRepository reasonRepository, PatientRepository patientRepository) {
         this.doctorRepository = doctorRepository;
         this.nurseRepository = nurseRepository;
         this.appointmentRepository = appointmentRepository;
-        this.complaintRepository = complaintRepository;
+        this.healthProviderRepository = healthProviderRepository;
         this.reasonRepository = reasonRepository;
+        this.patientRepository = patientRepository;
     }
     @Override
-    public void save(Doctor doctor) {
+    public void register(Doctor doctor) throws ValidationException {
+        verifyPasswordWhileRegister(doctor.getPassword());
+        List<Doctor> doctors = doctorRepository.findAll();
+        List<String> usedEmails = doctors.stream().flatMap(d -> Stream.of(d.getEmail())).toList();
+        verifyEmailWhileRegister(usedEmails, doctor.getEmail());
+        verifyUserName(doctor.getEmail());
         doctorRepository.save(doctor);
     }
 
@@ -78,6 +87,8 @@ public class DoctorServiceImpl implements DoctorService {
         Collections.shuffle(nurseList);
         Nurse nurse = nurseList.get(0);
         nurse.getPatientList().add(patient);
+        patient.setNurse(nurse);
+        patientRepository.save(patient);
     }
 
     @Override
@@ -95,9 +106,11 @@ public class DoctorServiceImpl implements DoctorService {
         int id = -1;
         if (reason.getType() instanceof Doctor doctor) {
             id = doctor.getId();
+            doctorRepository.getById(id).getReasons().add(reason);
         }
         else if (reason.getType() instanceof Nurse nurse) {
             id = nurse.getId();
+            nurseRepository.findById(id).getReasons().add(reason);
         }
         else {
             throw new ReasonTypeException(400, "Holder of reason " + reason.getType() + " does not exist");
@@ -106,6 +119,33 @@ public class DoctorServiceImpl implements DoctorService {
         if (healthProvider == null) {
             throw new ResourceNotFoundException(HealthProvider.class.toString(), 404);
         }
+        healthProvider.getReasons().add(reason);
+    }
+
+    @Override
+    public void login(Doctor doctor) throws ValidationException, AlreadyLoggedInException {
+        if (SessionManager.isAuthenticated(doctor.getSessionId())) {
+            throw new AlreadyLoggedInException("Doctor: " + doctor.getEmail() + " is already logged in");
+        }
+        List<Doctor> doctors = doctorRepository.findAll();
+        verifyEmailWhileLogin(doctors, doctor.getEmail());
+        Doctor doctor1 = doctors.stream().filter(d -> d.getEmail().equals(doctor.getEmail())).findFirst().get();
+        verifyPasswordWhileLogin(doctor1.getPassword(), doctor.getPassword());
+        doctor1.setSessionId(SessionManager.generateSessionId(doctor.getEmail()));
+    }
+
+
+    @Override
+    public void logout(String sessionId) throws AlreadyLoggedOutException {
+        if(!SessionManager.isAuthenticated(sessionId)) {
+            throw new AlreadyLoggedOutException("You are already logged out");
+        }
+        SessionManager.removeSessionId(sessionId);
+    }
+
+    @Override
+    public void save(Doctor doctor) {
+        doctorRepository.save(doctor);
     }
 
 
@@ -113,4 +153,6 @@ public class DoctorServiceImpl implements DoctorService {
     public List<Doctor> getByName(String name) {
         return doctorRepository.getByName(name);
     }
+
+
 }
