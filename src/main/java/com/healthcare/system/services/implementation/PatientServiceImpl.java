@@ -44,7 +44,7 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public void updatePatient(Patient patient) {
-        patientRepository.update(patient.getId(),patient);
+        patientRepository.update(patient);
     }
 
     @Override
@@ -106,5 +106,10 @@ public class PatientServiceImpl implements PatientService {
         else if(type.equals("Nurse")) {
             nurseRepository.findById(id).getComplaintList().add(complaint);
         }
+    }
+
+    @Override
+    public void login() {
+
     }
 }

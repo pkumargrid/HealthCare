@@ -7,7 +7,7 @@ public class Nurse {
     String name;
     String password;
     List<Complaint> complaintList;
-    List<HealthProviders> healthProvidersList;
+    List<HealthProvider> healthProviderList;
     List<Doctor> doctorList;
     List<Patient> patientList;
 
@@ -43,12 +43,12 @@ public class Nurse {
         this.complaintList = complaintList;
     }
 
-    public List<HealthProviders> getHealthProvidersList() {
-        return healthProvidersList;
+    public List<HealthProvider> getHealthProvidersList() {
+        return healthProviderList;
     }
 
-    public void setHealthProvidersList(List<HealthProviders> healthProvidersList) {
-        this.healthProvidersList = healthProvidersList;
+    public void setHealthProvidersList(List<HealthProvider> healthProviderList) {
+        this.healthProviderList = healthProviderList;
     }
 
     public List<Doctor> getDoctorList() {

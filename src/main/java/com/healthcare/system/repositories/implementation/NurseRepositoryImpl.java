@@ -25,6 +25,10 @@ public class NurseRepositoryImpl implements NurseRepository {
 
     @Override
     public void saveNurse(Nurse nurse) {
+        if(nurseList.contains(nurse)) {
+            updateNurse(nurse);
+            return;
+        }
         nurseList.add(nurse);
     }
 

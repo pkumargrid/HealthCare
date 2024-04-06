@@ -1,14 +1,14 @@
 package com.healthcare.system.services.implementation;
 
 import com.healthcare.system.entities.*;
-import com.healthcare.system.repositories.AppointmentRepository;
-import com.healthcare.system.repositories.ComplaintRepository;
-import com.healthcare.system.repositories.DoctorRepository;
-import com.healthcare.system.repositories.NurseRepository;
+import com.healthcare.system.exceptions.ReasonTypeException;
+import com.healthcare.system.exceptions.ResourceNotFoundException;
+import com.healthcare.system.repositories.*;
 import com.healthcare.system.services.DoctorService;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class DoctorServiceImpl implements DoctorService {
 
@@ -19,12 +19,17 @@ public class DoctorServiceImpl implements DoctorService {
 
     private final ComplaintRepository complaintRepository;
 
+    private HealthProviderRepository healthProviderRepository;
+
+    private final ReasonRepository reasonRepository;
+
     public DoctorServiceImpl(DoctorRepository doctorRepository, NurseRepository nurseRepository, AppointmentRepository appointmentRepository,
-                             ComplaintRepository complaintRepository) {
+                             ComplaintRepository complaintRepository, ReasonRepository reasonRepository) {
         this.doctorRepository = doctorRepository;
         this.nurseRepository = nurseRepository;
         this.appointmentRepository = appointmentRepository;
         this.complaintRepository = complaintRepository;
+        this.reasonRepository = reasonRepository;
     }
     @Override
     public void save(Doctor doctor) {
@@ -42,8 +47,8 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public void updateById(int id, Doctor doctor) {
-        doctorRepository.updateById(id, doctor);
+    public void update(Doctor doctor) {
+        doctorRepository.update(doctor);
     }
 
     @Override
@@ -57,18 +62,19 @@ public class DoctorServiceImpl implements DoctorService {
         if (doctor == null ) {
             throw new IllegalArgumentException("Id is not correct");
         }
-        Patient patient_assigned_to_doctor =
-                doctor.getPatientList().stream().filter(p -> p.getId() == patient.getId()).findFirst().get();
+        Optional<Patient> patient_assigned_to_doctor =
+                doctor.getPatientList().stream().filter(p -> p.getId() == patient.getId()).findFirst();
 
-        if (patient_assigned_to_doctor == null) {
+        if (patient_assigned_to_doctor.isEmpty()) {
             throw new IllegalArgumentException("Patient is not handled by doctor");
         }
 
         List<Nurse> nurseList = nurseRepository.findAll();
 
         if(nurseList == null || nurseList.isEmpty()) {
-            throw new IllegalArgumentException("No nurse to assign");
+            throw new IllegalStateException("No nurse to assign");
         }
+
         Collections.shuffle(nurseList);
         Nurse nurse = nurseList.get(0);
         nurse.getPatientList().add(patient);
@@ -84,9 +90,22 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public void notifyReasonForComplaint(int id, String text) {
-
-
+    public void notifyReasonForComplaint(Reason reason) throws ReasonTypeException, ResourceNotFoundException {
+        reasonRepository.save(reason);
+        int id = -1;
+        if (reason.getType() instanceof Doctor doctor) {
+            id = doctor.getId();
+        }
+        else if (reason.getType() instanceof Nurse nurse) {
+            id = nurse.getId();
+        }
+        else {
+            throw new ReasonTypeException(400, "Holder of reason " + reason.getType() + " does not exist");
+        }
+        HealthProvider healthProvider = healthProviderRepository.getById(id);
+        if (healthProvider == null) {
+            throw new ResourceNotFoundException(HealthProvider.class.toString(), 404);
+        }
     }
 
 

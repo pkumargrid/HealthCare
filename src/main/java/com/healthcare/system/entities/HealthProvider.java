@@ -3,7 +3,8 @@ package com.healthcare.system.entities;
 
 import java.util.List;
 
-public class HealthProviders {
+public class HealthProvider {
+
 
     private int id;
 

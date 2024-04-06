@@ -45,4 +45,5 @@ public class NurseServiceImpl implements NurseService {
     public HealthRecord accessPatientRecord(Patient patient) {
         return nurseRepository.accessPatientRecord(patient);
     }
+
 }

@@ -13,4 +13,5 @@ public interface NurseService {
     void updateNurse(Nurse nurse);
     void deleteNurseById(int id);
     HealthRecord accessPatientRecord(Patient patient);
+
 }

@@ -2,6 +2,16 @@ package com.healthcare.system.entities;
 
 public class Reason {
 
+    private int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     private Object type;
 
     private String text;

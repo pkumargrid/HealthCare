@@ -25,12 +25,16 @@ public class PatientRepositoryImpl implements PatientRepository {
 
     @Override
     public void save(Patient patient) {
+        if (patients.contains(patient)) {
+            update(patient);
+            return;
+        }
         patients.add(patient);
     }
 
     @Override
-    public void update(int id, Patient patient) {
-        Patient prevPatient = patients.stream().filter(p -> p.getId() == id).findFirst().get();
+    public void update(Patient patient) {
+        Patient prevPatient = patients.stream().filter(p -> p.getId() == patient.getId()).findFirst().get();
         prevPatient.setPassword(patient.getPassword());
         prevPatient.setNurse(patient.getNurse());
         prevPatient.setName(patient.getName());

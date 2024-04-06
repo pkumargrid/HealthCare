@@ -9,7 +9,7 @@ public interface ComplaintService {
 
     void deleteById(int id);
 
-    void updateId(int id, Complaint complaint);
+    void update(Complaint complaint);
 
     List<Complaint> findAll();
 

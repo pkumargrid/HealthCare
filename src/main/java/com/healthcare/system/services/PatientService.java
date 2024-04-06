@@ -15,4 +15,5 @@ public interface PatientService {
     void deletePatientById(int id);
     void bookAppointments(Appointment appointment) throws AppointmentTimeException;
     void createComplaints(Complaint complaint, String type, int id);
+    void login();
 }

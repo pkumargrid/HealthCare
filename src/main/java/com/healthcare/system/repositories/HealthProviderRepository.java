@@ -1,20 +1,20 @@
 package com.healthcare.system.repositories;
 
-import com.healthcare.system.entities.HealthProviders;
+import com.healthcare.system.entities.HealthProvider;
 import java.util.List;
 
 public interface HealthProviderRepository {
 
-    void save(HealthProviders healthProviders);
+    void save(HealthProvider healthProvider);
 
-    HealthProviders getById(int id);
+    HealthProvider getById(int id);
 
-    HealthProviders deleteById(int id);
+    HealthProvider deleteById(int id);
 
-    HealthProviders getByName(String name);
+    HealthProvider getByName(String name);
 
-    void updateById(int id, HealthProviders healthProviders);
+    void updateById(HealthProvider healthProvider);
 
-    List<HealthProviders> findAll();
+    List<HealthProvider> findAll();
 
 }

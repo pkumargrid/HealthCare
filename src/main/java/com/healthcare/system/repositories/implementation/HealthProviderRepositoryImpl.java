@@ -1,6 +1,6 @@
 package com.healthcare.system.repositories.implementation;
 
-import com.healthcare.system.entities.HealthProviders;
+import com.healthcare.system.entities.HealthProvider;
 import com.healthcare.system.repositories.HealthProviderRepository;
 
 import java.util.ArrayList;
@@ -8,46 +8,47 @@ import java.util.List;
 
 public class HealthProviderRepositoryImpl implements HealthProviderRepository {
 
-    List<HealthProviders> healthProvidersList;
+    List<HealthProvider> healthProviderList;
 
 
     public HealthProviderRepositoryImpl() {
-        healthProvidersList = new ArrayList<>();
+        healthProviderList = new ArrayList<>();
     }
 
     @Override
-    public void save(HealthProviders healthProviders) {
-        healthProvidersList.add(healthProviders);
+    public void save(HealthProvider healthProvider) {
+        healthProviderList.add(healthProvider);
     }
 
     @Override
-    public HealthProviders getById(int id) {
-        return healthProvidersList.stream().filter(healthProvider -> healthProvider.getId() == id).findFirst().get();
+    public HealthProvider getById(int id) {
+        return healthProviderList.stream().filter(healthProvider -> healthProvider.getId() == id).findFirst().get();
+    }
+
+
+    @Override
+    public HealthProvider deleteById(int id) {
+        HealthProvider healthProvider = healthProviderList.stream().filter(h -> h.getId() == id).findFirst().get();
+        healthProviderList.remove(healthProvider);
+        return healthProvider;
     }
 
     @Override
-    public HealthProviders deleteById(int id) {
-        HealthProviders healthProviders = healthProvidersList.stream().filter(h -> h.getId() == id).findFirst().get();
-        healthProvidersList.remove(healthProviders);
-        return healthProviders;
+    public void updateById(HealthProvider healthProvider) {
+        HealthProvider prevHealthProvider = healthProviderList.stream().filter(h -> h.getId() == healthProvider.getId()).findFirst().get();
+        prevHealthProvider.setHealthRecords(healthProvider.getHealthRecords());
+        prevHealthProvider.setDoctorList(healthProvider.getDoctorList());
+        prevHealthProvider.setReasons(healthProvider.getReasons());
+        prevHealthProvider.setPatientList(healthProvider.getPatientList());
     }
 
     @Override
-    public void updateById(int id, HealthProviders healthProviders) {
-        HealthProviders prevHealthProviders = healthProvidersList.stream().filter(h -> h.getId() == id).findFirst().get();
-        prevHealthProviders.setHealthRecords(healthProviders.getHealthRecords());
-        prevHealthProviders.setDoctorList(healthProviders.getDoctorList());
-        prevHealthProviders.setReasons(healthProviders.getReasons());
-        prevHealthProviders.setPatientList(healthProviders.getPatientList());
+    public List<HealthProvider> findAll() {
+        return healthProviderList.stream().toList();
     }
 
     @Override
-    public List<HealthProviders> findAll() {
-        return healthProvidersList.stream().toList();
-    }
-
-    @Override
-    public HealthProviders getByName(String name) {
+    public HealthProvider getByName(String name) {
         return null;
     }
 }

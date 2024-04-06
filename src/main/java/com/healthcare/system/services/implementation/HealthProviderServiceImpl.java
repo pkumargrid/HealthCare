@@ -1,6 +1,6 @@
 package com.healthcare.system.services.implementation;
 
-import com.healthcare.system.entities.HealthProviders;
+import com.healthcare.system.entities.HealthProvider;
 import com.healthcare.system.repositories.HealthProviderRepository;
 import com.healthcare.system.services.HealthProviderService;
 
@@ -14,32 +14,32 @@ public class HealthProviderServiceImpl implements HealthProviderService {
         this.healthProviderRepository = healthProviderRepository;
     }
     @Override
-    public void save(HealthProviders healthProviders) {
-        healthProviderRepository.save(healthProviders);
+    public void save(HealthProvider healthProvider) {
+        healthProviderRepository.save(healthProvider);
     }
 
     @Override
-    public HealthProviders getById(int id) {
+    public HealthProvider getById(int id) {
         return healthProviderRepository.getById(id);
     }
 
     @Override
-    public HealthProviders deleteById(int id) {
+    public HealthProvider deleteById(int id) {
         return healthProviderRepository.deleteById(id);
     }
 
     @Override
-    public void updateById(int id, HealthProviders healthProviders) {
-        healthProviderRepository.updateById(id, healthProviders);
+    public void update(HealthProvider healthProvider) {
+        healthProviderRepository.updateById(healthProvider);
     }
 
     @Override
-    public List<HealthProviders> findAll() {
+    public List<HealthProvider> findAll() {
         return healthProviderRepository.findAll();
     }
 
     @Override
-    public HealthProviders getByName(String name) {
+    public HealthProvider getByName(String name) {
         return healthProviderRepository.getByName(name);
     }
 }
