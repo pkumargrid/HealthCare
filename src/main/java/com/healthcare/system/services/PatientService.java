@@ -7,7 +7,6 @@ import com.healthcare.system.exceptions.AppointmentTimeException;
 import com.healthcare.system.exceptions.AlreadyLoggedInException;
 import com.healthcare.system.exceptions.AlreadyLoggedOutException;
 import com.healthcare.system.exceptions.ValidationException;
-
 import java.util.List;
 
 public interface PatientService {
@@ -21,4 +20,5 @@ public interface PatientService {
     void login(Patient patient) throws ValidationException, AlreadyLoggedInException;
     void logout(String sessionId) throws AlreadyLoggedOutException;
     void register(Patient patient) throws ValidationException;
+
 }

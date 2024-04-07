@@ -2,6 +2,7 @@ package com.healthcare.system.services.implementation;
 
 import com.healthcare.system.entities.HealthRecord;
 import com.healthcare.system.entities.Nurse;
+
 import com.healthcare.system.entities.Patient;
 import com.healthcare.system.entities.Report;
 import com.healthcare.system.exceptions.AlreadyLoggedInException;
@@ -80,10 +81,13 @@ public class NurseServiceImpl implements NurseService {
         verifyUserName(nurse.getEmail());
         nurseRepository.saveNurse(nurse);
     }
-
     @Override
     public void addBiometricData(int healthRecordId, Report report) {
         healthRecordRepository.getById(healthRecordId).setReport(report);
         healthRecordRepository.save(healthRecordRepository.getById(healthRecordId));
+    }
+
+    public HealthRecord accessPatientRecord(Patient patient) {
+        return nurseRepository.accessPatientRecord(patient);
     }
 }

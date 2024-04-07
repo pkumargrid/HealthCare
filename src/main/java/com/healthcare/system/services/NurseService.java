@@ -16,8 +16,10 @@ public interface NurseService {
     void saveNurse(Nurse nurse);
     void updateNurse(Nurse nurse);
     void deleteNurseById(int id);
+
     void login(Nurse nurse) throws ValidationException, AlreadyLoggedInException;
     void logout(String sessionId) throws AlreadyLoggedOutException;
     void register(Nurse nurse) throws ValidationException, AlreadyLoggedInException;
     void addBiometricData(int healthRecordId, Report report);
+    HealthRecord accessPatientRecord(Patient patient);
 }

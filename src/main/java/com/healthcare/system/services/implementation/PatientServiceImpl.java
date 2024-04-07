@@ -3,13 +3,13 @@ package com.healthcare.system.services.implementation;
 import com.healthcare.system.entities.Appointment;
 import com.healthcare.system.entities.Complaint;
 import com.healthcare.system.entities.Patient;
+import com.healthcare.system.exceptions.AlreadyLoggedInException;
+import com.healthcare.system.exceptions.AlreadyLoggedOutException;
+import com.healthcare.system.exceptions.ValidationException;
 import com.healthcare.system.exceptions.AppointmentTimeException;
 import com.healthcare.system.repositories.AppointmentRepository;
 import com.healthcare.system.repositories.DoctorRepository;
 import com.healthcare.system.repositories.NurseRepository;
-import com.healthcare.system.exceptions.AlreadyLoggedInException;
-import com.healthcare.system.exceptions.AlreadyLoggedOutException;
-import com.healthcare.system.exceptions.ValidationException;
 import com.healthcare.system.repositories.PatientRepository;
 import com.healthcare.system.services.PatientService;
 import com.healthcare.system.session.SessionManager;
@@ -60,7 +60,6 @@ public class PatientServiceImpl implements PatientService {
         patientRepository.deleteById(id);
     }
 
-    @Override
     public void bookAppointments(Appointment appointment) throws AppointmentTimeException {
         List<Appointment> doctorAppointmentList = appointment.getPatient().getAppointmentList();
         int[] range = new int[601];
@@ -101,8 +100,6 @@ public class PatientServiceImpl implements PatientService {
         else {
             throw new AppointmentTimeException("Time slots not available");
         }
-
-
 
     }
 

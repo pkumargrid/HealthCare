@@ -14,6 +14,5 @@ public class AppointmentTimeException extends Exception{
 
     public AppointmentTimeException(String timeSlotsNotAvailable) {
         super(timeSlotsNotAvailable);
-
     }
 }

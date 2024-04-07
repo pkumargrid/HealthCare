@@ -8,7 +8,7 @@ public class Nurse {
     private String name;
     private String password;
     private List<Complaint> complaintList;
-    private List<HealthProvider> healthProvidersList;
+    private List<HealthProvider> healthProviderList;
     private List<Doctor> doctorList;
     private List<Patient> patientList;
 
@@ -36,7 +36,7 @@ public class Nurse {
 
     public Nurse(){
         this.complaintList = new ArrayList<>();
-        this.healthProvidersList = new ArrayList<>();
+        this.healthProviderList = new ArrayList<>();
         this.doctorList = new ArrayList<>();
         this.patientList = new ArrayList<>();
         this.reasons = new ArrayList<>();
@@ -83,11 +83,11 @@ public class Nurse {
     }
 
     public List<HealthProvider> getHealthProvidersList() {
-        return healthProvidersList;
+        return healthProviderList;
     }
 
     public void setHealthProvidersList(List<HealthProvider> healthProviderList) {
-        this.healthProvidersList = healthProviderList;
+        this.healthProviderList = healthProviderList;
     }
 
     public List<Doctor> getDoctorList() {

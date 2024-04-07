@@ -117,7 +117,7 @@ public class DoctorServiceImpl implements DoctorService {
         }
         HealthProvider healthProvider = healthProviderRepository.getById(id);
         if (healthProvider == null) {
-            throw new ResourceNotFoundException(HealthProvider.class.toString(), 404);
+            throw new ResourceNotFoundException(HealthProvider.class.toString());
         }
         healthProvider.getReasons().add(reason);
     }

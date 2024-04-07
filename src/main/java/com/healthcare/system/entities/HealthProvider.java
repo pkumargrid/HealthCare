@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HealthProvider {
+
     private int id;
 
     private String name;
 
     private String password;
-
     public String getPassword() {
         return password;
     }
@@ -51,6 +51,7 @@ public class HealthProvider {
     private List<HealthRecord> healthRecords;
 
     private List<Reason> reasons;
+
     private List<Nurse> nurseList;
 
     private List<Complaint> complaintList;
@@ -120,5 +121,6 @@ public class HealthProvider {
     public void setHealthRecords(List<HealthRecord> healthRecords) {
         this.healthRecords = healthRecords;
     }
+
 
 }
