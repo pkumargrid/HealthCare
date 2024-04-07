@@ -1,6 +1,5 @@
 package com.healthcare.system.repositories.implementation;
 
-import com.healthcare.system.entities.Reason;
 import com.healthcare.system.entities.Report;
 import com.healthcare.system.repositories.ReportRepository;
 
@@ -38,5 +37,10 @@ public class ReportRepositoryImpl implements ReportRepository {
         Report prevReport = reportList.stream().filter(r -> r.getId() == report.getId()).findFirst().get();
         prevReport.setAdvice(report.getAdvice());
         prevReport.setCondition(report.getCondition());
+    }
+
+    @Override
+    public List<Report> findAll() {
+        return reportList.stream().toList();
     }
 }

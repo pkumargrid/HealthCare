@@ -1,32 +1,57 @@
 package com.healthcare.system.dependency.injection;
 
 import com.healthcare.system.repositories.*;
+import com.healthcare.system.repositories.implementation.*;
 import com.healthcare.system.services.*;
+import com.healthcare.system.services.implementation.*;
 
 public class Injector {
 
-    private  static DoctorRepository doctorRepository;
+    public  static DoctorRepository doctorRepository;
 
-    private static DoctorService doctorService;
-    private static ComplaintRepository complaintRepository;
+    public static DoctorService doctorService;
+    public static ComplaintRepository complaintRepository;
 
-    private static ComplaintService complaintService;
+    public static ComplaintService complaintService;
 
-    private HealthProviderRepository healthProviderRepository;
-    private HealthProviderService healthProviderService;
+    public static HealthProviderRepository healthProviderRepository;
+    public static HealthProviderService healthProviderService;
 
-    private ReasonRepository reasonRepository;
+    public static ReasonRepository reasonRepository;
 
-    private HealthRecordRepository healthRecordRepository;
+    public static HealthRecordRepository healthRecordRepository;
+    public static HealthRecordService healthRecordService;
 
-    private AppointmentRepository appointmentRepository;
+    public static AppointmentRepository appointmentRepository;
 
-    private AppointmentService appointmentService;
-    private PatientRepository patientRepository;
-    private PatientService patientService;
+    public static AppointmentService appointmentService;
+    public static PatientRepository patientRepository;
+    public static PatientService patientService;
+    public static ReasonService reasonService;
 
+    public static ReportRepository reportRepository;
+    public static NurseRepository nurseRepository;
+    public static NurseService nurseService;
     public static void inject() {
+        doctorRepository = new DoctorRepositoryImpl();
+        reasonRepository = new ReasonRepositoryImpl();
+        complaintRepository = new ComplaintRepositoryImpl();
+        appointmentRepository = new AppointmentRepositoryImpl();
+        patientRepository = new PatientRepositoryImpl();
+        nurseRepository = new NurseRepositoryImpl();
+        healthProviderRepository = new HealthProviderRepositoryImpl();
+        reportRepository = new ReportRepositoryImpl();
+        healthRecordRepository = new HealthRecordRepositoryImpl();
 
+        doctorService = new DoctorServiceImpl(doctorRepository, nurseRepository, appointmentRepository, healthProviderRepository,
+                reasonRepository, patientRepository, healthRecordRepository);
+        healthProviderService = new HealthProviderServiceImpl(healthProviderRepository, patientRepository);
+        reasonService = new ReasonServiceImpl(reasonRepository);
+        complaintService = new ComplaintServiceImpl(complaintRepository);
+        appointmentService = new AppointmentServiceImpl(appointmentRepository);
+        patientService = new PatientServiceImpl(patientRepository, appointmentRepository, doctorRepository, nurseRepository, complaintRepository, healthProviderRepository);
+        nurseService = new NurseServiceImpl(nurseRepository, healthRecordRepository, reportRepository);
+        healthRecordService = new HealthRecordServiceImpl(healthRecordRepository);
     }
 
 }
