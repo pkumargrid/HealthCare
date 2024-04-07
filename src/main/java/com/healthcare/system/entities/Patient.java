@@ -8,7 +8,7 @@ public class Patient {
     private String name;
     private String password;
 
-    private List<HealthProvider> healthProvidersList;
+    private List<HealthProvider> healthProviderList;
     private List<Doctor> doctorList;
     private String email;
 
@@ -34,8 +34,28 @@ public class Patient {
     }
 
     public Patient() {
-        this.healthProvidersList = new ArrayList<>();
+        this.healthProviderList = new ArrayList<>();
         this.doctorList = new ArrayList<>();
+    }
+
+    private List<Appointment> appointmentList;
+
+    private List<Complaint> complaintList;
+
+    public List<Complaint> getComplaintList() {
+        return complaintList;
+    }
+
+    public void setComplaintList(List<Complaint> complaintList) {
+        this.complaintList = complaintList;
+    }
+
+    public List<Appointment> getAppointmentList() {
+        return appointmentList;
+    }
+
+    public void setAppointmentList(List<Appointment> appointmentList) {
+        this.appointmentList = appointmentList;
     }
 
     public int getId() {
@@ -63,11 +83,11 @@ public class Patient {
     }
 
     public List<HealthProvider> getHealthProvidersList() {
-        return healthProvidersList;
+        return healthProviderList;
     }
 
-    public void setHealthProvidersList(List<HealthProvider> healthProvidersList) {
-        this.healthProvidersList = healthProvidersList;
+    public void setHealthProvidersList(List<HealthProvider> healthProviderList) {
+        this.healthProviderList = healthProviderList;
     }
 
     public List<Doctor> getDoctorList() {

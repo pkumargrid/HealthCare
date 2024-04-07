@@ -2,6 +2,7 @@ package com.healthcare.system.entities;
 
 import java.time.LocalDateTime;
 
+
 public class Appointment {
 
     private boolean status;
