@@ -18,7 +18,7 @@ public interface NurseService {
     void login(Nurse nurse) throws ValidationException, AlreadyLoggedInException;
     void logout(String sessionId) throws AlreadyLoggedOutException;
     void register(Nurse nurse) throws ValidationException, AlreadyLoggedInException;
-    void addBiometricData(int healthRecordId, Report report);
+    void addBiometricData(int healthRecordId, Report report) throws WrongCredentials;
     HealthRecord accessPatientRecord(Patient patient);
 
     List<Reason> getReasons(int nurseId) throws WrongCredentials;

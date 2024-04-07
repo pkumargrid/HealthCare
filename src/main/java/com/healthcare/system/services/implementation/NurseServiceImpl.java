@@ -91,7 +91,10 @@ public class NurseServiceImpl implements NurseService {
         nurseRepository.saveNurse(nurse);
     }
     @Override
-    public void addBiometricData(int healthRecordId, Report report) {
+    public void addBiometricData(int healthRecordId, Report report) throws WrongCredentials {
+        if(healthRecordRepository.getById(healthRecordId) == null) {
+            throw new WrongCredentials("HealthRecord with id: " + healthRecordId + " does not exist");
+        }
         healthRecordRepository.getById(healthRecordId).setReport(report);
         healthRecordRepository.save(healthRecordRepository.getById(healthRecordId));
         reportRepository.save(report);
