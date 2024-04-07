@@ -1,6 +1,7 @@
 package com.healthcare.system.services.implementation;
 
 import com.healthcare.system.entities.HealthProvider;
+import com.healthcare.system.entities.Patient;
 import com.healthcare.system.exceptions.AlreadyLoggedInException;
 import com.healthcare.system.exceptions.AlreadyLoggedOutException;
 import com.healthcare.system.exceptions.ValidationException;
@@ -73,6 +74,11 @@ public class HealthProviderServiceImpl implements HealthProviderService {
         verifyEmailWhileRegister(usedEmails, healthProvider.getEmail());
         verifyUserName(healthProvider.getEmail());
         healthProviderRepository.save(healthProvider);
+    }
+
+    @Override
+    public void registerPatient(HealthProvider healthProvider,Patient patient) {
+        healthProvider.getPatientList().add(patient);
     }
 
     @Override
