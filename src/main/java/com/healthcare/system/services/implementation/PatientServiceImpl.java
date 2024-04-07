@@ -1,8 +1,6 @@
 package com.healthcare.system.services.implementation;
 
-import com.healthcare.system.entities.Appointment;
-import com.healthcare.system.entities.Complaint;
-import com.healthcare.system.entities.Patient;
+import com.healthcare.system.entities.*;
 import com.healthcare.system.exceptions.AlreadyLoggedInException;
 import com.healthcare.system.exceptions.AlreadyLoggedOutException;
 import com.healthcare.system.exceptions.ValidationException;
@@ -142,5 +140,20 @@ public class PatientServiceImpl implements PatientService {
         verifyEmailWhileRegister(usedEmails, patient.getEmail());
         verifyUserName(patient.getEmail());
         patientRepository.save(patient);
+    }
+
+    @Override
+    public List<HealthProvider> getHealthProviders(Patient patient) {
+        return patient.getHealthProvidersList();
+    }
+
+    @Override
+    public List<Doctor> getDoctorList(Patient patient) {
+        return patient.getDoctorList();
+    }
+
+    @Override
+    public List<HealthRecord> getHealthRecordList(Patient patient) {
+        return patient.getHealthRecordList();
     }
 }
