@@ -37,4 +37,7 @@ public interface DoctorService {
 
     List<Patient> getPatients(int doctorId) throws WrongCredentials;
 
+    void prescribePrescription(int doctorId, int patientId, Prescription prescription) throws ValidationException, WrongCredentials;
+
+    void updatePrescription(int healthRecordId, Prescription prescription) throws ValidationException, WrongCredentials;
 }
