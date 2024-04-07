@@ -3,6 +3,10 @@ package com.healthcare.system.services;
 import com.healthcare.system.entities.HealthRecord;
 import com.healthcare.system.entities.Nurse;
 import com.healthcare.system.entities.Patient;
+import com.healthcare.system.entities.Report;
+import com.healthcare.system.exceptions.AlreadyLoggedInException;
+import com.healthcare.system.exceptions.AlreadyLoggedOutException;
+import com.healthcare.system.exceptions.ValidationException;
 
 import java.util.List;
 
@@ -12,6 +16,8 @@ public interface NurseService {
     void saveNurse(Nurse nurse);
     void updateNurse(Nurse nurse);
     void deleteNurseById(int id);
-    HealthRecord accessPatientRecord(Patient patient);
-
+    void login(Nurse nurse) throws ValidationException, AlreadyLoggedInException;
+    void logout(String sessionId) throws AlreadyLoggedOutException;
+    void register(Nurse nurse) throws ValidationException, AlreadyLoggedInException;
+    void addBiometricData(int healthRecordId, Report report);
 }

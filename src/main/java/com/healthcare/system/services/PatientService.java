@@ -4,6 +4,9 @@ import com.healthcare.system.entities.Appointment;
 import com.healthcare.system.entities.Complaint;
 import com.healthcare.system.entities.Patient;
 import com.healthcare.system.exceptions.AppointmentTimeException;
+import com.healthcare.system.exceptions.AlreadyLoggedInException;
+import com.healthcare.system.exceptions.AlreadyLoggedOutException;
+import com.healthcare.system.exceptions.ValidationException;
 
 import java.util.List;
 
@@ -15,5 +18,7 @@ public interface PatientService {
     void deletePatientById(int id);
     void bookAppointments(Appointment appointment) throws AppointmentTimeException;
     void createComplaints(Complaint complaint, String type, int id);
-    void login();
+    void login(Patient patient) throws ValidationException, AlreadyLoggedInException;
+    void logout(String sessionId) throws AlreadyLoggedOutException;
+    void register(Patient patient) throws ValidationException;
 }

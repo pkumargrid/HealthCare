@@ -2,7 +2,6 @@ package com.healthcare.system.repositories.implementation;
 
 import com.healthcare.system.entities.Doctor;
 import com.healthcare.system.repositories.DoctorRepository;
-
 import java.util.ArrayList;
 import java.util.List;
 

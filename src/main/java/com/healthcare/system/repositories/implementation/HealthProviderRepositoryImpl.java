@@ -34,7 +34,7 @@ public class HealthProviderRepositoryImpl implements HealthProviderRepository {
     }
 
     @Override
-    public void updateById(HealthProvider healthProvider) {
+    public void update(HealthProvider healthProvider) {
         HealthProvider prevHealthProvider = healthProviderList.stream().filter(h -> h.getId() == healthProvider.getId()).findFirst().get();
         prevHealthProvider.setHealthRecords(healthProvider.getHealthRecords());
         prevHealthProvider.setDoctorList(healthProvider.getDoctorList());
@@ -48,7 +48,7 @@ public class HealthProviderRepositoryImpl implements HealthProviderRepository {
     }
 
     @Override
-    public HealthProvider getByName(String name) {
-        return null;
+    public List<HealthProvider> getByName(String name) {
+        return healthProviderList.stream().filter(h -> h.getName().equals(name)).toList();
     }
 }
