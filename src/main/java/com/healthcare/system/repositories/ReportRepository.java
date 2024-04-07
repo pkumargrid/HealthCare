@@ -1,7 +1,8 @@
 package com.healthcare.system.repositories;
 
-import com.healthcare.system.entities.Reason;
 import com.healthcare.system.entities.Report;
+
+import java.util.List;
 
 public interface ReportRepository {
     void save(Report report);
@@ -11,4 +12,6 @@ public interface ReportRepository {
     void deleteById(int id);
 
     void update(Report report);
+
+    List<Report> findAll();
 }

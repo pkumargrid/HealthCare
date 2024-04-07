@@ -1,7 +1,9 @@
 package com.healthcare.system.services.implementation;
 
+import com.healthcare.system.controllers.dto.DoctorDTO;
 import com.healthcare.system.entities.*;
 import com.healthcare.system.exceptions.*;
+import com.healthcare.system.mappers.DoctorMapper;
 import com.healthcare.system.repositories.*;
 import com.healthcare.system.services.DoctorService;
 import com.healthcare.system.session.SessionManager;
@@ -39,12 +41,15 @@ public class DoctorServiceImpl implements DoctorService {
         this.healthRecordRepository = healthRecordRepository;
     }
     @Override
-    public void register(Doctor doctor) throws ValidationException {
+    public void register(DoctorDTO doctorDTO) throws ValidationException {
+        Doctor doctor = DoctorMapper.mapToDomain(doctorDTO,
+                healthProviderRepository);
         verifyPasswordWhileRegister(doctor.getPassword());
         List<Doctor> doctors = doctorRepository.findAll();
         List<String> usedEmails = doctors.stream().flatMap(d -> Stream.of(d.getEmail())).toList();
         verifyEmailWhileRegister(usedEmails, doctor.getEmail());
         verifyUserName(doctor.getEmail());
+        doctor.setId(doctors.stream().flatMap(d -> Stream.of(d.getId())).reduce(0,Integer::max) + 1);
         doctorRepository.save(doctor);
     }
 

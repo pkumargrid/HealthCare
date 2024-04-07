@@ -1,5 +1,6 @@
 package com.healthcare.system.services;
 
+import com.healthcare.system.controllers.dto.HealthProviderDTO;
 import com.healthcare.system.entities.*;
 import com.healthcare.system.exceptions.AlreadyLoggedInException;
 import com.healthcare.system.exceptions.AlreadyLoggedOutException;
@@ -25,9 +26,9 @@ public interface HealthProviderService {
 
     void login(HealthProvider healthProvider) throws ValidationException, AlreadyLoggedInException;
     void logout(String sessionId) throws AlreadyLoggedOutException;
-    void register(HealthProvider healthProvider) throws ValidationException;
+    void register(HealthProviderDTO healthProviderDTO) throws ValidationException;
 
-    void registerPatient(HealthProvider healthProvider,Patient patient);
+    void registerPatient(int healthProviderId, int patientId) throws WrongCredentials;
 
     List<Doctor> getDoctors(int healthProviderId) throws WrongCredentials;
 

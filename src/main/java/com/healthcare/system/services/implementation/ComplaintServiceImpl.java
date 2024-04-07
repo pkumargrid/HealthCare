@@ -1,12 +1,11 @@
 package com.healthcare.system.services.implementation;
 
-import com.healthcare.system.entities.Appointment;
 import com.healthcare.system.entities.Complaint;
 import com.healthcare.system.exceptions.ValidationException;
 import com.healthcare.system.exceptions.WrongCredentials;
 import com.healthcare.system.repositories.ComplaintRepository;
-import com.healthcare.system.repositories.implementation.ComplaintRepositoryImpl;
 import com.healthcare.system.services.ComplaintService;
+
 import java.util.List;
 
 import static com.healthcare.system.util.Verification.verifyCredentials;
@@ -15,7 +14,7 @@ public class ComplaintServiceImpl implements ComplaintService {
 
     private final ComplaintRepository complaintRepository;
 
-    public ComplaintServiceImpl(ComplaintRepositoryImpl complaintRepository) {
+    public ComplaintServiceImpl(ComplaintRepository complaintRepository) {
         this.complaintRepository = complaintRepository;
     }
     @Override

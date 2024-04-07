@@ -88,6 +88,7 @@ public class NurseServiceImpl implements NurseService {
         List<String> usedEmails = nurses.stream().flatMap(n -> Stream.of(n.getEmail())).toList();
         verifyEmailWhileRegister(usedEmails, nurse.getEmail());
         verifyUserName(nurse.getEmail());
+        nurse.setId(nurses.stream().flatMap(n -> Stream.of(n.getId())).reduce(0,Integer::max) + 1);
         nurseRepository.saveNurse(nurse);
     }
     @Override
@@ -97,6 +98,7 @@ public class NurseServiceImpl implements NurseService {
         }
         healthRecordRepository.getById(healthRecordId).setReport(report);
         healthRecordRepository.save(healthRecordRepository.getById(healthRecordId));
+        report.setId(reportRepository.findAll().stream().flatMap(r -> Stream.of(r.getId())).reduce(0, Integer::max) + 1);
         reportRepository.save(report);
     }
 

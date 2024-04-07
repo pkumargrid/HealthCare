@@ -102,6 +102,7 @@ public class PatientServiceImpl implements PatientService {
             appointment.getDoctor().getAppointmentList().add(appointment);
             doctorRepository.save(appointment.getDoctor());
             appointment.getDoctor().getHealthProvider().getAppointmentList().add(appointment);
+            appointment.setId(appointmentRepository.findAll().stream().flatMap(a ->Stream.of(a.getId())).reduce(0, Integer::max) + 1);
             healthProviderRepository.save(appointment.getDoctor().getHealthProvider());
         }
         else {
@@ -130,6 +131,8 @@ public class PatientServiceImpl implements PatientService {
             nurseRepository.saveNurse(nurse);
             healthProviderRepository.save(healthProvider);
         }
+        List<Complaint> complaints = complaintRepository.findAll();
+        complaint.setId(complaints.stream().flatMap(c -> Stream.of(c.getId())).reduce(0,Integer::max) + 1);
         complaintRepository.save(complaint);
     }
 
@@ -160,6 +163,7 @@ public class PatientServiceImpl implements PatientService {
         List<String> usedEmails = patients.stream().flatMap(p -> Stream.of(p.getEmail())).toList();
         verifyEmailWhileRegister(usedEmails, patient.getEmail());
         verifyUserName(patient.getEmail());
+        patient.setId(patients.stream().flatMap(p -> Stream.of(p.getId())).reduce(0,Integer::max) + 1);
         patientRepository.save(patient);
     }
 
@@ -168,7 +172,7 @@ public class PatientServiceImpl implements PatientService {
         if(patientRepository.findById(patientId) == null) {
             throw new WrongCredentials("Patient with id: " + patientId + " does not exist");
         }
-        return patientRepository.findById(patientId).getHealthProvidersList();
+        return patientRepository.findById(patientId).getHealthProviderList();
     }
 
     @Override
