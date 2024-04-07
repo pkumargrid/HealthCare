@@ -8,6 +8,7 @@ import com.healthcare.system.exceptions.ValidationException;
 import com.healthcare.system.exceptions.WrongCredentials;
 import com.healthcare.system.repositories.HealthRecordRepository;
 import com.healthcare.system.repositories.NurseRepository;
+import com.healthcare.system.repositories.ReportRepository;
 import com.healthcare.system.services.NurseService;
 import com.healthcare.system.session.SessionManager;
 
@@ -20,10 +21,12 @@ public class NurseServiceImpl implements NurseService {
 
     private final NurseRepository nurseRepository;
     public final HealthRecordRepository healthRecordRepository;
+    public final ReportRepository reportRepository;
 
-    public NurseServiceImpl(NurseRepository nurseRepository, HealthRecordRepository healthRecordRepository) {
+    public NurseServiceImpl(NurseRepository nurseRepository, HealthRecordRepository healthRecordRepository, ReportRepository reportRepository) {
         this.nurseRepository = nurseRepository;
         this.healthRecordRepository = healthRecordRepository;
+        this.reportRepository = reportRepository;
     }
 
     @Override
@@ -91,6 +94,7 @@ public class NurseServiceImpl implements NurseService {
     public void addBiometricData(int healthRecordId, Report report) {
         healthRecordRepository.getById(healthRecordId).setReport(report);
         healthRecordRepository.save(healthRecordRepository.getById(healthRecordId));
+        reportRepository.save(report);
     }
 
     public HealthRecord accessPatientRecord(Patient patient) {
