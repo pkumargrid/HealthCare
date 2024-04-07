@@ -27,7 +27,7 @@ public class DoctorRegisterHandler implements HttpHandler {
         String jsonResponse = mapper.writeValueAsString(responseCrud);
 
         exchange.getResponseHeaders().set("Content-Type", "application/json");
-        exchange.sendResponseHeaders(200, jsonResponse.length());
+        exchange.sendResponseHeaders(responseCrud.status, jsonResponse.length());
 
         OutputStream os = exchange.getResponseBody();
         os.write(jsonResponse.getBytes());

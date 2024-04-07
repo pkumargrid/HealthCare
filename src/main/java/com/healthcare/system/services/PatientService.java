@@ -1,5 +1,6 @@
 package com.healthcare.system.services;
 
+import com.healthcare.system.controllers.dto.PatientDTO;
 import com.healthcare.system.entities.*;
 import com.healthcare.system.exceptions.*;
 
@@ -17,7 +18,7 @@ public interface PatientService {
 
     void login(Patient patient) throws ValidationException, AlreadyLoggedInException;
     void logout(String sessionId) throws AlreadyLoggedOutException;
-    void register(Patient patient) throws ValidationException;
+    void register(PatientDTO patientDTO) throws ValidationException;
     List<HealthProvider> getHealthProviders(int patientId) throws WrongCredentials;
     List<Doctor> getDoctorList(int patientId) throws WrongCredentials;
     List<HealthRecord> getHealthRecordList(int patientId) throws WrongCredentials;

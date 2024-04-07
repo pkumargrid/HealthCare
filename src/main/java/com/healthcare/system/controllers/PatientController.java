@@ -1,11 +1,13 @@
 package com.healthcare.system.controllers;
 
-import com.healthcare.system.controllers.dto.ResponseSave;
-import com.healthcare.system.entities.Doctor;
+import com.healthcare.system.controllers.dto.PatientDTO;
+import com.healthcare.system.controllers.dto.ResponseCrudDTO;
+import com.healthcare.system.entities.HealthProvider;
 import com.healthcare.system.entities.Patient;
 import com.healthcare.system.exceptions.ValidationException;
-import com.healthcare.system.exceptions.WrongCredentials;
 import com.healthcare.system.services.PatientService;
+
+import java.util.List;
 
 public class PatientController {
 
@@ -15,31 +17,17 @@ public class PatientController {
         this.patientService = patientService;
     }
 
-    public ResponseSave save(Patient patient) {
+    public ResponseCrudDTO<Void> save(PatientDTO patientDTO) {
         try{
-            patientService.savePatient(patient);
-            return new ResponseSave("Saved Patient Successfully!");
+            patientService.register(patientDTO);
+            return new ResponseCrudDTO<Void>("Saved Patient Successfully!",201,null);
         } catch (ValidationException v) {
-            return new ResponseSave("Failed to Save!\n Reason: " + v.getMessage());
+            return new ResponseCrudDTO<Void>("Failed to Save!\n Reason: " + v.getMessage(),403,null);
         }
     }
 
-    public ResponseSave update(Patient patient) {
-        try{
-            patientService.updatePatient(patient);
-            return new ResponseSave("Updated Patient Successfully!");
-        } catch (ValidationException v) {
-            return new ResponseSave("Failed to Save!\n Reason: " + v.getMessage());
-        }
+    public ResponseCrudDTO<List<Patient>> findAll() {
+        List<Patient> patients = patientService.findAll();
+        return new ResponseCrudDTO<>("Fetched Patients Successfully!", 200, patients);
     }
-
-    public ResponseSave deleteById(int id) {
-        try{
-            patientService.deletePatientById(id);
-            return new ResponseSave("Deleted Patient Successfully!");
-        } catch (WrongCredentials v) {
-            return new ResponseSave("Failed to Delete!\n Reason: " + v.getMessage());
-        }
-    }
-
 }

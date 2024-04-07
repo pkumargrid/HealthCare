@@ -6,8 +6,7 @@ import com.healthcare.system.exceptions.ValidationException;
 
 public class HealthProviderMapper {
 
-    public static HealthProvider mapToDomain(HealthProviderDTO healthProviderDTO)
-            throws ValidationException {
+    public static HealthProvider mapToDomain(HealthProviderDTO healthProviderDTO) {
         HealthProvider healthProvider = new HealthProvider();
         healthProvider.setName(healthProviderDTO.getName());
         healthProvider.setPassword(healthProviderDTO.getPassword());
