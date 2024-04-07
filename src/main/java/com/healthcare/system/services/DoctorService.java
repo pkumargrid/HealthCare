@@ -8,12 +8,12 @@ public interface DoctorService {
 
     void register(Doctor doctor) throws ValidationException;
 
-    Doctor getById(int id);
-    Doctor deleteById(int id);
+    Doctor getById(int id) throws WrongCredentials;
+    Doctor deleteById(int id) throws WrongCredentials;
 
     List<Doctor> getByName(String name);
 
-    void update(Doctor doctor);
+    void update(Doctor doctor) throws ValidationException;
 
     List<Doctor> findAll();
 
@@ -25,7 +25,7 @@ public interface DoctorService {
 
     void login(Doctor doctor) throws ValidationException, AlreadyLoggedInException;
 
-    void save(Doctor doctor);
+    void save(Doctor doctor) throws ValidationException;
 
     void logout(String sessionId) throws AlreadyLoggedOutException;
 

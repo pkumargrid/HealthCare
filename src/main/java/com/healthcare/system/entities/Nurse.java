@@ -11,9 +11,7 @@ public class Nurse {
     private HealthProvider healthProvider;
     private List<Doctor> doctorList;
     private List<Patient> patientList;
-
     private List<Reason> reasons;
-
     private String email;
 
     public String getEmail() {

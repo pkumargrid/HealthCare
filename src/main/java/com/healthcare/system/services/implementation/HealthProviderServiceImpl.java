@@ -1,10 +1,12 @@
 package com.healthcare.system.services.implementation;
 
+import com.healthcare.system.entities.Complaint;
 import com.healthcare.system.entities.HealthProvider;
 import com.healthcare.system.entities.Patient;
 import com.healthcare.system.exceptions.AlreadyLoggedInException;
 import com.healthcare.system.exceptions.AlreadyLoggedOutException;
 import com.healthcare.system.exceptions.ValidationException;
+import com.healthcare.system.exceptions.WrongCredentials;
 import com.healthcare.system.repositories.HealthProviderRepository;
 import com.healthcare.system.services.HealthProviderService;
 import com.healthcare.system.session.SessionManager;
@@ -22,22 +24,30 @@ public class HealthProviderServiceImpl implements HealthProviderService {
         this.healthProviderRepository = healthProviderRepository;
     }
     @Override
-    public void save(HealthProvider healthProvider) {
+    public void save(HealthProvider healthProvider) throws ValidationException {
+        verifyCredentials(HealthProvider.class,healthProvider);
         healthProviderRepository.save(healthProvider);
     }
 
     @Override
-    public HealthProvider getById(int id) {
+    public HealthProvider getById(int id) throws WrongCredentials {
+        if(healthProviderRepository.getById(id) == null) {
+            throw new WrongCredentials("HealthProvider with id: " + id + " does not exist");
+        }
         return healthProviderRepository.getById(id);
     }
 
     @Override
-    public HealthProvider deleteById(int id) {
+    public HealthProvider deleteById(int id) throws WrongCredentials {
+        if(healthProviderRepository.getById(id) == null) {
+            throw new WrongCredentials("HealthProvider with id: " + id + " does not exist");
+        }
         return healthProviderRepository.deleteById(id);
     }
 
     @Override
-    public void update(HealthProvider healthProvider) {
+    public void update(HealthProvider healthProvider) throws ValidationException {
+        verifyCredentials(HealthProvider.class,healthProvider);
         healthProviderRepository.update(healthProvider);
     }
 

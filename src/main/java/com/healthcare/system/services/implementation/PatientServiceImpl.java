@@ -1,10 +1,7 @@
 package com.healthcare.system.services.implementation;
 
 import com.healthcare.system.entities.*;
-import com.healthcare.system.exceptions.AlreadyLoggedInException;
-import com.healthcare.system.exceptions.AlreadyLoggedOutException;
-import com.healthcare.system.exceptions.ValidationException;
-import com.healthcare.system.exceptions.AppointmentTimeException;
+import com.healthcare.system.exceptions.*;
 import com.healthcare.system.repositories.*;
 import com.healthcare.system.services.PatientService;
 import com.healthcare.system.session.SessionManager;
@@ -36,7 +33,10 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public Patient findById(int id) {
+    public Patient findById(int id) throws WrongCredentials {
+        if(patientRepository.findById(id) == null) {
+            throw new WrongCredentials("Patient with id: " + id + " does not exist");
+        }
         return patientRepository.findById(id);
     }
 
@@ -46,17 +46,22 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public void savePatient(Patient patient) {
+    public void savePatient(Patient patient) throws ValidationException {
+        verifyCredentials(Patient.class,patient);
         patientRepository.save(patient);
     }
 
     @Override
-    public void updatePatient(Patient patient) {
+    public void updatePatient(Patient patient) throws ValidationException {
+        verifyCredentials(Patient.class,patient);
         patientRepository.update(patient);
     }
 
     @Override
-    public void deletePatientById(int id) {
+    public void deletePatientById(int id) throws WrongCredentials {
+        if(patientRepository.findById(id) == null) {
+            throw new WrongCredentials("Patient with id: " + id + " does not exist");
+        }
         patientRepository.deleteById(id);
     }
 
@@ -96,6 +101,8 @@ public class PatientServiceImpl implements PatientService {
             patientRepository.save(appointment.getPatient());
             appointment.getDoctor().getAppointmentList().add(appointment);
             doctorRepository.save(appointment.getDoctor());
+            appointment.getDoctor().getHealthProvider().getAppointmentList().add(appointment);
+            healthProviderRepository.save(appointment.getDoctor().getHealthProvider());
         }
         else {
             throw new AppointmentTimeException("Time slots not available");
@@ -154,5 +161,29 @@ public class PatientServiceImpl implements PatientService {
         verifyEmailWhileRegister(usedEmails, patient.getEmail());
         verifyUserName(patient.getEmail());
         patientRepository.save(patient);
+    }
+
+    @Override
+    public List<HealthProvider> getHealthProviders(int patientId) throws WrongCredentials {
+        if(patientRepository.findById(patientId) == null) {
+            throw new WrongCredentials("Patient with id: " + patientId + " does not exist");
+        }
+        return patientRepository.findById(patientId).getHealthProvidersList();
+    }
+
+    @Override
+    public List<Doctor> getDoctorList(int patientId) throws WrongCredentials {
+        if(patientRepository.findById(patientId) == null) {
+            throw new WrongCredentials("Patient with id: " + patientId + " does not exist");
+        }
+        return patientRepository.findById(patientId).getDoctorList();
+    }
+
+    @Override
+    public List<HealthRecord> getHealthRecordList(int patientId) throws WrongCredentials {
+        if(patientRepository.findById(patientId) == null) {
+            throw new WrongCredentials("Patient with id: " + patientId + " does not exist");
+        }
+        return patientRepository.findById(patientId).getHealthRecordList();
     }
 }

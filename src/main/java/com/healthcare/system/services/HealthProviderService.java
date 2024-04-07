@@ -5,20 +5,21 @@ import com.healthcare.system.entities.Patient;
 import com.healthcare.system.exceptions.AlreadyLoggedInException;
 import com.healthcare.system.exceptions.AlreadyLoggedOutException;
 import com.healthcare.system.exceptions.ValidationException;
+import com.healthcare.system.exceptions.WrongCredentials;
 
 import java.util.List;
 
 public interface HealthProviderService {
-    void save(HealthProvider healthProvider);
+    void save(HealthProvider healthProvider) throws ValidationException;
 
-    HealthProvider getById(int id);
+    HealthProvider getById(int id) throws WrongCredentials;
 
-    HealthProvider deleteById(int id);
+    HealthProvider deleteById(int id) throws WrongCredentials;
 
     List<HealthProvider> getByName(String name);
 
 
-    void update(HealthProvider healthProvider);
+    void update(HealthProvider healthProvider) throws ValidationException;
 
 
     List<HealthProvider> findAll();
