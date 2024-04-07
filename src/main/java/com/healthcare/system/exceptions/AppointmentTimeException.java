@@ -1,2 +1,4 @@
-package com.healthcare.system.exceptions;public class AppointmentTimeException {
+package com.healthcare.system.exceptions;
+
+public class AppointmentTimeException {
 }
