@@ -3,11 +3,10 @@ package com.healthcare.system.services;
 import com.healthcare.system.entities.Appointment;
 import com.healthcare.system.entities.Complaint;
 import com.healthcare.system.entities.Patient;
+import com.healthcare.system.exceptions.AppointmentTimeException;
 import com.healthcare.system.exceptions.AlreadyLoggedInException;
 import com.healthcare.system.exceptions.AlreadyLoggedOutException;
 import com.healthcare.system.exceptions.ValidationException;
-import com.healthcare.system.exceptions.AppointmentTimeException;
-
 import java.util.List;
 
 public interface PatientService {
@@ -16,10 +15,10 @@ public interface PatientService {
     void savePatient(Patient patient);
     void updatePatient(Patient patient);
     void deletePatientById(int id);
-
+    void bookAppointments(Appointment appointment) throws AppointmentTimeException;
+    void createComplaints(Complaint complaint, String type, int id);
     void login(Patient patient) throws ValidationException, AlreadyLoggedInException;
     void logout(String sessionId) throws AlreadyLoggedOutException;
     void register(Patient patient) throws ValidationException;
-    void bookAppointments(Appointment appointment) throws AppointmentTimeException;
-    void createComplaints(Complaint complaint, String type, int id);
+
 }

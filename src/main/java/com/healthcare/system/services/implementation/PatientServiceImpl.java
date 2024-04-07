@@ -60,38 +60,7 @@ public class PatientServiceImpl implements PatientService {
         patientRepository.deleteById(id);
     }
 
-    @Override
-    public void login(Patient patient) throws ValidationException, AlreadyLoggedInException {
-        if (SessionManager.isAuthenticated(patient.getSessionId())) {
-            throw new AlreadyLoggedInException("Patient: " + patient.getEmail() + " is already logged in");
-        }
-        List<Patient> patients = patientRepository.findAll();
-        verifyEmailWhileLogin(patients, patient.getEmail());
-        Patient patient1 = patients.stream().filter(p -> p.getEmail().equals(patient.getEmail())).findFirst().get();
-        verifyPasswordWhileLogin(patient1.getPassword(), patient.getPassword());
-        patient1.setSessionId(SessionManager.generateSessionId(patient.getEmail()));
-    }
-
-    @Override
-    public void logout(String sessionId) throws AlreadyLoggedOutException {
-        if(!SessionManager.isAuthenticated(sessionId)) {
-            throw new AlreadyLoggedOutException("You are already logged out");
-        }
-        SessionManager.removeSessionId(sessionId);
-    }
-
-    @Override
-    public void register(Patient patient) throws ValidationException {
-        verifyPasswordWhileRegister(patient.getPassword());
-        List<Patient> patients = patientRepository.findAll();
-        List<String> usedEmails = patients.stream().flatMap(p -> Stream.of(p.getEmail())).toList();
-        verifyEmailWhileRegister(usedEmails, patient.getEmail());
-        verifyUserName(patient.getEmail());
-        patientRepository.save(patient);
-    }
-
     public void bookAppointments(Appointment appointment) throws AppointmentTimeException {
-
         List<Appointment> doctorAppointmentList = appointment.getPatient().getAppointmentList();
         int[] range = new int[601];
         for(var doctorAppointment : doctorAppointmentList) {
@@ -124,7 +93,9 @@ public class PatientServiceImpl implements PatientService {
             appointment.setEndTime(LocalDateTime.of(currentDate,end));
             appointmentRepository.save(appointment);
             appointment.getPatient().getAppointmentList().add(appointment);
+            patientRepository.save(appointment.getPatient());
             appointment.getDoctor().getAppointmentList().add(appointment);
+            doctorRepository.save(appointment.getDoctor());
         }
         else {
             throw new AppointmentTimeException("Time slots not available");
@@ -143,4 +114,33 @@ public class PatientServiceImpl implements PatientService {
         }
     }
 
+    @Override
+    public void login(Patient patient) throws ValidationException, AlreadyLoggedInException {
+        if (SessionManager.isAuthenticated(patient.getSessionId())) {
+            throw new AlreadyLoggedInException("Patient: " + patient.getEmail() + " is already logged in");
+        }
+        List<Patient> patients = patientRepository.findAll();
+        verifyEmailWhileLogin(patients, patient.getEmail());
+        Patient patient1 = patients.stream().filter(p -> p.getEmail().equals(patient.getEmail())).findFirst().get();
+        verifyPasswordWhileLogin(patient1.getPassword(), patient.getPassword());
+        patient1.setSessionId(SessionManager.generateSessionId(patient.getEmail()));
+    }
+
+    @Override
+    public void logout(String sessionId) throws AlreadyLoggedOutException {
+        if(!SessionManager.isAuthenticated(sessionId)) {
+            throw new AlreadyLoggedOutException("You are already logged out");
+        }
+        SessionManager.removeSessionId(sessionId);
+    }
+
+    @Override
+    public void register(Patient patient) throws ValidationException {
+        verifyPasswordWhileRegister(patient.getPassword());
+        List<Patient> patients = patientRepository.findAll();
+        List<String> usedEmails = patients.stream().flatMap(p -> Stream.of(p.getEmail())).toList();
+        verifyEmailWhileRegister(usedEmails, patient.getEmail());
+        verifyUserName(patient.getEmail());
+        patientRepository.save(patient);
+    }
 }
