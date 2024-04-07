@@ -10,6 +10,16 @@ public class HealthProvider {
     private String name;
 
     private String password;
+
+    public List<Appointment> getAppointmentList() {
+        return appointmentList;
+    }
+
+    public void setAppointmentList(List<Appointment> appointmentList) {
+        this.appointmentList = appointmentList;
+    }
+
+    private List<Appointment> appointmentList;
     public String getPassword() {
         return password;
     }
