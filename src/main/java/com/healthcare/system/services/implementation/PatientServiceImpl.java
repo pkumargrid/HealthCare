@@ -5,10 +5,7 @@ import com.healthcare.system.exceptions.AlreadyLoggedInException;
 import com.healthcare.system.exceptions.AlreadyLoggedOutException;
 import com.healthcare.system.exceptions.ValidationException;
 import com.healthcare.system.exceptions.AppointmentTimeException;
-import com.healthcare.system.repositories.AppointmentRepository;
-import com.healthcare.system.repositories.DoctorRepository;
-import com.healthcare.system.repositories.NurseRepository;
-import com.healthcare.system.repositories.PatientRepository;
+import com.healthcare.system.repositories.*;
 import com.healthcare.system.services.PatientService;
 import com.healthcare.system.session.SessionManager;
 
@@ -25,12 +22,17 @@ public class PatientServiceImpl implements PatientService {
     private final AppointmentRepository appointmentRepository;
     private final DoctorRepository doctorRepository;
     private final NurseRepository nurseRepository;
+    private final ComplaintRepository complaintRepository;
 
-    public PatientServiceImpl(PatientRepository patientRepository, AppointmentRepository appointmentRepository, DoctorRepository doctorRepository, NurseRepository nurseRepository) {
+    private final HealthProviderRepository healthProviderRepository;
+
+    public PatientServiceImpl(PatientRepository patientRepository, AppointmentRepository appointmentRepository, DoctorRepository doctorRepository, NurseRepository nurseRepository, ComplaintRepository complaintRepository, HealthProviderRepository healthProviderRepository) {
         this.patientRepository = patientRepository;
         this.appointmentRepository = appointmentRepository;
         this.doctorRepository = doctorRepository;
         this.nurseRepository = nurseRepository;
+        this.complaintRepository = complaintRepository;
+        this.healthProviderRepository = healthProviderRepository;
     }
 
     @Override
@@ -102,14 +104,26 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public void createComplaints(Complaint complaint, String type, int id) {
+    public void createComplaint(Complaint complaint, String type, int id) {
         complaint.getPatient().getComplaintList().add(complaint);
         if(type.equals("Doctor")) {
-            doctorRepository.getById(id).getComplaintList().add(complaint);
+            Doctor doctor = doctorRepository.getById(id);
+            doctor.getComplaintList().add(complaint);
+            HealthProvider healthProvider = doctor.getHealthProvider();
+            healthProvider.getComplaintList().add(complaint);
+            doctorRepository.save(doctor);
+            healthProviderRepository.save(healthProvider);
         }
         else if(type.equals("Nurse")) {
-            nurseRepository.findById(id).getComplaintList().add(complaint);
+            Nurse nurse = nurseRepository.findById(id);
+            nurse.getComplaintList().add(complaint);
+            nurse.getHealthProvider().getComplaintList().add(complaint);
+            HealthProvider healthProvider = nurse.getHealthProvider();
+            healthProvider.getComplaintList().add(complaint);
+            nurseRepository.saveNurse(nurse);
+            healthProviderRepository.save(healthProvider);
         }
+        complaintRepository.save(complaint);
     }
 
     @Override

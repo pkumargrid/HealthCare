@@ -144,6 +144,37 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
+    public List<Appointment> getAppointments(int doctorId) throws WrongCredentials {
+        if(doctorRepository.getById(doctorId) == null) {
+            throw new WrongCredentials("Doctor with id: " + doctorId + " does not exist");
+        }
+        return doctorRepository.getById(doctorId).getAppointmentList();
+    }
+
+    @Override
+    public List<Complaint> getComplaints(int doctorId) throws WrongCredentials {
+        if(doctorRepository.getById(doctorId) == null) {
+            throw new WrongCredentials("Doctor with id: " + doctorId + " does not exist");
+        }
+        return doctorRepository.getById(doctorId).getComplaintList();
+    }
+
+    public List<Reason> getReasons(int doctorId) throws WrongCredentials {
+        if(doctorRepository.getById(doctorId) == null) {
+            throw new WrongCredentials("Doctor with id: " + doctorId + " does not exist");
+        }
+        return doctorRepository.getById(doctorId).getReasons();
+    }
+
+    @Override
+    public List<Patient> getPatients(int doctorId) throws WrongCredentials {
+        if(doctorRepository.getById(doctorId) == null) {
+            throw new WrongCredentials("Doctor with id: " + doctorId + " does not exist");
+        }
+        return doctorRepository.getById(doctorId).getPatientList();
+    }
+
+    @Override
     public void save(Doctor doctor) {
         doctorRepository.save(doctor);
     }
