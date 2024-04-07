@@ -6,11 +6,4 @@ public class ReasonTypeException extends Exception {
         super(msg);
     }
 
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
 }

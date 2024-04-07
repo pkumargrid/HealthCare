@@ -8,7 +8,6 @@ import java.util.List;
 
 public class PatientRepositoryImpl implements PatientRepository {
 
-
     List<Patient> patients;
     public PatientRepositoryImpl(){
         patients = new ArrayList<>();
@@ -38,7 +37,7 @@ public class PatientRepositoryImpl implements PatientRepository {
         prevPatient.setPassword(patient.getPassword());
         prevPatient.setNurse(patient.getNurse());
         prevPatient.setName(patient.getName());
-        prevPatient.setHealthProvidersList(patient.getHealthProvidersList());
+        prevPatient.setHealthProviderList(patient.getHealthProviderList());
         prevPatient.setHealthRecordList(patient.getHealthRecordList());
         prevPatient.setPassword(patient.getPassword());
         prevPatient.setId(patient.getId());

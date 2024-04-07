@@ -1,12 +1,13 @@
 package com.healthcare.system.services;
 
+import com.healthcare.system.controllers.dto.DoctorDTO;
 import com.healthcare.system.entities.*;
 import com.healthcare.system.exceptions.*;
 
 import java.util.List;
 public interface DoctorService {
 
-    void register(Doctor doctor) throws ValidationException;
+    void register(DoctorDTO doctor) throws ValidationException;
 
     Doctor getById(int id) throws WrongCredentials;
     Doctor deleteById(int id) throws WrongCredentials;

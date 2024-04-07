@@ -1,16 +1,13 @@
 package com.healthcare.system.entities;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
 public class Reason {
 
     private int id;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     private Object type;
 
@@ -18,27 +15,4 @@ public class Reason {
 
     private Complaint complaint;
 
-    public Complaint getComplaint() {
-        return complaint;
-    }
-
-    public void setComplaint(Complaint complaint) {
-        this.complaint = complaint;
-    }
-
-    public Object getType() {
-        return type;
-    }
-
-    public void setType(Object type) {
-        this.type = type;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
 }

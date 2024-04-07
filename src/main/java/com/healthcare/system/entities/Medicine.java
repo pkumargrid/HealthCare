@@ -1,8 +1,13 @@
 package com.healthcare.system.entities;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Setter
+@Getter
 public class Medicine {
     private String name;
     private int dose;
@@ -12,27 +17,4 @@ public class Medicine {
         this.times = new ArrayList<>();
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getDose() {
-        return dose;
-    }
-
-    public void setDose(int dose) {
-        this.dose = dose;
-    }
-
-    public List<DayTime> getTimes() {
-        return times;
-    }
-
-    public void setTimes(List<DayTime> times) {
-        this.times = times;
-    }
 }

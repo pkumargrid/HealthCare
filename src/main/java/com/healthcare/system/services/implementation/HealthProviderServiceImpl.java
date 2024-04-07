@@ -1,6 +1,7 @@
 package com.healthcare.system.services.implementation;
 
 
+import com.healthcare.system.controllers.dto.HealthProviderDTO;
 import com.healthcare.system.entities.*;
 import com.healthcare.system.entities.Complaint;
 import com.healthcare.system.entities.HealthProvider;
@@ -10,7 +11,9 @@ import com.healthcare.system.exceptions.AlreadyLoggedOutException;
 import com.healthcare.system.exceptions.ValidationException;
 import com.healthcare.system.exceptions.WrongCredentials;
 
+import com.healthcare.system.mappers.HealthProviderMapper;
 import com.healthcare.system.repositories.HealthProviderRepository;
+import com.healthcare.system.repositories.PatientRepository;
 import com.healthcare.system.services.HealthProviderService;
 import com.healthcare.system.session.SessionManager;
 
@@ -22,10 +25,12 @@ import static com.healthcare.system.util.Verification.*;
 public class HealthProviderServiceImpl implements HealthProviderService {
 
     private final HealthProviderRepository healthProviderRepository;
+    private final PatientRepository patientRepository;
 
 
-    public HealthProviderServiceImpl(HealthProviderRepository healthProviderRepository) {
+    public HealthProviderServiceImpl(HealthProviderRepository healthProviderRepository, PatientRepository patientRepository) {
         this.healthProviderRepository = healthProviderRepository;
+        this.patientRepository = patientRepository;
     }
     @Override
     public void save(HealthProvider healthProvider) throws ValidationException {
@@ -81,18 +86,29 @@ public class HealthProviderServiceImpl implements HealthProviderService {
     }
 
     @Override
-    public void register(HealthProvider healthProvider) throws ValidationException {
+    public void register(HealthProviderDTO healthProviderDTO) throws ValidationException {
+        HealthProvider healthProvider = HealthProviderMapper.mapToDomain(healthProviderDTO);
         verifyPasswordWhileRegister(healthProvider.getPassword());
         List<HealthProvider> healthProviders = healthProviderRepository.findAll();
-        List<String> usedEmails = healthProviders.stream().flatMap(d -> Stream.of(d.getEmail())).toList();
+        List<String> usedEmails = healthProviders.stream().flatMap(h -> Stream.of(h.getEmail())).toList();
         verifyEmailWhileRegister(usedEmails, healthProvider.getEmail());
         verifyUserName(healthProvider.getEmail());
+        healthProvider.setId(healthProviders.stream().flatMap(h -> Stream.of(h.getId())).reduce(0,Integer::max) + 1);
         healthProviderRepository.save(healthProvider);
     }
 
     @Override
-    public void registerPatient(HealthProvider healthProvider,Patient patient) {
+    public void registerPatient(int healthProviderId, int patientId) throws WrongCredentials {
+        HealthProvider healthProvider = healthProviderRepository.getById(healthProviderId);
+        if (healthProvider == null) {
+            throw new WrongCredentials("Provided id for Health provider is wrong");
+        }
+        Patient patient = patientRepository.findById(patientId);
+        if(patient == null) {
+            throw new WrongCredentials("Provided id for Patient is wrong");
+        }
         healthProvider.getPatientList().add(patient);
+        healthProviderRepository.save(healthProvider);
     }
 
     @Override

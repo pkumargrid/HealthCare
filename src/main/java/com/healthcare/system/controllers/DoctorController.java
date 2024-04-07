@@ -1,7 +1,7 @@
 package com.healthcare.system.controllers;
 
-import com.healthcare.system.controllers.dto.ResponseSave;
-import com.healthcare.system.entities.Doctor;
+import com.healthcare.system.controllers.dto.DoctorDTO;
+import com.healthcare.system.controllers.dto.ResponseCrudDTO;
 import com.healthcare.system.exceptions.ValidationException;
 import com.healthcare.system.services.DoctorService;
 
@@ -13,12 +13,12 @@ public class DoctorController {
         this.doctorService = doctorService;
     }
 
-    public ResponseSave save(Doctor doctor) {
+    public ResponseCrudDTO register(DoctorDTO doctorDTO) {
         try{
-            doctorService.save(doctor);
-            return new ResponseSave("Saved Doctor Successfully!");
+            doctorService.register(doctorDTO);
+            return new ResponseCrudDTO("Saved Doctor Successfully!");
         } catch (ValidationException v) {
-            return new ResponseSave("Failed to Save!\n Reason: " + v.getMessage());
+            return new ResponseCrudDTO("Failed to Save!\n Reason: " + v.getMessage());
         }
     }
 
