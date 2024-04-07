@@ -53,7 +53,6 @@ public class HealthProvider {
     private List<Reason> reasons;
 
     private List<Nurse> nurseList;
-
     private List<Complaint> complaintList;
 
     private String sessionId;
