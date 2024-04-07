@@ -83,7 +83,6 @@ public class DoctorServiceImpl implements DoctorService {
         if(nurseList == null || nurseList.isEmpty()) {
             throw new IllegalStateException("No nurse to assign");
         }
-
         Collections.shuffle(nurseList);
         Nurse nurse = nurseList.get(0);
         nurse.getPatientList().add(patient);

@@ -1,11 +1,11 @@
 package com.healthcare.system.services.implementation;
 
-import com.healthcare.system.entities.HealthProvider;
-import com.healthcare.system.entities.Patient;
+import com.healthcare.system.entities.*;
 import com.healthcare.system.exceptions.AlreadyLoggedInException;
 import com.healthcare.system.exceptions.AlreadyLoggedOutException;
 import com.healthcare.system.exceptions.ValidationException;
-import com.healthcare.system.repositories.HealthProviderRepository;
+import com.healthcare.system.exceptions.WrongCredentials;
+import com.healthcare.system.repositories.*;
 import com.healthcare.system.services.HealthProviderService;
 import com.healthcare.system.session.SessionManager;
 
@@ -17,6 +17,7 @@ import static com.healthcare.system.util.Verification.*;
 public class HealthProviderServiceImpl implements HealthProviderService {
 
     private final HealthProviderRepository healthProviderRepository;
+
 
     public HealthProviderServiceImpl(HealthProviderRepository healthProviderRepository) {
         this.healthProviderRepository = healthProviderRepository;
@@ -79,6 +80,52 @@ public class HealthProviderServiceImpl implements HealthProviderService {
     @Override
     public void registerPatient(HealthProvider healthProvider,Patient patient) {
         healthProvider.getPatientList().add(patient);
+    }
+
+    @Override
+    public List<Doctor> getDoctors(int healthProviderId) throws WrongCredentials {
+        if(healthProviderRepository.getById(healthProviderId) == null) {
+            throw new WrongCredentials("HealthProvider with id: " + healthProviderId + " does not exist");
+        }
+        return healthProviderRepository.getById(healthProviderId).getDoctorList();
+    }
+
+    @Override
+    public List<Nurse> getNurse(int healthProviderId) throws WrongCredentials {
+        if(healthProviderRepository.getById(healthProviderId) == null) {
+            throw new WrongCredentials("HealthProvider with id: " + healthProviderId + " does not exist");
+        }
+        return healthProviderRepository.getById(healthProviderId).getNurseList();
+    }
+
+    @Override
+    public List<Complaint> getComplaints(int healthProviderId) throws WrongCredentials {
+        if(healthProviderRepository.getById(healthProviderId) == null) {
+            throw new WrongCredentials("HealthProvider with id: " + healthProviderId + " does not exist");
+        }
+        return healthProviderRepository.getById(healthProviderId).getComplaintList();
+    }
+
+    @Override
+    public List<HealthRecord> getHealthRecords(int healthProviderId) throws WrongCredentials {
+        if(healthProviderRepository.getById(healthProviderId) == null) {
+            throw new WrongCredentials("HealthProvider with id: " + healthProviderId + " does not exist");
+        }
+        return healthProviderRepository.getById(healthProviderId).getHealthRecords();
+    }
+
+    @Override
+    public List<Appointment> getAppointments(int healthProviderId) {
+        //@AnshMakker complete this method
+        return null;
+    }
+
+    @Override
+    public List<Reason> getReasons(int healthProviderId) throws WrongCredentials {
+        if(healthProviderRepository.getById(healthProviderId) == null) {
+            throw new WrongCredentials("HealthProvider with id: " + healthProviderId + " does not exist");
+        }
+        return healthProviderRepository.getById(healthProviderId).getReasons();
     }
 
     @Override
