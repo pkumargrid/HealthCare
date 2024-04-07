@@ -16,7 +16,9 @@ public interface HealthProviderService {
 
     List<HealthProvider> getByName(String name);
 
+
     void update(HealthProvider healthProvider);
+
 
     List<HealthProvider> findAll();
 

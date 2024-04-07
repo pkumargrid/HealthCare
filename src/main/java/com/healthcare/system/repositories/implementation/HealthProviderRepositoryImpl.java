@@ -25,6 +25,7 @@ public class HealthProviderRepositoryImpl implements HealthProviderRepository {
         return healthProviderList.stream().filter(healthProvider -> healthProvider.getId() == id).findFirst().get();
     }
 
+
     @Override
     public HealthProvider deleteById(int id) {
         HealthProvider healthProvider = healthProviderList.stream().filter(h -> h.getId() == id).findFirst().get();

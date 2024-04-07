@@ -2,13 +2,23 @@ package com.healthcare.system.entities;
 
 
 public class Report {
-    private String text;
+    private String advice;
 
-    public String getText() {
-        return text;
+    private Status status;
+
+    public String getAdvice() {
+        return advice;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setAdvice(String advice) {
+        this.advice = advice;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }

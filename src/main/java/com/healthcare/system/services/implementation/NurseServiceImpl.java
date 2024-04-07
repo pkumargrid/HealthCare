@@ -1,9 +1,11 @@
 package com.healthcare.system.services.implementation;
 
+import com.healthcare.system.entities.HealthRecord;
 import com.healthcare.system.entities.Nurse;
 import com.healthcare.system.exceptions.AlreadyLoggedInException;
 import com.healthcare.system.exceptions.AlreadyLoggedOutException;
 import com.healthcare.system.exceptions.ValidationException;
+import com.healthcare.system.entities.Patient;
 import com.healthcare.system.repositories.NurseRepository;
 import com.healthcare.system.services.NurseService;
 import com.healthcare.system.session.SessionManager;
@@ -74,5 +76,9 @@ public class NurseServiceImpl implements NurseService {
         verifyEmailWhileRegister(usedEmails, nurse.getEmail());
         verifyUserName(nurse.getEmail());
         nurseRepository.saveNurse(nurse);
+    }
+
+    public HealthRecord accessPatientRecord(Patient patient) {
+        return nurseRepository.accessPatientRecord(patient);
     }
 }
