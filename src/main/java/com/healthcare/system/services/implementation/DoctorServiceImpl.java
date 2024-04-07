@@ -46,17 +46,24 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public Doctor getById(int id) {
+    public Doctor getById(int id) throws WrongCredentials {
+        if(doctorRepository.getById(id) == null) {
+            throw new WrongCredentials("Doctor with id: " + id + " does not exist");
+        }
         return doctorRepository.getById(id);
     }
 
     @Override
-    public Doctor deleteById(int id) {
+    public Doctor deleteById(int id) throws WrongCredentials {
+        if(doctorRepository.getById(id) == null) {
+            throw new WrongCredentials("Doctor with id: " + id + " does not exist");
+        }
         return doctorRepository.deleteById(id);
     }
 
     @Override
-    public void update(Doctor doctor) {
+    public void update(Doctor doctor) throws ValidationException {
+        verifyCredentials(Doctor.class,doctor);
         doctorRepository.update(doctor);
     }
 
@@ -174,7 +181,8 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public void save(Doctor doctor) {
+    public void save(Doctor doctor) throws ValidationException {
+        verifyCredentials(Doctor.class,doctor);
         doctorRepository.save(doctor);
     }
 

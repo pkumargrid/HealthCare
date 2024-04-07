@@ -1,13 +1,11 @@
 package com.healthcare.system.services.implementation;
 
-import com.healthcare.system.entities.HealthRecord;
-import com.healthcare.system.entities.Nurse;
+import com.healthcare.system.entities.*;
 
-import com.healthcare.system.entities.Patient;
-import com.healthcare.system.entities.Report;
 import com.healthcare.system.exceptions.AlreadyLoggedInException;
 import com.healthcare.system.exceptions.AlreadyLoggedOutException;
 import com.healthcare.system.exceptions.ValidationException;
+import com.healthcare.system.exceptions.WrongCredentials;
 import com.healthcare.system.repositories.HealthRecordRepository;
 import com.healthcare.system.repositories.NurseRepository;
 import com.healthcare.system.services.NurseService;
@@ -29,7 +27,10 @@ public class NurseServiceImpl implements NurseService {
     }
 
     @Override
-    public Nurse findById(int id) {
+    public Nurse findById(int id) throws WrongCredentials {
+        if(nurseRepository.findById(id) == null) {
+            throw new WrongCredentials("Nurse with id: " + id + " does not exist");
+        }
         return nurseRepository.findById(id);
     }
 
@@ -39,17 +40,22 @@ public class NurseServiceImpl implements NurseService {
     }
 
     @Override
-    public void saveNurse(Nurse nurse) {
+    public void saveNurse(Nurse nurse) throws ValidationException {
+        verifyCredentials(Nurse.class,nurse);
         nurseRepository.saveNurse(nurse);
     }
 
     @Override
-    public void updateNurse(Nurse nurse) {
+    public void updateNurse(Nurse nurse) throws ValidationException {
+        verifyCredentials(Nurse.class,nurse);
         nurseRepository.updateNurse(nurse);
     }
 
     @Override
-    public void deleteNurseById(int id) {
+    public void deleteNurseById(int id) throws WrongCredentials {
+        if(nurseRepository.findById(id) == null) {
+            throw new WrongCredentials("Nurse with id: " + id + " does not exist");
+        }
         nurseRepository.deleteNurseById(id);
     }
     @Override
@@ -89,5 +95,21 @@ public class NurseServiceImpl implements NurseService {
 
     public HealthRecord accessPatientRecord(Patient patient) {
         return nurseRepository.accessPatientRecord(patient);
+    }
+
+    @Override
+    public List<Reason> getReasons(int nurseId) throws WrongCredentials {
+        if(nurseRepository.findById(nurseId) == null) {
+            throw new WrongCredentials("Nurse with id: " + nurseId + " does not exist");
+        }
+        return nurseRepository.findById(nurseId).getReasons();
+    }
+
+    @Override
+    public List<Complaint> getComplaints(int nurseId) throws WrongCredentials {
+        if(nurseRepository.findById(nurseId) == null) {
+            throw new WrongCredentials("Nurse with id: " + nurseId + " does not exist");
+        }
+        return nurseRepository.findById(nurseId).getComplaintList();
     }
 }

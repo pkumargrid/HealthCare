@@ -9,16 +9,16 @@ import com.healthcare.system.exceptions.WrongCredentials;
 import java.util.List;
 
 public interface HealthProviderService {
-    void save(HealthProvider healthProvider);
+    void save(HealthProvider healthProvider) throws ValidationException;
 
-    HealthProvider getById(int id);
+    HealthProvider getById(int id) throws WrongCredentials;
 
-    HealthProvider deleteById(int id);
+    HealthProvider deleteById(int id) throws WrongCredentials;
 
     List<HealthProvider> getByName(String name);
 
 
-    void update(HealthProvider healthProvider);
+    void update(HealthProvider healthProvider) throws ValidationException;
 
 
     List<HealthProvider> findAll();
@@ -37,7 +37,7 @@ public interface HealthProviderService {
 
     List<HealthRecord> getHealthRecords(int healthProviderId) throws WrongCredentials;
 
-    List<Appointment> getAppointments(int healthProviderId);
+    List<Appointment> getAppointments(int healthProviderId) throws WrongCredentials;
 
     List<Reason> getReasons(int healthProviderId) throws WrongCredentials;
 }
