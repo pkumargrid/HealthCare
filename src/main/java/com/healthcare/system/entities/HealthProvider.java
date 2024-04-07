@@ -17,7 +17,6 @@ public class HealthProvider {
     private List<Patient> patientList;
 
     private List<Nurse> nurseList;
-
     private List<Complaint> complaintList;
     private List<HealthRecord> healthRecords;
     private List<Doctor> doctorList;

@@ -21,5 +21,7 @@ public interface PatientService {
     void logout(String sessionId) throws AlreadyLoggedOutException;
     void register(Patient patient) throws ValidationException;
     void bookAppointments(Appointment appointment) throws AppointmentTimeException;
-    void createComplaints(Complaint complaint, String type, int id);
+    void createComplaint(Complaint complaint, String type, int id);
+
+
 }

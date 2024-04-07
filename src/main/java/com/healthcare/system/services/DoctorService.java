@@ -1,8 +1,6 @@
 package com.healthcare.system.services;
 
-import com.healthcare.system.entities.Doctor;
-import com.healthcare.system.entities.Patient;
-import com.healthcare.system.entities.Reason;
+import com.healthcare.system.entities.*;
 import com.healthcare.system.exceptions.*;
 
 import java.util.List;
@@ -30,4 +28,13 @@ public interface DoctorService {
     void save(Doctor doctor);
 
     void logout(String sessionId) throws AlreadyLoggedOutException;
+
+    List<Appointment> getAppointments(int doctorId) throws WrongCredentials;
+
+    List<Complaint> getComplaints(int doctorId) throws WrongCredentials;
+
+    List<Reason> getReasons(int doctorId) throws WrongCredentials;
+
+    List<Patient> getPatients(int doctorId) throws WrongCredentials;
+
 }
