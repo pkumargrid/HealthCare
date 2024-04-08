@@ -1,5 +1,6 @@
 package com.healthcare.system.services;
 
+import com.healthcare.system.controllers.dto.NurseDTO;
 import com.healthcare.system.entities.*;
 import com.healthcare.system.exceptions.AlreadyLoggedInException;
 import com.healthcare.system.exceptions.AlreadyLoggedOutException;
@@ -17,7 +18,7 @@ public interface NurseService {
 
     void login(Nurse nurse) throws ValidationException, AlreadyLoggedInException;
     void logout(String sessionId) throws AlreadyLoggedOutException;
-    void register(Nurse nurse) throws ValidationException, AlreadyLoggedInException;
+    void register(NurseDTO nurseDTO) throws ValidationException, AlreadyLoggedInException;
     void addBiometricData(int healthRecordId, Report report) throws WrongCredentials;
     HealthRecord accessPatientRecord(Patient patient);
 

@@ -50,7 +50,7 @@ public class Injector {
         complaintService = new ComplaintServiceImpl(complaintRepository);
         appointmentService = new AppointmentServiceImpl(appointmentRepository);
         patientService = new PatientServiceImpl(patientRepository, appointmentRepository, doctorRepository, nurseRepository, complaintRepository, healthProviderRepository);
-        nurseService = new NurseServiceImpl(nurseRepository, healthRecordRepository, reportRepository);
+        nurseService = new NurseServiceImpl(nurseRepository, healthRecordRepository,healthProviderRepository ,reportRepository);
         healthRecordService = new HealthRecordServiceImpl(healthRecordRepository);
     }
 

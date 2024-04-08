@@ -1,11 +1,15 @@
 package com.healthcare.system.services.implementation;
 
+import com.healthcare.system.controllers.dto.NurseDTO;
 import com.healthcare.system.entities.*;
 
 import com.healthcare.system.exceptions.AlreadyLoggedInException;
 import com.healthcare.system.exceptions.AlreadyLoggedOutException;
 import com.healthcare.system.exceptions.ValidationException;
 import com.healthcare.system.exceptions.WrongCredentials;
+import com.healthcare.system.mappers.NurseMapper;
+import com.healthcare.system.mappers.PatientMapper;
+import com.healthcare.system.repositories.HealthProviderRepository;
 import com.healthcare.system.repositories.HealthRecordRepository;
 import com.healthcare.system.repositories.NurseRepository;
 import com.healthcare.system.repositories.ReportRepository;
@@ -21,11 +25,13 @@ public class NurseServiceImpl implements NurseService {
 
     private final NurseRepository nurseRepository;
     public final HealthRecordRepository healthRecordRepository;
+    public final HealthProviderRepository healthProviderRepository;
     public final ReportRepository reportRepository;
 
-    public NurseServiceImpl(NurseRepository nurseRepository, HealthRecordRepository healthRecordRepository, ReportRepository reportRepository) {
+    public NurseServiceImpl(NurseRepository nurseRepository, HealthRecordRepository healthRecordRepository, HealthProviderRepository healthProviderRepository, ReportRepository reportRepository) {
         this.nurseRepository = nurseRepository;
         this.healthRecordRepository = healthRecordRepository;
+        this.healthProviderRepository = healthProviderRepository;
         this.reportRepository = reportRepository;
     }
 
@@ -82,13 +88,14 @@ public class NurseServiceImpl implements NurseService {
     }
 
     @Override
-    public void register(Nurse nurse) throws ValidationException {
+    public void register(NurseDTO nurseDTO) throws ValidationException {
+        Nurse nurse = NurseMapper.mapToDomain(nurseDTO,healthProviderRepository);
         verifyPasswordWhileRegister(nurse.getPassword());
         List<Nurse> nurses = nurseRepository.findAll();
-        List<String> usedEmails = nurses.stream().flatMap(n -> Stream.of(n.getEmail())).toList();
+        List<String> usedEmails = nurses.stream().flatMap(d -> Stream.of(d.getEmail())).toList();
         verifyEmailWhileRegister(usedEmails, nurse.getEmail());
         verifyUserName(nurse.getEmail());
-        nurse.setId(nurses.stream().flatMap(n -> Stream.of(n.getId())).reduce(0,Integer::max) + 1);
+        nurse.setId(nurses.stream().flatMap(d -> Stream.of(d.getId())).reduce(0,Integer::max) + 1);
         nurseRepository.saveNurse(nurse);
     }
     @Override

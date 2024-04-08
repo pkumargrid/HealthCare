@@ -1,17 +1,20 @@
 package com.healthcare.system.server.request.handlers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.healthcare.system.controllers.HealthProviderController;
-import com.healthcare.system.controllers.dto.HealthProviderDTO;
+import com.healthcare.system.controllers.NurseController;
+import com.healthcare.system.controllers.PatientController;
+import com.healthcare.system.controllers.dto.NurseDTO;
+import com.healthcare.system.controllers.dto.PatientDTO;
 import com.healthcare.system.controllers.dto.ResponseCrudDTO;
 import com.healthcare.system.dependency.injection.Injector;
+import com.healthcare.system.entities.Nurse;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class HealthProviderRegisterHandler implements HttpHandler {
+public class NurseRegisterHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         if (!exchange.getRequestMethod().equalsIgnoreCase("POST")) {
@@ -21,9 +24,9 @@ public class HealthProviderRegisterHandler implements HttpHandler {
 
         ObjectMapper mapper = new ObjectMapper();
         String requestBody = new String(exchange.getRequestBody().readAllBytes());
-        HealthProviderDTO requestObject = mapper.readValue(requestBody, HealthProviderDTO.class);
+        NurseDTO requestObject = mapper.readValue(requestBody, NurseDTO.class);
 
-        ResponseCrudDTO responseCrud = new HealthProviderController(Injector.healthProviderService).register(requestObject);
+        ResponseCrudDTO responseCrud = new NurseController(Injector.nurseService).save(requestObject);
         String jsonResponse = mapper.writeValueAsString(responseCrud);
 
         exchange.getResponseHeaders().set("Content-Type", "application/json");
