@@ -1,6 +1,7 @@
 package com.healthcare.system.repositories.implementation;
 
 import com.healthcare.system.entities.Patient;
+import com.healthcare.system.exceptions.WrongCredentials;
 import com.healthcare.system.repositories.PatientRepository;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ public class PatientRepositoryImpl implements PatientRepository {
     }
     @Override
     public Patient findById(int id) {
-        return patients.stream().filter(patient -> patient.getId() == id).findFirst().get();
+        return patients.stream().filter(patient -> patient.getId() == id).findFirst().orElse(null);
     }
 
     @Override
@@ -23,7 +24,7 @@ public class PatientRepositoryImpl implements PatientRepository {
     }
 
     @Override
-    public void save(Patient patient) {
+    public void save(Patient patient) throws WrongCredentials {
         if (patients.contains(patient)) {
             update(patient);
             return;
@@ -32,8 +33,11 @@ public class PatientRepositoryImpl implements PatientRepository {
     }
 
     @Override
-    public void update(Patient patient) {
-        Patient prevPatient = patients.stream().filter(p -> p.getId() == patient.getId()).findFirst().get();
+    public void update(Patient patient) throws WrongCredentials {
+        Patient prevPatient = patients.stream().filter(p -> p.getId() == patient.getId()).findFirst().orElse(null);
+        if(prevPatient == null) {
+            throw new WrongCredentials("Patient with id " + patient.getId() + " does not exist");
+        }
         prevPatient.setPassword(patient.getPassword());
         prevPatient.setNurse(patient.getNurse());
         prevPatient.setName(patient.getName());
@@ -49,8 +53,11 @@ public class PatientRepositoryImpl implements PatientRepository {
     }
 
     @Override
-    public void deleteById(int id) {
-        Patient patient = patients.stream().filter(patient1 -> patient1.getId() == id).findFirst().get();
+    public void deleteById(int id) throws WrongCredentials {
+        Patient patient = patients.stream().filter(patient1 -> patient1.getId() == id).findFirst().orElse(null);
+        if(patient == null) {
+            throw new WrongCredentials("Patient with id " + id + " does not exist");
+        }
         patients.remove(patient);
     }
 }

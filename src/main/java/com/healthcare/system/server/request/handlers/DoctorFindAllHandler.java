@@ -2,15 +2,13 @@ package com.healthcare.system.server.request.handlers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.healthcare.system.controllers.DoctorController;
-import com.healthcare.system.controllers.dto.ResponseCrudDTO;
-import com.healthcare.system.dependency.injection.Injector;
-import com.healthcare.system.entities.Doctor;
+import com.healthcare.system.dependency.injection.Context;
+import com.healthcare.system.dto.ResponseCrudDTO;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.List;
 
 public class DoctorFindAllHandler implements HttpHandler {
     @Override
@@ -22,14 +20,13 @@ public class DoctorFindAllHandler implements HttpHandler {
 
         ObjectMapper mapper = new ObjectMapper();
 
-        ResponseCrudDTO<List<Doctor>> responseCrud = new DoctorController(Injector.doctorService).findAll();
+        ResponseCrudDTO<?> responseCrud = new DoctorController(Context.doctorService).findAll();
         String jsonResponse = mapper.writeValueAsString(responseCrud);
-
         exchange.getResponseHeaders().set("Content-Type", "application/json");
         exchange.sendResponseHeaders(responseCrud.status, jsonResponse.length());
-
         OutputStream os = exchange.getResponseBody();
         os.write(jsonResponse.getBytes());
         os.close();
+
     }
 }

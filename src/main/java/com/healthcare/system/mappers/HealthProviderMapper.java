@@ -1,8 +1,7 @@
 package com.healthcare.system.mappers;
 
-import com.healthcare.system.controllers.dto.HealthProviderDTO;
+import com.healthcare.system.dto.HealthProviderDTO;
 import com.healthcare.system.entities.HealthProvider;
-import com.healthcare.system.exceptions.ValidationException;
 
 public class HealthProviderMapper {
 

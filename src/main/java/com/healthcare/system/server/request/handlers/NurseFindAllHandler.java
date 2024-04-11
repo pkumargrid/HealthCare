@@ -2,8 +2,8 @@ package com.healthcare.system.server.request.handlers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.healthcare.system.controllers.NurseController;
-import com.healthcare.system.controllers.dto.ResponseCrudDTO;
-import com.healthcare.system.dependency.injection.Injector;
+import com.healthcare.system.dto.ResponseCrudDTO;
+import com.healthcare.system.dependency.injection.Context;
 import com.healthcare.system.entities.Nurse;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -22,7 +22,7 @@ public class NurseFindAllHandler implements HttpHandler {
 
         ObjectMapper mapper = new ObjectMapper();
 
-        ResponseCrudDTO<List<Nurse>> responseCrud = new NurseController(Injector.nurseService).findAll();
+        ResponseCrudDTO<List<Nurse>> responseCrud = new NurseController(Context.nurseService).findAll();
         String jsonResponse = mapper.writeValueAsString(responseCrud);
 
         exchange.getResponseHeaders().set("Content-Type", "application/json");

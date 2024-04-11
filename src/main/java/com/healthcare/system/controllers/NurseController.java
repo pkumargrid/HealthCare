@@ -1,14 +1,12 @@
 package com.healthcare.system.controllers;
 
-import com.healthcare.system.controllers.dto.NurseDTO;
-import com.healthcare.system.controllers.dto.PatientDTO;
-import com.healthcare.system.controllers.dto.ResponseCrudDTO;
-import com.healthcare.system.entities.HealthProvider;
+import com.healthcare.system.dto.NurseDTO;
+import com.healthcare.system.dto.ResponseCrudDTO;
 import com.healthcare.system.entities.Nurse;
 import com.healthcare.system.exceptions.AlreadyLoggedInException;
 import com.healthcare.system.exceptions.ValidationException;
+import com.healthcare.system.exceptions.WrongCredentials;
 import com.healthcare.system.services.NurseService;
-import com.healthcare.system.services.PatientService;
 
 import java.util.List;
 
@@ -28,6 +26,8 @@ public class NurseController {
             return new ResponseCrudDTO<Void>("Failed to Save!\n Reason: " + v.getMessage(),403, null);
         } catch (AlreadyLoggedInException e) {
             throw new RuntimeException(e);
+        } catch (WrongCredentials w) {
+            return new ResponseCrudDTO<Void>("Failed to Save!\n Reason: " + w.getMessage(), 401,null);
         }
     }
 

@@ -25,7 +25,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public void update(Appointment appointment) throws ValidationException {
+    public void update(Appointment appointment) throws ValidationException, WrongCredentials {
         verifyCredentials(Appointment.class,appointment);
         appointmentRepository.update(appointment);
     }
@@ -44,7 +44,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public void save(Appointment appointment) throws ValidationException {
+    public void save(Appointment appointment) throws ValidationException, WrongCredentials {
         verifyCredentials(Appointment.class,appointment);
         appointmentRepository.save(appointment);
     }

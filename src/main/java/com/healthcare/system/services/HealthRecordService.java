@@ -8,13 +8,13 @@ import java.util.List;
 
 public interface HealthRecordService {
 
-    void save(HealthRecord healthRecord) throws ValidationException;
+    void save(HealthRecord healthRecord) throws ValidationException, WrongCredentials;
 
     HealthRecord getById(int id) throws WrongCredentials;
 
     HealthRecord deleteById(int id) throws WrongCredentials;
 
-    void update(HealthRecord healthRecord) throws ValidationException;
+    void update(HealthRecord healthRecord) throws ValidationException, WrongCredentials;
 
     List<HealthRecord> findAll();
 }

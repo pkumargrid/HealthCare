@@ -1,6 +1,6 @@
 package com.healthcare.system.services.implementation;
 
-import com.healthcare.system.controllers.dto.NurseDTO;
+import com.healthcare.system.dto.NurseDTO;
 import com.healthcare.system.entities.*;
 
 import com.healthcare.system.exceptions.AlreadyLoggedInException;
@@ -8,7 +8,6 @@ import com.healthcare.system.exceptions.AlreadyLoggedOutException;
 import com.healthcare.system.exceptions.ValidationException;
 import com.healthcare.system.exceptions.WrongCredentials;
 import com.healthcare.system.mappers.NurseMapper;
-import com.healthcare.system.mappers.PatientMapper;
 import com.healthcare.system.repositories.HealthProviderRepository;
 import com.healthcare.system.repositories.HealthRecordRepository;
 import com.healthcare.system.repositories.NurseRepository;
@@ -49,13 +48,13 @@ public class NurseServiceImpl implements NurseService {
     }
 
     @Override
-    public void saveNurse(Nurse nurse) throws ValidationException {
+    public void saveNurse(Nurse nurse) throws ValidationException, WrongCredentials {
         verifyCredentials(Nurse.class,nurse);
         nurseRepository.saveNurse(nurse);
     }
 
     @Override
-    public void updateNurse(Nurse nurse) throws ValidationException {
+    public void updateNurse(Nurse nurse) throws ValidationException, WrongCredentials {
         verifyCredentials(Nurse.class,nurse);
         nurseRepository.updateNurse(nurse);
     }
@@ -88,7 +87,7 @@ public class NurseServiceImpl implements NurseService {
     }
 
     @Override
-    public void register(NurseDTO nurseDTO) throws ValidationException {
+    public void register(NurseDTO nurseDTO) throws ValidationException, WrongCredentials {
         Nurse nurse = NurseMapper.mapToDomain(nurseDTO,healthProviderRepository);
         verifyPasswordWhileRegister(nurse.getPassword());
         List<Nurse> nurses = nurseRepository.findAll();

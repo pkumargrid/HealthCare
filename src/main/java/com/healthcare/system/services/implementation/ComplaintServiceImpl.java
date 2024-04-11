@@ -34,7 +34,7 @@ public class ComplaintServiceImpl implements ComplaintService {
     }
 
     @Override
-    public void update(Complaint complaint) throws ValidationException {
+    public void update(Complaint complaint) throws ValidationException, WrongCredentials {
         verifyCredentials(Complaint.class,complaint);
         complaintRepository.update(complaint);
     }
@@ -45,7 +45,7 @@ public class ComplaintServiceImpl implements ComplaintService {
     }
 
     @Override
-    public void save(Complaint complaint) throws ValidationException {
+    public void save(Complaint complaint) throws ValidationException, WrongCredentials {
         verifyCredentials(Complaint.class,complaint);
         complaintRepository.save(complaint);
     }

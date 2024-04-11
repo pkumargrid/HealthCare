@@ -1,4 +1,4 @@
-package com.healthcare.system.controllers.dto;
+package com.healthcare.system.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;

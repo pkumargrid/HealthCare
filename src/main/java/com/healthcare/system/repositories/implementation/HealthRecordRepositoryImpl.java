@@ -1,7 +1,7 @@
 package com.healthcare.system.repositories.implementation;
 
-import com.healthcare.system.entities.HealthProvider;
 import com.healthcare.system.entities.HealthRecord;
+import com.healthcare.system.exceptions.WrongCredentials;
 import com.healthcare.system.repositories.HealthRecordRepository;
 
 import java.util.ArrayList;
@@ -17,26 +17,36 @@ public class HealthRecordRepositoryImpl implements HealthRecordRepository {
     }
 
     @Override
-    public void save(HealthRecord healthRecord) {
+    public void save(HealthRecord healthRecord) throws WrongCredentials {
+        if(healthRecordList.contains(healthRecord)) {
+            update(healthRecord);
+            return;
+        }
         healthRecordList.add(healthRecord);
     }
 
     @Override
     public HealthRecord getById(int id) {
-        return healthRecordList.stream().filter(healthRecord -> healthRecord.getId() == id).findFirst().get();
+        return healthRecordList.stream().filter(healthRecord -> healthRecord.getId() == id).findFirst().orElseGet(()-> null);
     }
 
 
     @Override
-    public HealthRecord deleteById(int id) {
-        HealthRecord healthRecord = healthRecordList.stream().filter(h -> h.getId() == id).findFirst().get();
+    public HealthRecord deleteById(int id) throws WrongCredentials {
+        HealthRecord healthRecord = healthRecordList.stream().filter(h -> h.getId() == id).findFirst().orElseGet(()-> null);
+        if(healthRecord == null) {
+            throw new WrongCredentials("HealthRecord with id " + id + " does not exist");
+        }
         healthRecordList.remove(healthRecord);
         return healthRecord;
     }
 
     @Override
-    public void update(HealthRecord healthRecord) {
-        HealthRecord prevHealthRecord = healthRecordList.stream().filter(h -> h.getId() == healthRecord.getId()).findFirst().get();
+    public void update(HealthRecord healthRecord) throws WrongCredentials {
+        HealthRecord prevHealthRecord = healthRecordList.stream().filter(h -> h.getId() == healthRecord.getId()).findFirst().orElseGet(()-> null);
+        if(prevHealthRecord == null) {
+            throw new WrongCredentials("HealthRecord with id " + healthRecord.getId() + " does not exist");
+        }
         prevHealthRecord.setHealthProvider(healthRecord.getHealthProvider());
         prevHealthRecord.setDoctor(healthRecord.getDoctor());
         prevHealthRecord.setPatient(healthRecord.getPatient());

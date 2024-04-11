@@ -5,7 +5,7 @@ import com.healthcare.system.repositories.implementation.*;
 import com.healthcare.system.services.*;
 import com.healthcare.system.services.implementation.*;
 
-public class Injector {
+public class Context {
 
     public  static DoctorRepository doctorRepository;
 

@@ -1,6 +1,6 @@
 package com.healthcare.system.server;
 
-import com.healthcare.system.dependency.injection.Injector;
+import com.healthcare.system.dependency.injection.Context;
 import com.healthcare.system.server.request.handlers.*;
 import com.sun.net.httpserver.HttpServer;
 
@@ -13,7 +13,7 @@ public class Server {
         HttpServer server = HttpServer.create(new java.net.InetSocketAddress(8000), 0);
 
         ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-        Injector.inject();
+        Context.inject();
         server.createContext("/doctor/register", new DoctorRegisterHandler());
         server.createContext("/healthProvider/register", new HealthProviderRegisterHandler());
         server.createContext("/patient/register", new PatientRegisterHandler());

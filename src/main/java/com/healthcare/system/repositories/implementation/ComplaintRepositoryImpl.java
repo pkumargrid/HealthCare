@@ -1,6 +1,7 @@
 package com.healthcare.system.repositories.implementation;
 
 import com.healthcare.system.entities.Complaint;
+import com.healthcare.system.exceptions.WrongCredentials;
 import com.healthcare.system.repositories.ComplaintRepository;
 
 import java.util.ArrayList;
@@ -15,18 +16,24 @@ public class ComplaintRepositoryImpl implements ComplaintRepository {
 
     @Override
     public Complaint findById(int id) {
-        return complaintList.stream().filter(c -> c.getId() == id).findFirst().get();
+        return complaintList.stream().filter(c -> c.getId() == id).findFirst().orElseGet(()-> null);
     }
 
     @Override
-    public void deleteById(int id) {
-        Complaint complaint = complaintList.stream().filter(c -> c.getId() == id).findFirst().get();
+    public void deleteById(int id) throws WrongCredentials {
+        Complaint complaint = complaintList.stream().filter(c -> c.getId() == id).findFirst().orElseGet(()-> null);
+        if(complaint == null) {
+            throw new WrongCredentials("complaint with id " + id + " does not exist");
+        }
         complaintList.remove(complaint);
     }
 
     @Override
-    public void update(Complaint complaint) {
-        Complaint prevComplaint = complaintList.stream().filter(c -> c.getId() == complaint.getId()).findFirst().get();
+    public void update(Complaint complaint) throws WrongCredentials {
+        Complaint prevComplaint = complaintList.stream().filter(c -> c.getId() == complaint.getId()).findFirst().orElseGet(()-> null);
+        if(prevComplaint == null) {
+            throw new WrongCredentials("complaint with id " + complaint.getId() + " does not exist");
+        }
         prevComplaint.setPatient(complaint.getPatient());
         prevComplaint.setText(complaint.getText());
     }
@@ -37,7 +44,7 @@ public class ComplaintRepositoryImpl implements ComplaintRepository {
     }
 
     @Override
-    public void save(Complaint complaint) {
+    public void save(Complaint complaint) throws WrongCredentials {
         if (complaintList.stream().anyMatch(c -> c.getId() == complaint.getId())) {
             update(complaint);
             return;
