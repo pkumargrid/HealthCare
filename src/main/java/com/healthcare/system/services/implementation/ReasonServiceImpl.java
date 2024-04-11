@@ -17,7 +17,7 @@ public class ReasonServiceImpl implements ReasonService {
     }
 
     @Override
-    public void save(Reason reason) throws ValidationException {
+    public void save(Reason reason) throws ValidationException, WrongCredentials {
         verifyCredentials(Reason.class,reason);
         reasonRepository.save(reason);
     }
@@ -39,7 +39,7 @@ public class ReasonServiceImpl implements ReasonService {
     }
 
     @Override
-    public void update(Reason reason) throws ValidationException {
+    public void update(Reason reason) throws ValidationException, WrongCredentials {
         verifyCredentials(Reason.class,reason);
         reasonRepository.update(reason);
     }

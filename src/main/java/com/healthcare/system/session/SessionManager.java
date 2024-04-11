@@ -5,24 +5,28 @@ import java.util.Map;
 import java.util.UUID;
 
 public class SessionManager {
-    private static final Map<String, String> sessions = new HashMap<>();
+    private static final Map<String, String> session = new HashMap<>();
 
     public static boolean isAuthenticated(String sessionId) {
-        return sessions.containsKey(sessionId);
+        return session.containsKey(sessionId);
     }
 
     public static String getEmail(String sessionId) {
-        return sessions.get(sessionId);
+        return session.get(sessionId);
     }
 
 
     public static String generateSessionId(String email) {
         String sessionId = UUID.randomUUID().toString();
-        sessions.put(sessionId,email);
+        session.put(sessionId,email);
         return sessionId;
     }
 
     public static void removeSessionId(String sessionId) {
-        sessions.remove(sessionId);
+        session.remove(sessionId);
+    }
+
+    public static boolean getAuthentication() {
+        return !session.isEmpty();
     }
 }

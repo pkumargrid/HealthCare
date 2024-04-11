@@ -1,6 +1,5 @@
 package com.healthcare.system.services.implementation;
 
-import com.healthcare.system.entities.HealthProvider;
 import com.healthcare.system.entities.HealthRecord;
 import com.healthcare.system.exceptions.ValidationException;
 import com.healthcare.system.exceptions.WrongCredentials;
@@ -19,7 +18,7 @@ public class HealthRecordServiceImpl implements HealthRecordService {
         this.healthRecordRepository = healthRecordRepository;
     }
     @Override
-    public void save(HealthRecord healthRecord) throws ValidationException {
+    public void save(HealthRecord healthRecord) throws ValidationException, WrongCredentials {
         verifyCredentials(HealthRecord.class,healthRecord);
         healthRecordRepository.save(healthRecord);
 
@@ -42,7 +41,7 @@ public class HealthRecordServiceImpl implements HealthRecordService {
     }
 
     @Override
-    public void update(HealthRecord healthRecord) throws ValidationException {
+    public void update(HealthRecord healthRecord) throws ValidationException, WrongCredentials {
         verifyCredentials(HealthRecord.class,healthRecord);
         healthRecordRepository.update(healthRecord);
     }

@@ -1,10 +1,11 @@
 package com.healthcare.system.repositories.implementation;
 
 import com.healthcare.system.entities.Appointment;
+import com.healthcare.system.exceptions.WrongCredentials;
 import com.healthcare.system.repositories.AppointmentRepository;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 public class AppointmentRepositoryImpl implements AppointmentRepository {
 
@@ -15,12 +16,13 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
     }
     @Override
     public Appointment findById(int id) {
-        return appointmentList.stream().filter(a -> a.getId() == id).findFirst().get();
+        return appointmentList.stream().filter(a -> a.getId() == id).findFirst().orElseGet(()-> null);
     }
 
     @Override
-    public void update(Appointment appointment) {
-        Appointment prevAppointment = appointmentList.stream().filter(a -> a.getId() == appointment.getId()).findFirst().get();
+    public void update(Appointment appointment) throws WrongCredentials {
+        Appointment prevAppointment = appointmentList.stream().filter(a -> a.getId() == appointment.getId()).findFirst().orElseGet(() -> null);
+        if(prevAppointment == null) throw new WrongCredentials("appointment with id " + appointment.getId() + " does not exist");
         prevAppointment.setDoctor(appointment.getDoctor());
         prevAppointment.setEndTime(appointment.getEndTime());
         prevAppointment.setStartTime(appointment.getStartTime());
@@ -34,12 +36,15 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
     }
 
     @Override
-    public void deleteById(int id) {
+    public void deleteById(int id) throws WrongCredentials {
+        if(appointmentList.get(id) == null) {
+            throw new WrongCredentials("appointment with id " + id + " does not exist");
+        }
         appointmentList = appointmentList.stream().filter(a -> a.getId() != id).toList();
     }
 
     @Override
-    public void save(Appointment appointment) {
+    public void save(Appointment appointment) throws WrongCredentials {
         if(appointmentList.stream().anyMatch(app -> app.getId() == appointment.getId())) {
             update(appointment);
         }

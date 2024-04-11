@@ -2,9 +2,9 @@ package com.healthcare.system.server.request.handlers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.healthcare.system.controllers.PatientController;
-import com.healthcare.system.controllers.dto.PatientDTO;
-import com.healthcare.system.controllers.dto.ResponseCrudDTO;
-import com.healthcare.system.dependency.injection.Injector;
+import com.healthcare.system.dto.PatientDTO;
+import com.healthcare.system.dto.ResponseCrudDTO;
+import com.healthcare.system.dependency.injection.Context;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
@@ -24,7 +24,7 @@ public class PatientRegisterHandler implements HttpHandler {
         String requestBody = new String(exchange.getRequestBody().readAllBytes());
         PatientDTO requestObject = mapper.readValue(requestBody, PatientDTO.class);
 
-        ResponseCrudDTO responseCrud = new PatientController(Injector.patientService).save(requestObject);
+        ResponseCrudDTO<Void> responseCrud = new PatientController(Context.patientService).save(requestObject);
         String jsonResponse = mapper.writeValueAsString(responseCrud);
 
         exchange.getResponseHeaders().set("Content-Type", "application/json");

@@ -1,17 +1,15 @@
-package com.healthcare.system.controllers.dto;
+package com.healthcare.system.dto;
 
-import com.healthcare.system.entities.HealthProvider;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
-public class PatientDTO {
+public class HealthProviderDTO implements ObjectDTO {
     private String name;
     private String password;
     private String email;
+    private String sessionId;
 }

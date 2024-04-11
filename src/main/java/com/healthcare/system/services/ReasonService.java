@@ -6,12 +6,12 @@ import com.healthcare.system.exceptions.WrongCredentials;
 
 public interface ReasonService {
 
-    void save(Reason reason) throws ValidationException;
+    void save(Reason reason) throws ValidationException, WrongCredentials;
 
     Reason findById(int id) throws WrongCredentials;
 
     void deleteById(int id) throws WrongCredentials;
 
-    void update(Reason reason) throws ValidationException;
+    void update(Reason reason) throws ValidationException, WrongCredentials;
 
 }

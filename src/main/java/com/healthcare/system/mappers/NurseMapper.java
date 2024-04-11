@@ -1,8 +1,6 @@
 package com.healthcare.system.mappers;
 
-import com.healthcare.system.controllers.dto.DoctorDTO;
-import com.healthcare.system.controllers.dto.NurseDTO;
-import com.healthcare.system.entities.Doctor;
+import com.healthcare.system.dto.NurseDTO;
 import com.healthcare.system.entities.Nurse;
 import com.healthcare.system.exceptions.ValidationException;
 import com.healthcare.system.repositories.HealthProviderRepository;

@@ -11,9 +11,9 @@ public interface ComplaintService {
 
     void deleteById(int id) throws WrongCredentials;
 
-    void update(Complaint complaint) throws ValidationException;
+    void update(Complaint complaint) throws ValidationException, WrongCredentials;
 
     List<Complaint> findAll();
 
-    void save(Complaint complaint) throws ValidationException;
+    void save(Complaint complaint) throws ValidationException, WrongCredentials;
 }

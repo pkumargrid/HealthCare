@@ -1,6 +1,7 @@
 package com.healthcare.system.repositories.implementation;
 
 import com.healthcare.system.entities.Doctor;
+import com.healthcare.system.exceptions.WrongCredentials;
 import com.healthcare.system.repositories.DoctorRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,7 @@ public class DoctorRepositoryImpl implements DoctorRepository {
     }
 
     @Override
-    public void save(Doctor doctor) {
+    public void save(Doctor doctor) throws WrongCredentials {
         if(doctorList.contains(doctor)) {
             update(doctor);
             return;
@@ -24,12 +25,15 @@ public class DoctorRepositoryImpl implements DoctorRepository {
 
     @Override
     public Doctor getById(int id) {
-        return doctorList.stream().filter(doctor -> doctor.getId() == id).findFirst().get();
+        return doctorList.stream().filter(doctor -> doctor.getId() == id).findFirst().orElseGet(() -> null);
     }
 
     @Override
-    public Doctor deleteById(int id) {
-        Doctor doctor = doctorList.stream().filter(d -> d.getId() == id).findFirst().get();
+    public Doctor deleteById(int id) throws WrongCredentials {
+        Doctor doctor = doctorList.stream().filter(d -> d.getId() == id).findFirst().orElseGet(() -> null);
+        if(doctor == null) {
+            throw new WrongCredentials("doctor with id " + id + " does not exist");
+        }
         doctorList.remove(doctor);
         return doctor;
     }
@@ -40,8 +44,11 @@ public class DoctorRepositoryImpl implements DoctorRepository {
     }
 
     @Override
-    public void update(Doctor doctor) {
-        Doctor prevDoctor = doctorList.stream().filter(d -> d.getId() == doctor.getId()).findFirst().get();
+    public void update(Doctor doctor) throws WrongCredentials {
+        Doctor prevDoctor = doctorList.stream().filter(d -> d.getId() == doctor.getId()).findFirst().orElseGet(() -> null);
+        if(prevDoctor == null) {
+            throw new WrongCredentials("doctor with id " + doctor.getId() + " does not exist");
+        }
         prevDoctor.setEmail(doctor.getEmail());
         prevDoctor.setName(doctor.getName());
         prevDoctor.setAppointmentList(doctor.getAppointmentList());

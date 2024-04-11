@@ -1,9 +1,8 @@
 package com.healthcare.system.services.implementation;
 
-import com.healthcare.system.controllers.dto.PatientDTO;
+import com.healthcare.system.dto.PatientDTO;
 import com.healthcare.system.entities.*;
 import com.healthcare.system.exceptions.*;
-import com.healthcare.system.mappers.DoctorMapper;
 import com.healthcare.system.mappers.PatientMapper;
 import com.healthcare.system.repositories.*;
 import com.healthcare.system.services.PatientService;
@@ -49,13 +48,13 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public void savePatient(Patient patient) throws ValidationException {
+    public void savePatient(Patient patient) throws ValidationException, WrongCredentials {
         verifyCredentials(Patient.class,patient);
         patientRepository.save(patient);
     }
 
     @Override
-    public void updatePatient(Patient patient) throws ValidationException {
+    public void updatePatient(Patient patient) throws ValidationException, WrongCredentials {
         verifyCredentials(Patient.class,patient);
         patientRepository.update(patient);
     }
@@ -68,7 +67,7 @@ public class PatientServiceImpl implements PatientService {
         patientRepository.deleteById(id);
     }
 
-    public void bookAppointments(Appointment appointment) throws AppointmentTimeException {
+    public void bookAppointments(Appointment appointment) throws AppointmentTimeException, WrongCredentials {
         List<Appointment> doctorAppointmentList = appointment.getPatient().getAppointmentList();
         int[] range = new int[601];
         for(var doctorAppointment : doctorAppointmentList) {
@@ -115,7 +114,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public void createComplaint(Complaint complaint, String type, int id) {
+    public void createComplaint(Complaint complaint, String type, int id) throws WrongCredentials {
         complaint.getPatient().getComplaintList().add(complaint);
         if(type.equals("Doctor")) {
             Doctor doctor = doctorRepository.getById(id);
@@ -160,7 +159,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public void register(PatientDTO patientDTO) throws ValidationException {
+    public void register(PatientDTO patientDTO) throws ValidationException, WrongCredentials {
         Patient patient = PatientMapper.mapToDomain(patientDTO);
         verifyPasswordWhileRegister(patient.getPassword());
         List<Patient> patients = patientRepository.findAll();

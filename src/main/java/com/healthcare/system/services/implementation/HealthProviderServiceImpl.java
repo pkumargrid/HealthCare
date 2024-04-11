@@ -1,7 +1,7 @@
 package com.healthcare.system.services.implementation;
 
 
-import com.healthcare.system.controllers.dto.HealthProviderDTO;
+import com.healthcare.system.dto.HealthProviderDTO;
 import com.healthcare.system.entities.*;
 import com.healthcare.system.entities.Complaint;
 import com.healthcare.system.entities.HealthProvider;
@@ -33,7 +33,7 @@ public class HealthProviderServiceImpl implements HealthProviderService {
         this.patientRepository = patientRepository;
     }
     @Override
-    public void save(HealthProvider healthProvider) throws ValidationException {
+    public void save(HealthProvider healthProvider) throws ValidationException, WrongCredentials {
         verifyCredentials(HealthProvider.class,healthProvider);
         healthProviderRepository.save(healthProvider);
     }
@@ -55,7 +55,7 @@ public class HealthProviderServiceImpl implements HealthProviderService {
     }
 
     @Override
-    public void update(HealthProvider healthProvider) throws ValidationException {
+    public void update(HealthProvider healthProvider) throws ValidationException, WrongCredentials {
         verifyCredentials(HealthProvider.class,healthProvider);
         healthProviderRepository.update(healthProvider);
     }
@@ -86,7 +86,7 @@ public class HealthProviderServiceImpl implements HealthProviderService {
     }
 
     @Override
-    public void register(HealthProviderDTO healthProviderDTO) throws ValidationException {
+    public void register(HealthProviderDTO healthProviderDTO) throws ValidationException, WrongCredentials {
         HealthProvider healthProvider = HealthProviderMapper.mapToDomain(healthProviderDTO);
         verifyPasswordWhileRegister(healthProvider.getPassword());
         List<HealthProvider> healthProviders = healthProviderRepository.findAll();

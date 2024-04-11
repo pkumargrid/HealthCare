@@ -9,11 +9,11 @@ import java.util.List;
 public interface AppointmentService {
     Appointment findById(int id) throws WrongCredentials;
 
-    void update(Appointment appointment) throws ValidationException;
+    void update(Appointment appointment) throws ValidationException, WrongCredentials;
 
     List<Appointment> findAll();
 
     void deleteById(int id) throws WrongCredentials;
 
-    void save(Appointment appointment) throws ValidationException;
+    void save(Appointment appointment) throws ValidationException, WrongCredentials;
 }

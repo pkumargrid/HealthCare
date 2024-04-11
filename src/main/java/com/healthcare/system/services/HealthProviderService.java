@@ -1,6 +1,6 @@
 package com.healthcare.system.services;
 
-import com.healthcare.system.controllers.dto.HealthProviderDTO;
+import com.healthcare.system.dto.HealthProviderDTO;
 import com.healthcare.system.entities.*;
 import com.healthcare.system.exceptions.AlreadyLoggedInException;
 import com.healthcare.system.exceptions.AlreadyLoggedOutException;
@@ -10,7 +10,7 @@ import com.healthcare.system.exceptions.WrongCredentials;
 import java.util.List;
 
 public interface HealthProviderService {
-    void save(HealthProvider healthProvider) throws ValidationException;
+    void save(HealthProvider healthProvider) throws ValidationException, WrongCredentials;
 
     HealthProvider getById(int id) throws WrongCredentials;
 
@@ -19,14 +19,14 @@ public interface HealthProviderService {
     List<HealthProvider> getByName(String name);
 
 
-    void update(HealthProvider healthProvider) throws ValidationException;
+    void update(HealthProvider healthProvider) throws ValidationException, WrongCredentials;
 
 
     List<HealthProvider> findAll();
 
     void login(HealthProvider healthProvider) throws ValidationException, AlreadyLoggedInException;
     void logout(String sessionId) throws AlreadyLoggedOutException;
-    void register(HealthProviderDTO healthProviderDTO) throws ValidationException;
+    void register(HealthProviderDTO healthProviderDTO) throws ValidationException, WrongCredentials;
 
     void registerPatient(int healthProviderId, int patientId) throws WrongCredentials;
 

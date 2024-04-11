@@ -1,32 +1,32 @@
 package com.healthcare.system.services;
 
-import com.healthcare.system.controllers.dto.DoctorDTO;
+import com.healthcare.system.dto.DoctorDTO;
 import com.healthcare.system.entities.*;
 import com.healthcare.system.exceptions.*;
 
 import java.util.List;
 public interface DoctorService {
 
-    void register(DoctorDTO doctor) throws ValidationException;
+    void register(DoctorDTO doctor) throws ValidationException, WrongCredentials;
 
     Doctor getById(int id) throws WrongCredentials;
     Doctor deleteById(int id) throws WrongCredentials;
 
     List<Doctor> getByName(String name);
 
-    void update(Doctor doctor) throws ValidationException;
+    void update(Doctor doctor) throws ValidationException, WrongCredentials;
 
     List<Doctor> findAll();
 
-    void assignNurse(int id, Patient patient);
+    void assignNurse(int id, Patient patient) throws WrongCredentials;
 
     void confirmAppointment(int id);
 
-    void notifyReasonForComplaint(Reason reason) throws ReasonTypeException, ResourceNotFoundException;
+    void notifyReasonForComplaint(Reason reason) throws ReasonTypeException, ResourceNotFoundException, WrongCredentials;
 
     void login(Doctor doctor) throws ValidationException, AlreadyLoggedInException;
 
-    void save(Doctor doctor) throws ValidationException;
+    void save(Doctor doctor) throws ValidationException, WrongCredentials;
 
     void logout(String sessionId) throws AlreadyLoggedOutException;
 

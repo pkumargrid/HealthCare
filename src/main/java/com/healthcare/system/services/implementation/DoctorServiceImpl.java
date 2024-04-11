@@ -1,6 +1,6 @@
 package com.healthcare.system.services.implementation;
 
-import com.healthcare.system.controllers.dto.DoctorDTO;
+import com.healthcare.system.dto.DoctorDTO;
 import com.healthcare.system.entities.*;
 import com.healthcare.system.exceptions.*;
 import com.healthcare.system.mappers.DoctorMapper;
@@ -41,7 +41,7 @@ public class DoctorServiceImpl implements DoctorService {
         this.healthRecordRepository = healthRecordRepository;
     }
     @Override
-    public void register(DoctorDTO doctorDTO) throws ValidationException {
+    public void register(DoctorDTO doctorDTO) throws ValidationException, WrongCredentials {
         Doctor doctor = DoctorMapper.mapToDomain(doctorDTO,
                 healthProviderRepository);
         verifyPasswordWhileRegister(doctor.getPassword());
@@ -70,7 +70,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public void update(Doctor doctor) throws ValidationException {
+    public void update(Doctor doctor) throws ValidationException, WrongCredentials {
         verifyCredentials(Doctor.class,doctor);
         doctorRepository.update(doctor);
     }
@@ -81,7 +81,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public void assignNurse(int id, Patient patient) {
+    public void assignNurse(int id, Patient patient) throws WrongCredentials {
         Doctor doctor = doctorRepository.getById(id);
         if (doctor == null ) {
             throw new IllegalArgumentException("Id is not correct");
@@ -115,7 +115,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public void notifyReasonForComplaint(Reason reason) throws ReasonTypeException, ResourceNotFoundException {
+    public void notifyReasonForComplaint(Reason reason) throws ReasonTypeException, ResourceNotFoundException, WrongCredentials {
         reasonRepository.save(reason);
         int id = -1;
         if (reason.getType() instanceof Doctor doctor) {
@@ -223,7 +223,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public void save(Doctor doctor) throws ValidationException {
+    public void save(Doctor doctor) throws ValidationException, WrongCredentials {
         verifyCredentials(Doctor.class,doctor);
         doctorRepository.save(doctor);
     }
