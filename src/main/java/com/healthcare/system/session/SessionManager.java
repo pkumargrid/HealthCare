@@ -26,7 +26,4 @@ public class SessionManager {
         session.remove(sessionId);
     }
 
-    public static boolean getAuthentication() {
-        return !session.isEmpty();
-    }
 }
