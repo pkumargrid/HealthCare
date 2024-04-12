@@ -3,51 +3,162 @@ package com.healthcare.system.repositories.implementation;
 import com.healthcare.system.entities.Appointment;
 import com.healthcare.system.exceptions.WrongCredentials;
 import com.healthcare.system.repositories.AppointmentRepository;
+import com.healthcare.system.repositories.DoctorRepository;
+import com.healthcare.system.repositories.PatientRepository;
 
+import javax.sql.DataSource;
+import java.rmi.ServerException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AppointmentRepositoryImpl implements AppointmentRepository {
 
-    private List<Appointment> appointmentList;
+    private final DataSource dataSource;
+    private final DoctorRepository doctorRepository;
+    private final PatientRepository patientRepository;
 
-    public AppointmentRepositoryImpl() {
-        this.appointmentList = new ArrayList<>();
+    public AppointmentRepositoryImpl(DataSource dataSource, DoctorRepository doctorRepository, PatientRepository patientRepository) {
+        this.dataSource = dataSource;
+        this.doctorRepository = doctorRepository;
+        this.patientRepository = patientRepository;
     }
     @Override
-    public Appointment findById(int id) {
-        return appointmentList.stream().filter(a -> a.getId() == id).findFirst().orElseGet(()-> null);
-    }
-
-    @Override
-    public void update(Appointment appointment) throws WrongCredentials {
-        Appointment prevAppointment = appointmentList.stream().filter(a -> a.getId() == appointment.getId()).findFirst().orElseGet(() -> null);
-        if(prevAppointment == null) throw new WrongCredentials("appointment with id " + appointment.getId() + " does not exist");
-        prevAppointment.setDoctor(appointment.getDoctor());
-        prevAppointment.setEndTime(appointment.getEndTime());
-        prevAppointment.setStartTime(appointment.getStartTime());
-        prevAppointment.setDoctor(appointment.getDoctor());
-        prevAppointment.setPatient(appointment.getPatient());
-    }
-
-    @Override
-    public List<Appointment> findAll() {
-        return appointmentList.stream().toList();
-    }
-
-    @Override
-    public void deleteById(int id) throws WrongCredentials {
-        if(appointmentList.get(id) == null) {
-            throw new WrongCredentials("appointment with id " + id + " does not exist");
+    public Appointment findById(int id) throws WrongCredentials, ServerException {
+        try (Connection connection = dataSource.getConnection()) {
+            try(PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM appointment WHERE id = ?")) {
+                preparedStatement.setInt(1, id);
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        return createAppointment(resultSet);
+                    } else {
+                        throw new WrongCredentials("Appointment with ID: " + id + " does not exist");
+                    }
+                }
+            } catch (SQLException e) {
+                throw new ServerException("Error accessing data: " + e.getMessage());
+            }
+        } catch (SQLException sqlException) {
+            if ("08001".equals(sqlException.getSQLState())) {
+                throw new ServerException("Could not connect to the postgres server.");
+            } else {
+                throw new ServerException("Error executing SQL query: " + sqlException.getMessage());
+            }
         }
-        appointmentList = appointmentList.stream().filter(a -> a.getId() != id).toList();
+
     }
 
     @Override
-    public void save(Appointment appointment) throws WrongCredentials {
-        if(appointmentList.stream().anyMatch(app -> app.getId() == appointment.getId())) {
-            update(appointment);
+    public void update(Appointment appointment) throws ServerException, WrongCredentials {
+        try(Connection connection = dataSource.getConnection()) {
+            String sql = "update appointment set status=?, startTime=?, endTime=?, doctor=?, patient=? where id = ?";
+            try(PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                configureAppointment(appointment, preparedStatement);
+            } catch (SQLException e) {
+                throw new ServerException("Error accessing data: " + e.getMessage());
+            }
+        } catch (SQLException sqlException) {
+            if ("08001".equals(sqlException.getSQLState())) {
+                throw new ServerException("Could not connect to the postgres server.");
+            } else {
+                throw new ServerException("Error executing SQL query: " + sqlException.getMessage());
+            }
         }
-        appointmentList.add(appointment);
+    }
+
+    @Override
+    public List<Appointment> findAll() throws ServerException {
+        List<Appointment> appointments = new ArrayList<>();
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM appointment")) {
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    Appointment appointment = createAppointment(resultSet);
+                    appointments.add(appointment);
+                }
+            } catch (SQLException e) {
+                throw new ServerException("Error accessing data: " + e.getMessage());
+            }
+        } catch (SQLException sqlException) {
+            if ("08001".equals(sqlException.getSQLState())) {
+                throw new ServerException("Could not connect to the postgres server.");
+            } else {
+                throw new ServerException("Error executing SQL query: " + sqlException.getMessage());
+            }
+        }
+        return appointments;
+    }
+
+    private Appointment createAppointment(ResultSet resultSet) throws SQLException {
+        Appointment appointment = new Appointment();
+        appointment.setStatus(resultSet.getBoolean("status"));
+        appointment.setDoctor(doctorRepository.getById(resultSet.getInt("doctor")));
+        appointment.setPatient(patientRepository.findById(resultSet.getInt("patient")));
+        appointment.setStartTime(resultSet.getObject("startTime", LocalDateTime.class));
+        appointment.setEndTime(resultSet.getObject("endTime", LocalDateTime.class));
+        return appointment;
+    }
+
+    @Override
+    public void deleteById(int id) throws ServerException, WrongCredentials {
+        try (Connection connection = dataSource.getConnection()) {
+             try(PreparedStatement preparedStatement = connection.prepareStatement("delete from appointment where id = ?")){
+                 try{
+                     preparedStatement.executeUpdate();
+                 } catch (SQLException sqlException) {
+                     throw new WrongCredentials(sqlException.getMessage());
+                 }
+             } catch (SQLException e) {
+                 throw new ServerException("Error accessing data: " + e.getMessage());
+             }
+        } catch (SQLException sqlException) {
+            if ("08001".equals(sqlException.getSQLState())) {
+                throw new ServerException("Could not connect to the postgres server.");
+            } else {
+                throw new ServerException("Error executing SQL query: " + sqlException.getMessage());
+            }
+        }
+    }
+
+    @Override
+    public void save(Appointment appointment) throws ServerException, WrongCredentials {
+        try {
+            findById(appointment.getId());
+        } catch (WrongCredentials wrongCredentials ) {
+            try(Connection connection = dataSource.getConnection()) {
+                String sql = "insert into appointment (status, startTime, endTime, doctor, patient, id) values(?, ?, ?, ? ,? ,?)";
+                try(PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                    configureAppointment(appointment, preparedStatement);
+                } catch (SQLException e) {
+                    throw new ServerException("Failed to execute the query: " + e.getMessage());
+                }
+            } catch (SQLException sqlException) {
+                if ("08001".equals(sqlException.getSQLState())) {
+                    throw new ServerException("Could not connect to the postgres server.");
+                } else {
+                    throw new ServerException("Error executing SQL query: " + sqlException.getMessage());
+                }
+            }
+            return;
+        }
+        update(appointment);
+    }
+
+    private void configureAppointment(Appointment appointment, PreparedStatement preparedStatement) throws SQLException, WrongCredentials {
+        preparedStatement.setBoolean(1, appointment.isStatus());
+        preparedStatement.setObject(2, appointment.getStartTime());
+        preparedStatement.setObject(3, appointment.getEndTime());
+        preparedStatement.setInt(4, appointment.getDoctor().getId());
+        preparedStatement.setInt(5, appointment.getPatient().getId());
+        preparedStatement.setInt(6, appointment.getId());
+        try{
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new WrongCredentials(e.getMessage());
+        }
     }
 }
