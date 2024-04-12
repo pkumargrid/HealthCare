@@ -53,6 +53,7 @@ public class ComplaintRepositoryImpl implements ComplaintRepository {
     public void deleteById(int id) throws WrongCredentials, ServerException {
         try (Connection connection = dataSource.getConnection()) {
             try(PreparedStatement preparedStatement = connection.prepareStatement("delete from complaint where id = ?")){
+                preparedStatement.setInt(1,id);
                 try{
                     preparedStatement.executeUpdate();
                 } catch (SQLException sqlException) {
@@ -73,7 +74,7 @@ public class ComplaintRepositoryImpl implements ComplaintRepository {
     @Override
     public void update(Complaint complaint) throws WrongCredentials, ServerException {
         try(Connection connection = dataSource.getConnection()) {
-            String sql = "update complaint set status=?, startTime=?, endTime=?, doctor=?, patient=? where id = ?";
+            String sql = "update complaint set text=?, type=?, table_name=?, patient_id=?,where id = ?";
             try(PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
                 configureComplaint(complaint, preparedStatement);
             } catch (SQLException e) {
@@ -117,7 +118,7 @@ public class ComplaintRepositoryImpl implements ComplaintRepository {
             findById(complaint.getId());
         } catch (WrongCredentials wrongCredentials ) {
             try(Connection connection = dataSource.getConnection()) {
-                String sql = "insert into complaint (text, id, patient) values(?, ?, ?)";
+                String sql = "insert into complaint (text,type,table_name,patient_id, id,) values(?, ?, ?,?,?)";
                 try(PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
                     configureComplaint(complaint, preparedStatement);
                 } catch (SQLException e) {
@@ -139,14 +140,18 @@ public class ComplaintRepositoryImpl implements ComplaintRepository {
         Complaint complaint = new Complaint();
         complaint.setText(resultSet.getString("text"));
         complaint.setId(resultSet.getInt("id"));
+        complaint.setTableName(resultSet.getString("table_name"));
+        complaint.setType(resultSet.getInt("type"));
         complaint.setPatient(patientRepository.findById(resultSet.getInt("patient")));
         return complaint;
     }
 
     private void configureComplaint(Complaint complaint, PreparedStatement preparedStatement) throws WrongCredentials, SQLException {
         preparedStatement.setString(1, complaint.getText());
-        preparedStatement.setInt(2, complaint.getId());
-        preparedStatement.setInt(3, complaint.getPatient().getId());
+        preparedStatement.setInt(2,complaint.getType());
+        preparedStatement.setString(3,complaint.getTableName());
+        preparedStatement.setInt(4, complaint.getPatient().getId());
+        preparedStatement.setInt(5, complaint.getId());
         try{
             preparedStatement.executeUpdate();
         } catch (SQLException e) {

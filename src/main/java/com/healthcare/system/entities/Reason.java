@@ -9,7 +9,9 @@ public class Reason {
 
     private int id;
 
-    private Object type;
+    private int type;
+
+    private String tableName;
 
     private String text;
 

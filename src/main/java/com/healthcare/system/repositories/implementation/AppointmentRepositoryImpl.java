@@ -107,6 +107,7 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
     public void deleteById(int id) throws ServerException, WrongCredentials {
         try (Connection connection = dataSource.getConnection()) {
              try(PreparedStatement preparedStatement = connection.prepareStatement("delete from appointment where id = ?")){
+                 preparedStatement.setInt(1,id);
                  try{
                      preparedStatement.executeUpdate();
                  } catch (SQLException sqlException) {

@@ -13,4 +13,7 @@ public class Complaint {
 
     private Patient patient;
 
+    private int type;
+    private String tableName;
+
 }
