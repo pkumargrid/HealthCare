@@ -12,10 +12,11 @@ public interface AppointmentRepository {
 
     void update(Appointment appointment) throws WrongCredentials, ServerException;
 
-    List<Appointment> findAll() throws ServerException;
+    List<Appointment> findAll() throws ServerException, WrongCredentials;
 
     void deleteById(int id) throws WrongCredentials, ServerException;
 
     void save(Appointment appointment) throws ServerException, WrongCredentials;
 
+    List<Appointment> findByDoctorId(int id) throws ServerException, WrongCredentials;
 }

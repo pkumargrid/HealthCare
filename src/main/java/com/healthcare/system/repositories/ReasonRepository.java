@@ -17,4 +17,6 @@ public interface ReasonRepository {
     void update(Reason reason) throws WrongCredentials,ServerException;
 
     List<Reason> findAll() throws WrongCredentials,ServerException;
+
+    List<Reason> findReasonByType(int id, String tableName) throws ServerException, WrongCredentials;
 }

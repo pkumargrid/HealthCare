@@ -20,7 +20,6 @@ public class Patient {
     private Nurse nurse;
 
     private List<HealthRecord> healthRecordList;
-    private String sessionId;
     private List<Appointment> appointmentList;
 
     private List<Complaint> complaintList;

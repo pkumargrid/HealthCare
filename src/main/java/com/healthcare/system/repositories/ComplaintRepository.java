@@ -16,4 +16,6 @@ public interface ComplaintRepository {
     List<Complaint> findAll() throws ServerException;
 
     void save(Complaint complaint) throws WrongCredentials, ServerException;
+
+    List<Complaint> findComplainant(int id, String tableName) throws ServerException;
 }

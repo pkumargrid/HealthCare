@@ -11,4 +11,6 @@ public interface PatientRepository {
     void save(Patient patient) throws WrongCredentials;
     void update(Patient patient) throws WrongCredentials;
     void deleteById(int id) throws WrongCredentials;
+
+    List<Patient> findPatientByDoctorId(int id);
 }

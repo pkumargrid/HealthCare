@@ -1,8 +1,6 @@
 package com.healthcare.system.repositories.implementation;
 
-import com.healthcare.system.entities.Complaint;
 import com.healthcare.system.entities.Reason;
-import com.healthcare.system.entities.Report;
 import com.healthcare.system.exceptions.WrongCredentials;
 import com.healthcare.system.repositories.ComplaintRepository;
 import com.healthcare.system.repositories.ReasonRepository;
@@ -14,7 +12,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class ReasonRepositoryImpl implements ReasonRepository {
@@ -121,6 +118,31 @@ public class ReasonRepositoryImpl implements ReasonRepository {
         List<Reason> reasons = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM reason")) {
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    Reason reason = createReason(resultSet);
+                    reasons.add(reason);
+                }
+            } catch (SQLException e) {
+                throw new ServerException("Error accessing data: " + e.getMessage());
+            }
+        } catch (SQLException sqlException) {
+            if ("08001".equals(sqlException.getSQLState())) {
+                throw new ServerException("Could not connect to the postgres server.");
+            } else {
+                throw new ServerException("Error executing SQL query: " + sqlException.getMessage());
+            }
+        }
+        return reasons;
+    }
+
+    @Override
+    public List<Reason> findReasonByType(int id, String tableName) throws ServerException, WrongCredentials {
+        List<Reason> reasons = new ArrayList<>();
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM reason where table_name=? and type = ? ")) {
+            preparedStatement.setString(1, tableName);
+            preparedStatement.setInt(2, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
                     Reason reason = createReason(resultSet);
