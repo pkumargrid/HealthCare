@@ -10,9 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 public class Appointment {
 
-    private boolean status;
     private  int id;
-
     private LocalDateTime startTime;
 
     private LocalDateTime endTime;
@@ -20,5 +18,6 @@ public class Appointment {
     private Doctor doctor;
 
     private Patient patient;
+    private boolean status;
 
 }
