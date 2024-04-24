@@ -60,4 +60,9 @@ public class PatientRepositoryImpl implements PatientRepository {
         }
         patients.remove(patient);
     }
+
+    @Override
+    public List<Patient> findPatientByDoctorId(int id) {
+        return null;
+    }
 }

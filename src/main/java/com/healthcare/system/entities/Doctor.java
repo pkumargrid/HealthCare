@@ -23,8 +23,6 @@ public class Doctor {
 
     private HealthProvider healthProvider;
 
-    private String sessionId;
-
     private List<Complaint> complaintList;
 
     private List<Appointment> appointmentList;

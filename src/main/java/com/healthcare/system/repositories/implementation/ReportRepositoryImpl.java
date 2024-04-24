@@ -1,14 +1,11 @@
 package com.healthcare.system.repositories.implementation;
 
-import com.healthcare.system.entities.Appointment;
-import com.healthcare.system.entities.Reason;
 import com.healthcare.system.entities.Report;
 import com.healthcare.system.entities.Status;
 import com.healthcare.system.exceptions.WrongCredentials;
 import com.healthcare.system.repositories.ReportRepository;
 
 import javax.sql.DataSource;
-import javax.xml.crypto.Data;
 import java.rmi.ServerException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -135,7 +132,7 @@ public class ReportRepositoryImpl implements ReportRepository {
         return reportList;
     }
 
-    private Report createReport(ResultSet resultSet) throws SQLException, WrongCredentials, ServerException {
+    private Report createReport(ResultSet resultSet) throws SQLException {
         Report report = new Report();
         report.setAdvice(resultSet.getString("advice"));
         report.setStatus(Status.valueOf(resultSet.getString("status")));

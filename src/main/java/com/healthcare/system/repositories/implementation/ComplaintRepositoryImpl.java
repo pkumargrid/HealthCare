@@ -136,6 +136,31 @@ public class ComplaintRepositoryImpl implements ComplaintRepository {
         update(complaint);
     }
 
+    @Override
+    public List<Complaint> findComplainant(int id, String tableName) throws ServerException {
+        List<Complaint> complaints = new ArrayList<>();
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM complaint where table_name=? and type = ? ")) {
+            preparedStatement.setString(1, tableName);
+            preparedStatement.setInt(2, id);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    Complaint complaint = createComplaint(resultSet);
+                    complaints.add(complaint);
+                }
+            } catch (SQLException e) {
+                throw new ServerException("Error accessing data: " + e.getMessage());
+            }
+        } catch (SQLException sqlException) {
+            if ("08001".equals(sqlException.getSQLState())) {
+                throw new ServerException("Could not connect to the postgres server.");
+            } else {
+                throw new ServerException("Error executing SQL query: " + sqlException.getMessage());
+            }
+        }
+        return complaints;
+    }
+
     private Complaint createComplaint(ResultSet resultSet) throws SQLException {
         Complaint complaint = new Complaint();
         complaint.setText(resultSet.getString("text"));

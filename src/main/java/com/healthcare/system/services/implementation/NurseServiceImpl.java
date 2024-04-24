@@ -67,7 +67,7 @@ public class NurseServiceImpl implements NurseService {
         nurseRepository.deleteNurseById(id);
     }
     @Override
-    public void login(Nurse nurse) throws ValidationException, AlreadyLoggedInException {
+    public void login(NurseDTO nurse) throws ValidationException, AlreadyLoggedInException {
         if (SessionManager.isAuthenticated(nurse.getSessionId())) {
             throw new AlreadyLoggedInException("Nurse: " + nurse.getEmail() + " is already logged in");
         }
@@ -75,7 +75,7 @@ public class NurseServiceImpl implements NurseService {
         verifyEmailWhileLogin(nurses, nurse.getEmail());
         Nurse nurse1 = nurses.stream().filter(n -> n.getEmail().equals(nurse.getEmail())).findFirst().get();
         verifyPasswordWhileLogin(nurse1.getPassword(), nurse.getPassword());
-        nurse1.setSessionId(SessionManager.generateSessionId(nurse.getEmail()));
+        SessionManager.generateSessionId(nurse.getEmail());
     }
 
     @Override
