@@ -14,10 +14,7 @@ public interface HealthProviderService {
 
     HealthProvider getById(int id) throws WrongCredentials;
 
-    HealthProvider deleteById(int id) throws WrongCredentials;
-
-    List<HealthProvider> getByName(String name);
-
+    void deleteById(int id) throws WrongCredentials;
 
     void update(HealthProvider healthProvider) throws ValidationException, WrongCredentials;
 

@@ -5,11 +5,15 @@ import com.healthcare.system.exceptions.ValidationException;
 import com.healthcare.system.exceptions.WrongCredentials;
 import com.healthcare.system.repositories.ComplaintRepository;
 import com.healthcare.system.services.ComplaintService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.healthcare.system.util.Verification.verifyCredentials;
 
+
+@Service
 public class ComplaintServiceImpl implements ComplaintService {
 
     private final ComplaintRepository complaintRepository;
@@ -19,15 +23,15 @@ public class ComplaintServiceImpl implements ComplaintService {
     }
     @Override
     public Complaint findById(int id) throws WrongCredentials {
-        if(complaintRepository.findById(id) == null) {
+        if(complaintRepository.findById(id).equals(Optional.empty())) {
             throw new WrongCredentials("Complaint with id: " + id + " does not exist");
         }
-        return complaintRepository.findById(id);
+        return complaintRepository.findById(id).get();
     }
 
     @Override
     public void deleteById(int id) throws WrongCredentials {
-        if(complaintRepository.findById(id) == null) {
+        if(complaintRepository.findById(id).equals(Optional.empty())) {
             throw new WrongCredentials("Complaint with id: " + id + " does not exist");
         }
         complaintRepository.deleteById(id);
@@ -36,7 +40,7 @@ public class ComplaintServiceImpl implements ComplaintService {
     @Override
     public void update(Complaint complaint) throws ValidationException, WrongCredentials {
         verifyCredentials(Complaint.class,complaint);
-        complaintRepository.update(complaint);
+        complaintRepository.save(complaint);
     }
 
     @Override

@@ -10,9 +10,7 @@ public interface DoctorService {
     void register(DoctorDTO doctor) throws ValidationException, WrongCredentials;
 
     Doctor getById(int id) throws WrongCredentials;
-    Doctor deleteById(int id) throws WrongCredentials;
-
-    List<Doctor> getByName(String name);
+    void deleteById(int id) throws WrongCredentials;
 
     void update(Doctor doctor) throws ValidationException, WrongCredentials;
 

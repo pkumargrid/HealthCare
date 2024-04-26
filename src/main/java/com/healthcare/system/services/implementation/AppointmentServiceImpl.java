@@ -5,11 +5,14 @@ import com.healthcare.system.exceptions.ValidationException;
 import com.healthcare.system.exceptions.WrongCredentials;
 import com.healthcare.system.repositories.AppointmentRepository;
 import com.healthcare.system.services.AppointmentService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.healthcare.system.util.Verification.verifyCredentials;
 
+@Service
 public class AppointmentServiceImpl implements AppointmentService {
 
     private final AppointmentRepository appointmentRepository;
@@ -18,16 +21,16 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
     @Override
     public Appointment findById(int id) throws WrongCredentials {
-        if(appointmentRepository.findById(id) == null) {
+        if(appointmentRepository.findById(id).equals(Optional.empty())) {
             throw new WrongCredentials("Appointment with id: " + id + " does not exist");
         }
-        return appointmentRepository.findById(id);
+        return appointmentRepository.findById(id).get();
     }
 
     @Override
     public void update(Appointment appointment) throws ValidationException, WrongCredentials {
         verifyCredentials(Appointment.class,appointment);
-        appointmentRepository.update(appointment);
+        appointmentRepository.save(appointment);
     }
 
     @Override
@@ -37,7 +40,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public void deleteById(int id) throws WrongCredentials {
-        if(appointmentRepository.findById(id) == null) {
+        if(appointmentRepository.findById(id).equals(Optional.empty())) {
             throw new WrongCredentials("Appointment with id: " + id + " does not exist");
         }
         appointmentRepository.deleteById(id);

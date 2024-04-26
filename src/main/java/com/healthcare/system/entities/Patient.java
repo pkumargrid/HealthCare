@@ -1,5 +1,6 @@
 package com.healthcare.system.entities;
 
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,7 +9,11 @@ import java.util.List;
 
 @Getter
 @Setter
+@Entity
 public class Patient {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String name;
     private String password;
@@ -21,6 +26,8 @@ public class Patient {
 
     private List<HealthRecord> healthRecordList;
     private String sessionId;
+
+    @OneToMany(mappedBy = "patient")
     private List<Appointment> appointmentList;
 
     private List<Complaint> complaintList;

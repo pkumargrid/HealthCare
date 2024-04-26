@@ -7,15 +7,18 @@ import com.healthcare.system.mappers.PatientMapper;
 import com.healthcare.system.repositories.*;
 import com.healthcare.system.services.PatientService;
 import com.healthcare.system.session.SessionManager;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static com.healthcare.system.util.Verification.*;
 
+@Service
 public class PatientServiceImpl implements PatientService {
     private final PatientRepository patientRepository;
     private final AppointmentRepository appointmentRepository;
@@ -36,10 +39,10 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public Patient findById(int id) throws WrongCredentials {
-        if(patientRepository.findById(id) == null) {
+        if(patientRepository.findById(id).equals(Optional.empty())) {
             throw new WrongCredentials("Patient with id: " + id + " does not exist");
         }
-        return patientRepository.findById(id);
+        return patientRepository.findById(id).get();
     }
 
     @Override
@@ -56,12 +59,12 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public void updatePatient(Patient patient) throws ValidationException, WrongCredentials {
         verifyCredentials(Patient.class,patient);
-        patientRepository.update(patient);
+        patientRepository.save(patient);
     }
 
     @Override
     public void deletePatientById(int id) throws WrongCredentials {
-        if(patientRepository.findById(id) == null) {
+        if(patientRepository.findById(id).equals(Optional.empty())) {
             throw new WrongCredentials("Patient with id: " + id + " does not exist");
         }
         patientRepository.deleteById(id);
@@ -125,17 +128,22 @@ public class PatientServiceImpl implements PatientService {
             healthProviderRepository.save(healthProvider);
         }
         else if(type.equals("Nurse")) {
-            Nurse nurse = nurseRepository.findById(id);
+            Nurse nurse = nurseRepository.findById(id).get();
             nurse.getComplaintList().add(complaint);
             nurse.getHealthProvider().getComplaintList().add(complaint);
             HealthProvider healthProvider = nurse.getHealthProvider();
             healthProvider.getComplaintList().add(complaint);
-            nurseRepository.saveNurse(nurse);
+            nurseRepository.save(nurse);
             healthProviderRepository.save(healthProvider);
         }
         List<Complaint> complaints = complaintRepository.findAll();
         complaint.setId(complaints.stream().flatMap(c -> Stream.of(c.getId())).reduce(0,Integer::max) + 1);
         complaintRepository.save(complaint);
+    }
+
+    @Override
+    public HealthRecord accessPatientRecord(Patient patient) {
+        return null;
     }
 
     @Override
@@ -172,25 +180,25 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public List<HealthProvider> getHealthProviders(int patientId) throws WrongCredentials {
-        if(patientRepository.findById(patientId) == null) {
+        if(patientRepository.findById(patientId).equals(Optional.empty())) {
             throw new WrongCredentials("Patient with id: " + patientId + " does not exist");
         }
-        return patientRepository.findById(patientId).getHealthProviderList();
+        return patientRepository.findById(patientId).get().getHealthProviderList();
     }
 
     @Override
     public List<Doctor> getDoctorList(int patientId) throws WrongCredentials {
-        if(patientRepository.findById(patientId) == null) {
+        if(patientRepository.findById(patientId).equals(Optional.empty())) {
             throw new WrongCredentials("Patient with id: " + patientId + " does not exist");
         }
-        return patientRepository.findById(patientId).getDoctorList();
+        return patientRepository.findById(patientId).get().getDoctorList();
     }
 
     @Override
     public List<HealthRecord> getHealthRecordList(int patientId) throws WrongCredentials {
-        if(patientRepository.findById(patientId) == null) {
+        if(patientRepository.findById(patientId).equals(Optional.empty())) {
             throw new WrongCredentials("Patient with id: " + patientId + " does not exist");
         }
-        return patientRepository.findById(patientId).getHealthRecordList();
+        return patientRepository.findById(patientId).get().getHealthRecordList();
     }
 }

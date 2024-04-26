@@ -5,11 +5,14 @@ import com.healthcare.system.exceptions.ValidationException;
 import com.healthcare.system.exceptions.WrongCredentials;
 import com.healthcare.system.repositories.HealthRecordRepository;
 import com.healthcare.system.services.HealthRecordService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.healthcare.system.util.Verification.verifyCredentials;
 
+@Service
 public class HealthRecordServiceImpl implements HealthRecordService {
 
     private final HealthRecordRepository healthRecordRepository;
@@ -26,24 +29,24 @@ public class HealthRecordServiceImpl implements HealthRecordService {
 
     @Override
     public HealthRecord getById(int id) throws WrongCredentials {
-        if(healthRecordRepository.getById(id) == null) {
+        if(healthRecordRepository.findById(id).equals(Optional.empty())) {
             throw new WrongCredentials("HealthRecord with id: " + id + " does not exist");
         }
-        return healthRecordRepository.getById(id);
+        return healthRecordRepository.findById(id).get();
     }
 
     @Override
-    public HealthRecord deleteById(int id) throws WrongCredentials {
-        if(healthRecordRepository.getById(id) == null) {
+    public void deleteById(int id) throws WrongCredentials {
+        if(healthRecordRepository.findById(id).equals(Optional.empty())) {
             throw new WrongCredentials("HealthRecord with id: " + id + " does not exist");
         }
-        return healthRecordRepository.deleteById(id);
+        healthRecordRepository.deleteById(id);
     }
 
     @Override
     public void update(HealthRecord healthRecord) throws ValidationException, WrongCredentials {
         verifyCredentials(HealthRecord.class,healthRecord);
-        healthRecordRepository.update(healthRecord);
+        healthRecordRepository.save(healthRecord);
     }
 
     @Override

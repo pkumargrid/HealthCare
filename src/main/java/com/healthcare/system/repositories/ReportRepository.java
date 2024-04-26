@@ -2,17 +2,12 @@ package com.healthcare.system.repositories;
 
 import com.healthcare.system.entities.Report;
 import com.healthcare.system.exceptions.WrongCredentials;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface ReportRepository {
-    void save(Report report) throws WrongCredentials;
+@Repository
+public interface ReportRepository extends JpaRepository<Report,Integer> {
 
-    Report findById(int id);
-
-    void deleteById(int id) throws WrongCredentials;
-
-    void update(Report report) throws WrongCredentials;
-
-    List<Report> findAll();
 }

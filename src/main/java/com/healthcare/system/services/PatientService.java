@@ -16,6 +16,7 @@ public interface PatientService {
 
     void createComplaint(Complaint complaint, String type, int id) throws WrongCredentials;
 
+    HealthRecord accessPatientRecord(Patient patient);
     void login(Patient patient) throws ValidationException, AlreadyLoggedInException;
     void logout(String sessionId) throws AlreadyLoggedOutException;
     void register(PatientDTO patientDTO) throws ValidationException, WrongCredentials;

@@ -4,14 +4,12 @@ import com.healthcare.system.entities.HealthRecord;
 import com.healthcare.system.entities.Nurse;
 import com.healthcare.system.entities.Patient;
 import com.healthcare.system.exceptions.WrongCredentials;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface NurseRepository {
-    Nurse findById(int id);
-    List<Nurse> findAll();
-    void saveNurse(Nurse nurse) throws WrongCredentials;
-    void updateNurse(Nurse nurse) throws WrongCredentials;
-    void deleteNurseById(int id) throws WrongCredentials;
-    HealthRecord accessPatientRecord(Patient patient);
+@Repository
+public interface NurseRepository extends JpaRepository<Nurse,Integer> {
+
 }

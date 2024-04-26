@@ -7,6 +7,7 @@ import com.healthcare.system.mappers.DoctorMapper;
 import com.healthcare.system.repositories.*;
 import com.healthcare.system.services.DoctorService;
 import com.healthcare.system.session.SessionManager;
+import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.stream.Stream;
 
 import static com.healthcare.system.util.Verification.*;
 
+@Service
 public class DoctorServiceImpl implements DoctorService {
 
     private final DoctorRepository doctorRepository;
@@ -55,24 +57,24 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public Doctor getById(int id) throws WrongCredentials {
-        if(doctorRepository.getById(id) == null) {
+        if(doctorRepository.findById(id).equals(Optional.empty())) {
             throw new WrongCredentials("Doctor with id: " + id + " does not exist");
         }
-        return doctorRepository.getById(id);
+        return doctorRepository.findById(id).get();
     }
 
     @Override
-    public Doctor deleteById(int id) throws WrongCredentials {
-        if(doctorRepository.getById(id) == null) {
+    public void deleteById(int id) throws WrongCredentials {
+        if(doctorRepository.findById(id).equals(Optional.empty())) {
             throw new WrongCredentials("Doctor with id: " + id + " does not exist");
         }
-        return doctorRepository.deleteById(id);
+        doctorRepository.deleteById(id);
     }
 
     @Override
     public void update(Doctor doctor) throws ValidationException, WrongCredentials {
         verifyCredentials(Doctor.class,doctor);
-        doctorRepository.update(doctor);
+        doctorRepository.save(doctor);
     }
 
     @Override
@@ -82,7 +84,7 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public void assignNurse(int id, Patient patient) throws WrongCredentials {
-        Doctor doctor = doctorRepository.getById(id);
+        Doctor doctor = doctorRepository.findById(id).orElse(null);
         if (doctor == null ) {
             throw new IllegalArgumentException("Id is not correct");
         }
@@ -95,7 +97,7 @@ public class DoctorServiceImpl implements DoctorService {
 
         List<Nurse> nurseList = nurseRepository.findAll();
 
-        if(nurseList == null || nurseList.isEmpty()) {
+        if(nurseList.isEmpty()) {
             throw new IllegalStateException("No nurse to assign");
         }
         Collections.shuffle(nurseList);
@@ -107,7 +109,7 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public void confirmAppointment(int id) {
-        Appointment appointment = appointmentRepository.findById(id);
+        Appointment appointment = appointmentRepository.findById(id).orElse(null);
         if (appointment == null) {
             throw new IllegalArgumentException("Appointment with " + id + " not found");
         }
@@ -120,16 +122,16 @@ public class DoctorServiceImpl implements DoctorService {
         int id = -1;
         if (reason.getType() instanceof Doctor doctor) {
             id = doctor.getId();
-            doctorRepository.getById(id).getReasons().add(reason);
+            doctorRepository.findById(id).get().getReasons().add(reason);
         }
         else if (reason.getType() instanceof Nurse nurse) {
             id = nurse.getId();
-            nurseRepository.findById(id).getReasons().add(reason);
+            nurseRepository.findById(id).get().getReasons().add(reason);
         }
         else {
             throw new ReasonTypeException("Holder of reason " + reason.getType() + " does not exist");
         }
-        HealthProvider healthProvider = healthProviderRepository.getById(id);
+        HealthProvider healthProvider = healthProviderRepository.findById(id).orElse(null);
         if (healthProvider == null) {
             throw new ResourceNotFoundException(HealthProvider.class.toString());
         }
@@ -159,33 +161,33 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public List<Appointment> getAppointments(int doctorId) throws WrongCredentials {
-        if(doctorRepository.getById(doctorId) == null) {
+        if(doctorRepository.findById(doctorId).equals(Optional.empty())) {
             throw new WrongCredentials("Doctor with id: " + doctorId + " does not exist");
         }
-        return doctorRepository.getById(doctorId).getAppointmentList();
+        return doctorRepository.findById(doctorId).get().getAppointmentList();
     }
 
     @Override
     public List<Complaint> getComplaints(int doctorId) throws WrongCredentials {
-        if(doctorRepository.getById(doctorId) == null) {
+        if(doctorRepository.findById(doctorId).equals(Optional.empty())) {
             throw new WrongCredentials("Doctor with id: " + doctorId + " does not exist");
         }
-        return doctorRepository.getById(doctorId).getComplaintList();
+        return doctorRepository.findById(doctorId).get().getComplaintList();
     }
 
     public List<Reason> getReasons(int doctorId) throws WrongCredentials {
-        if(doctorRepository.getById(doctorId) == null) {
+        if(doctorRepository.findById(doctorId).equals(Optional.empty())) {
             throw new WrongCredentials("Doctor with id: " + doctorId + " does not exist");
         }
-        return doctorRepository.getById(doctorId).getReasons();
+        return doctorRepository.findById(doctorId).get().getReasons();
     }
 
     @Override
     public List<Patient> getPatients(int doctorId) throws WrongCredentials {
-        if(doctorRepository.getById(doctorId) == null) {
+        if(doctorRepository.findById(doctorId).equals(Optional.empty())) {
             throw new WrongCredentials("Doctor with id: " + doctorId + " does not exist");
         }
-        return doctorRepository.getById(doctorId).getPatientList();
+        return doctorRepository.findById(doctorId).get().getPatientList();
     }
 
     @Override
@@ -195,11 +197,11 @@ public class DoctorServiceImpl implements DoctorService {
         List<HealthRecord> healthRecords = healthRecordRepository.findAll();
         int id = healthRecords.stream().flatMap(h -> Stream.of(h.getId())).mapToInt(i->i).max().orElseGet(()->1) + 1;
         healthRecord.setId(id);
-        Doctor doctor = doctorRepository.getById(doctorId);
+        Doctor doctor = doctorRepository.findById(doctorId).orElse(null);
         if(doctor == null) throw new WrongCredentials("Doctor with id: " + id + " does not exist");
         healthRecord.setDoctor(doctor);
         healthRecord.setPrescription(prescription);
-        Patient patient = patientRepository.findById(patientId);
+        Patient patient = patientRepository.findById(patientId).orElse(null);
         if(patient == null) throw new WrongCredentials("Patient with id: " + id + " does not exist");
         healthRecord.setPatient(patient);
         HealthProvider healthProvider = doctor.getHealthProvider();
@@ -214,7 +216,7 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     public void updatePrescription(int healthRecordId, Prescription prescription) throws ValidationException, WrongCredentials {
         verifyCredentials(prescription.getClass(), prescription);
-        HealthRecord healthRecord = healthRecordRepository.getById(healthRecordId);
+        HealthRecord healthRecord = healthRecordRepository.findById(healthRecordId).orElse(null);
         if(healthRecord == null) {
             throw new WrongCredentials("HealthRecord with id: " + healthRecordId + " does not exist");
         }
@@ -228,11 +230,6 @@ public class DoctorServiceImpl implements DoctorService {
         doctorRepository.save(doctor);
     }
 
-
-    @Override
-    public List<Doctor> getByName(String name) {
-        return doctorRepository.getByName(name);
-    }
 
 
 

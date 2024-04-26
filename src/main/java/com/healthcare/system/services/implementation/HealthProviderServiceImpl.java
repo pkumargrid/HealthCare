@@ -16,12 +16,15 @@ import com.healthcare.system.repositories.HealthProviderRepository;
 import com.healthcare.system.repositories.PatientRepository;
 import com.healthcare.system.services.HealthProviderService;
 import com.healthcare.system.session.SessionManager;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static com.healthcare.system.util.Verification.*;
 
+@Service
 public class HealthProviderServiceImpl implements HealthProviderService {
 
     private final HealthProviderRepository healthProviderRepository;
@@ -40,24 +43,24 @@ public class HealthProviderServiceImpl implements HealthProviderService {
 
     @Override
     public HealthProvider getById(int id) throws WrongCredentials {
-        if(healthProviderRepository.getById(id) == null) {
+        if(healthProviderRepository.findById(id).equals(Optional.empty())) {
             throw new WrongCredentials("HealthProvider with id: " + id + " does not exist");
         }
-        return healthProviderRepository.getById(id);
+        return healthProviderRepository.findById(id).get();
     }
 
     @Override
-    public HealthProvider deleteById(int id) throws WrongCredentials {
-        if(healthProviderRepository.getById(id) == null) {
+    public void deleteById(int id) throws WrongCredentials {
+        if(healthProviderRepository.findById(id).equals(Optional.empty())) {
             throw new WrongCredentials("HealthProvider with id: " + id + " does not exist");
         }
-        return healthProviderRepository.deleteById(id);
+        healthProviderRepository.deleteById(id);
     }
 
     @Override
     public void update(HealthProvider healthProvider) throws ValidationException, WrongCredentials {
         verifyCredentials(HealthProvider.class,healthProvider);
-        healthProviderRepository.update(healthProvider);
+        healthProviderRepository.save(healthProvider);
     }
 
     @Override
@@ -99,11 +102,11 @@ public class HealthProviderServiceImpl implements HealthProviderService {
 
     @Override
     public void registerPatient(int healthProviderId, int patientId) throws WrongCredentials {
-        HealthProvider healthProvider = healthProviderRepository.getById(healthProviderId);
+        HealthProvider healthProvider = healthProviderRepository.findById(healthProviderId).orElse(null);
         if (healthProvider == null) {
             throw new WrongCredentials("Provided id for Health provider is wrong");
         }
-        Patient patient = patientRepository.findById(patientId);
+        Patient patient = patientRepository.findById(patientId).orElse(null);
         if(patient == null) {
             throw new WrongCredentials("Provided id for Patient is wrong");
         }
@@ -113,54 +116,50 @@ public class HealthProviderServiceImpl implements HealthProviderService {
 
     @Override
     public List<Doctor> getDoctors(int healthProviderId) throws WrongCredentials {
-        if(healthProviderRepository.getById(healthProviderId) == null) {
+        if(healthProviderRepository.findById(healthProviderId).equals(Optional.empty())) {
             throw new WrongCredentials("HealthProvider with id: " + healthProviderId + " does not exist");
         }
-        return healthProviderRepository.getById(healthProviderId).getDoctorList();
+        return healthProviderRepository.findById(healthProviderId).get().getDoctorList();
     }
 
     @Override
     public List<Nurse> getNurse(int healthProviderId) throws WrongCredentials {
-        if(healthProviderRepository.getById(healthProviderId) == null) {
+        if(healthProviderRepository.findById(healthProviderId).equals(Optional.empty())) {
             throw new WrongCredentials("HealthProvider with id: " + healthProviderId + " does not exist");
         }
-        return healthProviderRepository.getById(healthProviderId).getNurseList();
+        return healthProviderRepository.findById(healthProviderId).get().getNurseList();
     }
 
     @Override
     public List<Complaint> getComplaints(int healthProviderId) throws WrongCredentials {
-        if(healthProviderRepository.getById(healthProviderId) == null) {
+        if(healthProviderRepository.findById(healthProviderId).equals(Optional.empty())) {
             throw new WrongCredentials("HealthProvider with id: " + healthProviderId + " does not exist");
         }
-        return healthProviderRepository.getById(healthProviderId).getComplaintList();
+        return healthProviderRepository.findById(healthProviderId).get().getComplaintList();
     }
 
     @Override
     public List<HealthRecord> getHealthRecords(int healthProviderId) throws WrongCredentials {
-        if(healthProviderRepository.getById(healthProviderId) == null) {
+        if(healthProviderRepository.findById(healthProviderId).equals(Optional.empty())) {
             throw new WrongCredentials("HealthProvider with id: " + healthProviderId + " does not exist");
         }
-        return healthProviderRepository.getById(healthProviderId).getHealthRecords();
+        return healthProviderRepository.findById(healthProviderId).get().getHealthRecords();
     }
 
     @Override
     public List<Appointment> getAppointments(int healthProviderId) throws WrongCredentials {
-        if(healthProviderRepository.getById(healthProviderId) == null) {
+        if(healthProviderRepository.findById(healthProviderId).equals(Optional.empty())) {
             throw new WrongCredentials("HealthProvider with id: " + healthProviderId + " does not exist");
         }
-        return healthProviderRepository.getById(healthProviderId).getAppointmentList();
+        return healthProviderRepository.findById(healthProviderId).get().getAppointmentList();
     }
 
     @Override
     public List<Reason> getReasons(int healthProviderId) throws WrongCredentials {
-        if(healthProviderRepository.getById(healthProviderId) == null) {
+        if(healthProviderRepository.findById(healthProviderId).equals(Optional.empty())) {
             throw new WrongCredentials("HealthProvider with id: " + healthProviderId + " does not exist");
         }
-        return healthProviderRepository.getById(healthProviderId).getReasons();
+        return healthProviderRepository.findById(healthProviderId).get().getReasons();
     }
 
-    @Override
-    public List<HealthProvider> getByName(String name) {
-        return healthProviderRepository.getByName(name);
-    }
 }
