@@ -1,5 +1,6 @@
 package com.healthcare.system.entities;
 
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +15,7 @@ public class Nurse {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+
     private String name;
     private String password;
 

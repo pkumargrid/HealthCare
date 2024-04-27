@@ -1,3 +1,53 @@
 spring:
   application:
     name: HealthCareSystem
+
+  main:
+    banner-mode: off
+  profiles:
+    active: local
+
+logging:
+  level:
+    org.hibernate.SQL: trace
+    org.hibernate.orm.jdbc.bind: TRACE
+
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: tester
+    password: password
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+
+  h2:
+    console:
+      enabled: true
+
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/healthcare
+    driver-class-name: org.postgresql.Driver
+    username: prakumar
+    password: prakumar
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+

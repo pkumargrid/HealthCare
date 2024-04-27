@@ -12,7 +12,7 @@ public interface HealthRecordService {
 
     HealthRecord getById(int id) throws WrongCredentials;
 
-    HealthRecord deleteById(int id) throws WrongCredentials;
+    void deleteById(int id) throws WrongCredentials;
 
     void update(HealthRecord healthRecord) throws ValidationException, WrongCredentials;
 

@@ -1,0 +1,11 @@
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/healthcare
+    driver-class-name: org.postgresql.Driver
+    username: prakumar
+    password: prakumar

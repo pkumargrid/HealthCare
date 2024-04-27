@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class HealthProviderDTO implements ObjectDTO {
+    private Integer id;
     private String name;
     private String password;
     private String email;

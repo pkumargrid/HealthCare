@@ -2,14 +2,16 @@ package com.healthcare.system.mappers;
 
 import com.healthcare.system.dto.HealthProviderDTO;
 import com.healthcare.system.entities.HealthProvider;
+import org.mapstruct.Mapper;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.factory.Mappers;
 
-public class HealthProviderMapper {
+@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+public interface HealthProviderMapper {
 
-    public static HealthProvider mapToDomain(HealthProviderDTO healthProviderDTO) {
-        HealthProvider healthProvider = new HealthProvider();
-        healthProvider.setName(healthProviderDTO.getName());
-        healthProvider.setPassword(healthProviderDTO.getPassword());
-        healthProvider.setEmail(healthProviderDTO.getEmail());
-        return healthProvider;
-    }
+    HealthProviderMapper INSTANCE = Mappers.getMapper(HealthProviderMapper.class);
+
+    HealthProvider dtoToEntity(HealthProviderDTO healthProviderDTO);
+
+    HealthProviderDTO entityToDto(HealthProvider nurse);
 }
