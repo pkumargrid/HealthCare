@@ -7,6 +7,7 @@ import com.healthcare.system.repositories.AppointmentRepository;
 import com.healthcare.system.services.AppointmentService;
 import org.springframework.stereotype.Service;
 
+import java.rmi.ServerException;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,34 +21,44 @@ public class AppointmentServiceImpl implements AppointmentService {
         this.appointmentRepository = appointmentRepository;
     }
     @Override
+<<<<<<< HEAD
     public Appointment findById(int id) throws WrongCredentials {
         if(appointmentRepository.findById(id).equals(Optional.empty())) {
+=======
+    public Appointment findById(int id) throws WrongCredentials, ServerException {
+        if(appointmentRepository.findById(id) == null) {
+>>>>>>> 0d0b0e05f28cc077e7d42a1a22f542fe7df0398b
             throw new WrongCredentials("Appointment with id: " + id + " does not exist");
         }
         return appointmentRepository.findById(id).get();
     }
 
     @Override
-    public void update(Appointment appointment) throws ValidationException, WrongCredentials {
+    public void update(Appointment appointment) throws ValidationException, WrongCredentials, ServerException {
         verifyCredentials(Appointment.class,appointment);
         appointmentRepository.save(appointment);
     }
 
     @Override
-    public List<Appointment> findAll() {
+    public List<Appointment> findAll() throws ServerException {
         return appointmentRepository.findAll();
     }
 
     @Override
+<<<<<<< HEAD
     public void deleteById(int id) throws WrongCredentials {
         if(appointmentRepository.findById(id).equals(Optional.empty())) {
+=======
+    public void deleteById(int id) throws WrongCredentials, ServerException {
+        if(appointmentRepository.findById(id) == null) {
+>>>>>>> 0d0b0e05f28cc077e7d42a1a22f542fe7df0398b
             throw new WrongCredentials("Appointment with id: " + id + " does not exist");
         }
         appointmentRepository.deleteById(id);
     }
 
     @Override
-    public void save(Appointment appointment) throws ValidationException, WrongCredentials {
+    public void save(Appointment appointment) throws ValidationException, WrongCredentials, ServerException {
         verifyCredentials(Appointment.class,appointment);
         appointmentRepository.save(appointment);
     }

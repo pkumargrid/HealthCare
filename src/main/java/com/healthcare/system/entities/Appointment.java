@@ -16,7 +16,6 @@ public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private  int id;
-
     private LocalDateTime startTime;
 
     private LocalDateTime endTime;
@@ -28,5 +27,6 @@ public class Appointment {
     @ManyToOne
     @JoinColumn(name = "patient_id")
     private Patient patient;
+    private boolean status;
 
 }

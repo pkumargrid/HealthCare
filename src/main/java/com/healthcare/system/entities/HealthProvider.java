@@ -38,8 +38,6 @@ public class HealthProvider {
     private List<Nurse> nurseList;
     private List<Complaint> complaintList;
 
-    private String sessionId;
-
     public HealthProvider() {
         this.healthRecords = new ArrayList<>();
         this.doctorList = new ArrayList<>();

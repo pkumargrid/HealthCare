@@ -26,7 +26,6 @@ public class Nurse {
     private List<Patient> patientList;
     private List<Reason> reasons;
     private String email;
-    private String sessionId;
 
 
     public Nurse(){

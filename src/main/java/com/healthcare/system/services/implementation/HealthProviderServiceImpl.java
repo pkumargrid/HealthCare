@@ -69,7 +69,7 @@ public class HealthProviderServiceImpl implements HealthProviderService {
     }
 
     @Override
-    public void login(HealthProvider healthProvider) throws ValidationException, AlreadyLoggedInException {
+    public void login(HealthProviderDTO healthProvider) throws ValidationException, AlreadyLoggedInException {
         if (SessionManager.isAuthenticated(healthProvider.getSessionId())) {
             throw new AlreadyLoggedInException("HealthProvider: " + healthProvider.getEmail() + " is already logged in");
         }
@@ -77,7 +77,7 @@ public class HealthProviderServiceImpl implements HealthProviderService {
         verifyEmailWhileLogin(healthProviders, healthProvider.getEmail());
         HealthProvider healthProvider1 = healthProviders.stream().filter(h -> h.getEmail().equals(healthProvider.getEmail())).findFirst().get();
         verifyPasswordWhileLogin(healthProvider1.getPassword(), healthProvider.getPassword());
-        healthProvider1.setSessionId(SessionManager.generateSessionId(healthProvider.getEmail()));
+        SessionManager.generateSessionId(healthProvider.getEmail());
     }
 
     @Override

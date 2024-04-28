@@ -139,7 +139,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public void login(Doctor doctor) throws ValidationException, AlreadyLoggedInException {
+    public void login(DoctorDTO doctor) throws ValidationException, AlreadyLoggedInException {
         if (SessionManager.isAuthenticated(doctor.getSessionId())) {
             throw new AlreadyLoggedInException("Doctor: " + doctor.getEmail() + " is already logged in");
         }
@@ -147,7 +147,7 @@ public class DoctorServiceImpl implements DoctorService {
         verifyEmailWhileLogin(doctors, doctor.getEmail());
         Doctor doctor1 = doctors.stream().filter(d -> d.getEmail().equals(doctor.getEmail())).findFirst().get();
         verifyPasswordWhileLogin(doctor1.getPassword(), doctor.getPassword());
-        doctor1.setSessionId(SessionManager.generateSessionId(doctor.getEmail()));
+        SessionManager.generateSessionId(doctor.getEmail());
     }
 
 

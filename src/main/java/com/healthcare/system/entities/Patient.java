@@ -25,9 +25,12 @@ public class Patient {
     private Nurse nurse;
 
     private List<HealthRecord> healthRecordList;
+<<<<<<< HEAD
     private String sessionId;
 
     @OneToMany(mappedBy = "patient")
+=======
+>>>>>>> 0d0b0e05f28cc077e7d42a1a22f542fe7df0398b
     private List<Appointment> appointmentList;
 
     private List<Complaint> complaintList;

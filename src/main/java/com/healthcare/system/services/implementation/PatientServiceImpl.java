@@ -142,12 +142,16 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+<<<<<<< HEAD
     public HealthRecord accessPatientRecord(Patient patient) {
         return null;
     }
 
     @Override
     public void login(Patient patient) throws ValidationException, AlreadyLoggedInException {
+=======
+    public void login(PatientDTO patient) throws ValidationException, AlreadyLoggedInException {
+>>>>>>> 0d0b0e05f28cc077e7d42a1a22f542fe7df0398b
         if (SessionManager.isAuthenticated(patient.getSessionId())) {
             throw new AlreadyLoggedInException("Patient: " + patient.getEmail() + " is already logged in");
         }
@@ -155,7 +159,7 @@ public class PatientServiceImpl implements PatientService {
         verifyEmailWhileLogin(patients, patient.getEmail());
         Patient patient1 = patients.stream().filter(p -> p.getEmail().equals(patient.getEmail())).findFirst().get();
         verifyPasswordWhileLogin(patient1.getPassword(), patient.getPassword());
-        patient1.setSessionId(SessionManager.generateSessionId(patient.getEmail()));
+        SessionManager.generateSessionId(patient.getEmail());
     }
 
     @Override

@@ -27,8 +27,6 @@ public class Doctor {
 
     private HealthProvider healthProvider;
 
-    private String sessionId;
-
     private List<Complaint> complaintList;
 
     @OneToMany(mappedBy = "doctor")
