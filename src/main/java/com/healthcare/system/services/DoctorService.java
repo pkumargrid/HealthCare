@@ -1,6 +1,7 @@
 package com.healthcare.system.services;
 
 import com.healthcare.system.dto.DoctorDTO;
+import com.healthcare.system.dto.ReasonDTO;
 import com.healthcare.system.entities.*;
 import com.healthcare.system.exceptions.*;
 
@@ -20,13 +21,11 @@ public interface DoctorService {
 
     void confirmAppointment(int id);
 
-    void notifyReasonForComplaint(Reason reason) throws ReasonTypeException, ResourceNotFoundException, WrongCredentials;
+    void notifyReasonForComplaint(ReasonDTO reasonDTO) throws ReasonTypeException, ResourceNotFoundException, WrongCredentials;
 
-    void login(Doctor doctor) throws ValidationException, AlreadyLoggedInException;
 
     void save(Doctor doctor) throws ValidationException, WrongCredentials;
 
-    void logout(String sessionId) throws AlreadyLoggedOutException;
 
     List<Appointment> getAppointments(int doctorId) throws WrongCredentials;
 
@@ -39,4 +38,6 @@ public interface DoctorService {
     void prescribePrescription(int doctorId, int patientId, Prescription prescription) throws ValidationException, WrongCredentials;
 
     void updatePrescription(int healthRecordId, Prescription prescription) throws ValidationException, WrongCredentials;
+
+
 }

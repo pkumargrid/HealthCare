@@ -1,14 +1,16 @@
 package com.healthcare.system.services.implementation;
 
+import com.healthcare.system.dto.AppointmentDTO;
 import com.healthcare.system.dto.PatientDTO;
 import com.healthcare.system.entities.*;
 import com.healthcare.system.exceptions.*;
+import com.healthcare.system.mappers.AppointmentMapper;
 import com.healthcare.system.mappers.PatientMapper;
 import com.healthcare.system.repositories.*;
 import com.healthcare.system.services.PatientService;
-import com.healthcare.system.session.SessionManager;
 import org.springframework.stereotype.Service;
 
+import javax.print.Doc;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -70,7 +72,18 @@ public class PatientServiceImpl implements PatientService {
         patientRepository.deleteById(id);
     }
 
-    public void bookAppointments(Appointment appointment) throws AppointmentTimeException, WrongCredentials {
+    public void bookAppointments(AppointmentDTO appointmentDTO) throws AppointmentTimeException, WrongCredentials {
+        Appointment appointment = AppointmentMapper.INSTANCE.dtoToEntity(appointmentDTO);
+        Patient patient = patientRepository.findById(appointmentDTO.getId()).orElse(null);
+        Doctor doctor = doctorRepository.findById(appointmentDTO.getId()).orElse(null);
+        if(patient == null) {
+            throw new WrongCredentials("Patient with " + appointmentDTO.getPatientId() + " does not exist");
+        }
+        if(doctor == null) {
+            throw new WrongCredentials("Doctor with " + appointmentDTO.getDoctorId() + " does not exist");
+        }
+        appointment.setPatient(patient);
+        appointment.setDoctor(doctor);
         List<Appointment> doctorAppointmentList = appointment.getPatient().getAppointmentList();
         int[] range = new int[601];
         for(var doctorAppointment : doctorAppointmentList) {
@@ -101,14 +114,17 @@ public class PatientServiceImpl implements PatientService {
             LocalTime end = LocalTime.of(endTime/60 + 10,endTime%60);
             appointment.setStartTime(LocalDateTime.of(currentDate,start));
             appointment.setEndTime(LocalDateTime.of(currentDate,end));
-            appointmentRepository.save(appointment);
-            appointment.getPatient().getAppointmentList().add(appointment);
-            patientRepository.save(appointment.getPatient());
-            appointment.getDoctor().getAppointmentList().add(appointment);
-            doctorRepository.save(appointment.getDoctor());
-            appointment.getDoctor().getHealthProvider().getAppointmentList().add(appointment);
+            doctor.getAppointmentList().add(appointment);
+            doctor.getPatientList().add(patient);
+            patient.getDoctorList().add(doctor);
+            patient.getAppointmentList().add(appointment);
+            patientRepository.save(patient);
+            doctorRepository.save(doctor);
+            doctor.getHealthProvider().getAppointmentList().add(appointment);
+            doctor.getHealthProvider().getPatientList().add(patient);
             appointment.setId(appointmentRepository.findAll().stream().flatMap(a ->Stream.of(a.getId())).reduce(0, Integer::max) + 1);
             healthProviderRepository.save(appointment.getDoctor().getHealthProvider());
+            appointmentRepository.save(appointment);
         }
         else {
             throw new AppointmentTimeException("Time slots not available");
@@ -147,6 +163,7 @@ public class PatientServiceImpl implements PatientService {
         return null;
     }
 
+<<<<<<< HEAD
     @Override
     public void login(Patient patient) throws ValidationException, AlreadyLoggedInException {
 =======
@@ -169,10 +186,12 @@ public class PatientServiceImpl implements PatientService {
         }
         SessionManager.removeSessionId(sessionId);
     }
+=======
+>>>>>>> 2d492300d731caddcb0bf3cfa538274a9ca97b06
 
     @Override
     public void register(PatientDTO patientDTO) throws ValidationException, WrongCredentials {
-        Patient patient = PatientMapper.mapToDomain(patientDTO);
+        Patient patient = PatientMapper.INSTANCE.dtoToEntity(patientDTO);
         verifyPasswordWhileRegister(patient.getPassword());
         List<Patient> patients = patientRepository.findAll();
         List<String> usedEmails = patients.stream().flatMap(d -> Stream.of(d.getEmail())).toList();

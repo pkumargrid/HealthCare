@@ -1,9 +1,7 @@
 package com.healthcare.system.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,27 +15,39 @@ public class HealthProvider {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Integer id;
 
     private String name;
 
     private String password;
 
+    @OneToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST},fetch = FetchType.LAZY)
+    @JoinColumn(name = "health_care_provider_id")
     private List<Appointment> appointmentList;
 
     private String email;
 
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST},fetch = FetchType.LAZY)
+    @JoinTable(name = "patient_heath_care_provider",
+                joinColumns = @JoinColumn(name = "health_care_provider_id"), inverseJoinColumns = @JoinColumn(name = "patient_id"))
     private List<Patient> patientList;
 
+    @OneToMany(mappedBy = "healthProvider", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST},fetch = FetchType.LAZY)
     private List<Doctor> doctorList;
 
+    @OneToMany(mappedBy = "healthProvider", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST},fetch = FetchType.LAZY)
     private List<HealthRecord> healthRecords;
 
+    @OneToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST},fetch = FetchType.LAZY)
+    @JoinColumn(name = "health_care_provider_id")
     private List<Reason> reasons;
 
+    @OneToMany(mappedBy = "healthProvider", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST},fetch = FetchType.LAZY)
     private List<Nurse> nurseList;
-    private List<Complaint> complaintList;
 
+    @OneToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST},fetch = FetchType.LAZY)
+    @JoinColumn(name = "health_care_provider_id")
+    private List<Complaint> complaintList;
     public HealthProvider() {
         this.healthRecords = new ArrayList<>();
         this.doctorList = new ArrayList<>();
@@ -46,6 +56,5 @@ public class HealthProvider {
         this.nurseList = new ArrayList<>();
         this.complaintList = new ArrayList<>();
     }
-
 
 }

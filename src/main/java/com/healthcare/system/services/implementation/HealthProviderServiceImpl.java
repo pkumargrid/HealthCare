@@ -6,16 +6,12 @@ import com.healthcare.system.entities.*;
 import com.healthcare.system.entities.Complaint;
 import com.healthcare.system.entities.HealthProvider;
 import com.healthcare.system.entities.Patient;
-import com.healthcare.system.exceptions.AlreadyLoggedInException;
-import com.healthcare.system.exceptions.AlreadyLoggedOutException;
 import com.healthcare.system.exceptions.ValidationException;
 import com.healthcare.system.exceptions.WrongCredentials;
-
 import com.healthcare.system.mappers.HealthProviderMapper;
 import com.healthcare.system.repositories.HealthProviderRepository;
 import com.healthcare.system.repositories.PatientRepository;
 import com.healthcare.system.services.HealthProviderService;
-import com.healthcare.system.session.SessionManager;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -69,6 +65,7 @@ public class HealthProviderServiceImpl implements HealthProviderService {
     }
 
     @Override
+<<<<<<< HEAD
     public void login(HealthProviderDTO healthProvider) throws ValidationException, AlreadyLoggedInException {
         if (SessionManager.isAuthenticated(healthProvider.getSessionId())) {
             throw new AlreadyLoggedInException("HealthProvider: " + healthProvider.getEmail() + " is already logged in");
@@ -89,8 +86,16 @@ public class HealthProviderServiceImpl implements HealthProviderService {
     }
 
     @Override
+=======
+>>>>>>> 2d492300d731caddcb0bf3cfa538274a9ca97b06
     public void register(HealthProviderDTO healthProviderDTO) throws ValidationException, WrongCredentials {
-        HealthProvider healthProvider = HealthProviderMapper.mapToDomain(healthProviderDTO);
+        System.out.println(healthProviderDTO.getEmail());
+        System.out.println(healthProviderDTO.getName());
+        System.out.println(healthProviderDTO.getPassword());
+        HealthProvider healthProvider = HealthProviderMapper.INSTANCE.dtoToEntity(healthProviderDTO);
+        System.out.println(healthProvider.getEmail());
+        System.out.println(healthProvider.getName());
+        System.out.println(healthProvider.getPassword());
         verifyPasswordWhileRegister(healthProvider.getPassword());
         List<HealthProvider> healthProviders = healthProviderRepository.findAll();
         List<String> usedEmails = healthProviders.stream().flatMap(h -> Stream.of(h.getEmail())).toList();

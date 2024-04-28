@@ -15,18 +15,18 @@ public class Appointment {
     private boolean status;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private  int id;
+    private  Integer id;
+
     private LocalDateTime startTime;
 
     private LocalDateTime endTime;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinColumn(name = "doctor_id")
     private Doctor doctor;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinColumn(name = "patient_id")
     private Patient patient;
-    private boolean status;
 
 }

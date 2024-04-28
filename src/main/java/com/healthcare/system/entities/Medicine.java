@@ -13,8 +13,7 @@ import java.util.List;
 public class Medicine {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
-
+    private Integer id;
     private String name;
     private int dose;
 

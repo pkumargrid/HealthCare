@@ -1,12 +1,13 @@
 package com.healthcare.system.services.implementation;
 
 import com.healthcare.system.dto.DoctorDTO;
+import com.healthcare.system.dto.ReasonDTO;
 import com.healthcare.system.entities.*;
 import com.healthcare.system.exceptions.*;
 import com.healthcare.system.mappers.DoctorMapper;
+import com.healthcare.system.mappers.ReasonMapper;
 import com.healthcare.system.repositories.*;
 import com.healthcare.system.services.DoctorService;
-import com.healthcare.system.session.SessionManager;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -44,13 +45,17 @@ public class DoctorServiceImpl implements DoctorService {
     }
     @Override
     public void register(DoctorDTO doctorDTO) throws ValidationException, WrongCredentials {
-        Doctor doctor = DoctorMapper.mapToDomain(doctorDTO,
-                healthProviderRepository);
+        Doctor doctor = DoctorMapper.INSTANCE.dtoToEntity(doctorDTO);
+        HealthProvider healthProvider = healthProviderRepository.findById(doctorDTO.getHealthProviderId()).orElse(null);
+        if(healthProvider == null) {
+            throw new WrongCredentials("Provided healthProvider " + doctorDTO.getHealthProviderId() + " is not valid");
+        }
         verifyPasswordWhileRegister(doctor.getPassword());
         List<Doctor> doctors = doctorRepository.findAll();
         List<String> usedEmails = doctors.stream().flatMap(d -> Stream.of(d.getEmail())).toList();
         verifyEmailWhileRegister(usedEmails, doctor.getEmail());
         verifyUserName(doctor.getEmail());
+        doctor.setHealthProvider(healthProvider);
         doctor.setId(doctors.stream().flatMap(d -> Stream.of(d.getId())).reduce(0,Integer::max) + 1);
         doctorRepository.save(doctor);
     }
@@ -117,21 +122,14 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public void notifyReasonForComplaint(Reason reason) throws ReasonTypeException, ResourceNotFoundException, WrongCredentials {
+    public void notifyReasonForComplaint(ReasonDTO reasonDTO) throws ReasonTypeException, ResourceNotFoundException {
+        Reason reason = ReasonMapper.INSTANCE.dtoToEntity(reasonDTO);
         reasonRepository.save(reason);
-        int id = -1;
-        if (reason.getType() instanceof Doctor doctor) {
-            id = doctor.getId();
-            doctorRepository.findById(id).get().getReasons().add(reason);
+        Doctor doctor = doctorRepository.findById(reasonDTO.getDoctorId()).orElse(null);
+        if (doctor == null) {
+            throw new ResourceNotFoundException("Doctor with " + reasonDTO.getDoctorId() + " cannot be found");
         }
-        else if (reason.getType() instanceof Nurse nurse) {
-            id = nurse.getId();
-            nurseRepository.findById(id).get().getReasons().add(reason);
-        }
-        else {
-            throw new ReasonTypeException("Holder of reason " + reason.getType() + " does not exist");
-        }
-        HealthProvider healthProvider = healthProviderRepository.findById(id).orElse(null);
+        HealthProvider healthProvider = healthProviderRepository.findById(doctor.getHealthProvider().getId()).orElse(null);
         if (healthProvider == null) {
             throw new ResourceNotFoundException(HealthProvider.class.toString());
         }
@@ -139,6 +137,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
+<<<<<<< HEAD
     public void login(DoctorDTO doctor) throws ValidationException, AlreadyLoggedInException {
         if (SessionManager.isAuthenticated(doctor.getSessionId())) {
             throw new AlreadyLoggedInException("Doctor: " + doctor.getEmail() + " is already logged in");
@@ -160,6 +159,8 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
+=======
+>>>>>>> 2d492300d731caddcb0bf3cfa538274a9ca97b06
     public List<Appointment> getAppointments(int doctorId) throws WrongCredentials {
         if(doctorRepository.findById(doctorId).equals(Optional.empty())) {
             throw new WrongCredentials("Doctor with id: " + doctorId + " does not exist");

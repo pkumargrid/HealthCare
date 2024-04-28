@@ -14,31 +14,34 @@ public class Patient {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Integer id;
     private String name;
     private String password;
 
+    @ManyToMany(mappedBy = "patientList", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST},fetch = FetchType.LAZY)
     private List<HealthProvider> healthProviderList;
+
+    @ManyToMany(mappedBy = "patientList", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST},fetch = FetchType.LAZY)
     private List<Doctor> doctorList;
     private String email;
 
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
+    @JoinColumn(name = "nurse_id")
     private Nurse nurse;
 
+    @OneToMany(mappedBy = "patient", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST},fetch = FetchType.LAZY)
     private List<HealthRecord> healthRecordList;
-<<<<<<< HEAD
-    private String sessionId;
 
-    @OneToMany(mappedBy = "patient")
-=======
->>>>>>> 0d0b0e05f28cc077e7d42a1a22f542fe7df0398b
+    @OneToMany(mappedBy = "patient", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST},fetch = FetchType.LAZY)
     private List<Appointment> appointmentList;
 
+    @OneToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST},fetch = FetchType.LAZY)
+    @JoinColumn(name = "patient_id")
     private List<Complaint> complaintList;
 
 
     public Patient() {
         this.healthProviderList = new ArrayList<>();
-        this.doctorList = new ArrayList<>();
         this.doctorList = new ArrayList<>();
         this.appointmentList = new ArrayList<>();
         this.complaintList = new ArrayList<>();

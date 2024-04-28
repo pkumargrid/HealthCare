@@ -3,14 +3,12 @@ package com.healthcare.system.services.implementation;
 import com.healthcare.system.dto.NurseDTO;
 import com.healthcare.system.entities.*;
 
-import com.healthcare.system.exceptions.AlreadyLoggedInException;
-import com.healthcare.system.exceptions.AlreadyLoggedOutException;
+
 import com.healthcare.system.exceptions.ValidationException;
 import com.healthcare.system.exceptions.WrongCredentials;
 import com.healthcare.system.mappers.NurseMapper;
 import com.healthcare.system.repositories.*;
 import com.healthcare.system.services.NurseService;
-import com.healthcare.system.session.SessionManager;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -70,6 +68,7 @@ public class NurseServiceImpl implements NurseService {
         nurseRepository.deleteById(id);
     }
     @Override
+<<<<<<< HEAD
     public void login(NurseDTO nurse) throws ValidationException, AlreadyLoggedInException {
         if (SessionManager.isAuthenticated(nurse.getSessionId())) {
             throw new AlreadyLoggedInException("Nurse: " + nurse.getEmail() + " is already logged in");
@@ -90,8 +89,10 @@ public class NurseServiceImpl implements NurseService {
     }
 
     @Override
+=======
+>>>>>>> 2d492300d731caddcb0bf3cfa538274a9ca97b06
     public void register(NurseDTO nurseDTO) throws ValidationException, WrongCredentials {
-        Nurse nurse = NurseMapper.mapToDomain(nurseDTO,healthProviderRepository);
+        Nurse nurse = NurseMapper.INSTANCE.dtoToEntity(nurseDTO);
         verifyPasswordWhileRegister(nurse.getPassword());
         List<Nurse> nurses = nurseRepository.findAll();
         List<String> usedEmails = nurses.stream().flatMap(d -> Stream.of(d.getEmail())).toList();
