@@ -66,7 +66,13 @@ public class HealthProviderServiceImpl implements HealthProviderService {
 
     @Override
     public void register(HealthProviderDTO healthProviderDTO) throws ValidationException, WrongCredentials {
+        System.out.println(healthProviderDTO.getEmail());
+        System.out.println(healthProviderDTO.getName());
+        System.out.println(healthProviderDTO.getPassword());
         HealthProvider healthProvider = HealthProviderMapper.INSTANCE.dtoToEntity(healthProviderDTO);
+        System.out.println(healthProvider.getEmail());
+        System.out.println(healthProvider.getName());
+        System.out.println(healthProvider.getPassword());
         verifyPasswordWhileRegister(healthProvider.getPassword());
         List<HealthProvider> healthProviders = healthProviderRepository.findAll();
         List<String> usedEmails = healthProviders.stream().flatMap(h -> Stream.of(h.getEmail())).toList();

@@ -19,21 +19,21 @@ public class Nurse {
     private String name;
     private String password;
 
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinColumn(name = "nurse_id")
     private List<Complaint> complaintList;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinColumn(name ="health_care_provider_id")
     private HealthProvider healthProvider;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinTable(name = "nurse_doctor", joinColumns = @JoinColumn(name = "nurse_id"), inverseJoinColumns = @JoinColumn(name = "doctor_id"))
     private List<Doctor> doctorList;
 
-    @OneToMany(mappedBy = "nurse")
+    @OneToMany(mappedBy = "nurse", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
     private List<Patient> patientList;
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinColumn(name = "nurse_id")
     private List<Reason> reasons;
     private String email;

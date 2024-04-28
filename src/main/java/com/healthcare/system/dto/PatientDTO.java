@@ -7,10 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class PatientDTO implements ObjectDTO{
+public class PatientDTO{
     private Integer id;
     private String name;
     private String password;
     private String email;
-    private String sessionId;
 }

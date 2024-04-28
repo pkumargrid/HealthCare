@@ -6,10 +6,13 @@ import com.healthcare.system.entities.Doctor;
 import com.healthcare.system.exceptions.ValidationException;
 import com.healthcare.system.exceptions.WrongCredentials;
 import com.healthcare.system.services.DoctorService;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 
+@RestController
+@RequestMapping("/api/v1/doctors")
 public class DoctorController {
 
     private final DoctorService doctorService;
@@ -18,7 +21,8 @@ public class DoctorController {
         this.doctorService = doctorService;
     }
 
-    public ResponseCrudDTO<Void> register(DoctorDTO doctorDTO) {
+    @PostMapping("/")
+    public ResponseCrudDTO<Void> register(@RequestBody DoctorDTO doctorDTO) {
         try{
             doctorService.register(doctorDTO);
             return new ResponseCrudDTO<Void>("Saved Doctor Successfully!", 201,null);
@@ -29,6 +33,7 @@ public class DoctorController {
         }
     }
 
+    @GetMapping("/")
     public ResponseCrudDTO<List<Doctor>> findAll() {
         List<Doctor> doctors = doctorService.findAll();
         return new ResponseCrudDTO<>("Fetched Doctors Successfully!", 200, doctors);

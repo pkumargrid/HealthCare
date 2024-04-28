@@ -1,7 +1,6 @@
 spring:
   application:
     name: HealthCareSystem
-
   main:
     banner-mode: off
   profiles:
@@ -11,7 +10,8 @@ logging:
   level:
     org.hibernate.SQL: trace
     org.hibernate.orm.jdbc.bind: TRACE
-
+server:
+  port: 9090
 
 ---
 

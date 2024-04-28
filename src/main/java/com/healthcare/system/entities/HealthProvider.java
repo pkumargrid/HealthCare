@@ -21,31 +21,31 @@ public class HealthProvider {
 
     private String password;
 
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinColumn(name = "health_care_provider_id")
     private List<Appointment> appointmentList;
 
     private String email;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinTable(name = "patient_heath_care_provider",
                 joinColumns = @JoinColumn(name = "health_care_provider_id"), inverseJoinColumns = @JoinColumn(name = "patient_id"))
     private List<Patient> patientList;
 
-    @OneToMany(mappedBy = "healthProvider")
+    @OneToMany(mappedBy = "healthProvider", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
     private List<Doctor> doctorList;
 
-    @OneToMany(mappedBy = "healthProvider")
+    @OneToMany(mappedBy = "healthProvider", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
     private List<HealthRecord> healthRecords;
 
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinColumn(name = "health_care_provider_id")
     private List<Reason> reasons;
 
-    @OneToMany(mappedBy = "healthProvider")
+    @OneToMany(mappedBy = "healthProvider", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
     private List<Nurse> nurseList;
 
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinColumn(name = "health_care_provider_id")
     private List<Complaint> complaintList;
 
@@ -58,6 +58,5 @@ public class HealthProvider {
         this.nurseList = new ArrayList<>();
         this.complaintList = new ArrayList<>();
     }
-
 
 }

@@ -19,7 +19,7 @@ public class Complaint {
 
     private String text;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinColumn(name ="patient_id")
     private Patient patient;
 

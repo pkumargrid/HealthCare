@@ -18,7 +18,7 @@ public class Reason {
     private Integer id;
     private String text;
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinColumn(name = "reason_id")
     private Complaint complaint;
 

@@ -55,6 +55,7 @@ public class DoctorServiceImpl implements DoctorService {
         List<String> usedEmails = doctors.stream().flatMap(d -> Stream.of(d.getEmail())).toList();
         verifyEmailWhileRegister(usedEmails, doctor.getEmail());
         verifyUserName(doctor.getEmail());
+        doctor.setHealthProvider(healthProvider);
         doctor.setId(doctors.stream().flatMap(d -> Stream.of(d.getId())).reduce(0,Integer::max) + 1);
         doctorRepository.save(doctor);
     }

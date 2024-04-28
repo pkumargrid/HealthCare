@@ -7,9 +7,16 @@ import com.healthcare.system.exceptions.AlreadyLoggedInException;
 import com.healthcare.system.exceptions.ValidationException;
 import com.healthcare.system.exceptions.WrongCredentials;
 import com.healthcare.system.services.NurseService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+
+@RestController
+@RequestMapping("/api/v1/nurses")
 public class NurseController {
 
     private final NurseService nurseService;
@@ -18,6 +25,7 @@ public class NurseController {
         this.nurseService = nurseService;
     }
 
+    @PostMapping("/")
     public ResponseCrudDTO<Void> save(NurseDTO nurseDTO) {
         try{
             nurseService.register(nurseDTO);
@@ -31,6 +39,7 @@ public class NurseController {
         }
     }
 
+    @GetMapping("/")
     public ResponseCrudDTO<List<Nurse>> findAll() {
         List<Nurse> nurses = nurseService.findAll();
         return new ResponseCrudDTO<>("Fetched Nurses Successfully!", 200, nurses);
