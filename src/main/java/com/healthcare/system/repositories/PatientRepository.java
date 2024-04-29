@@ -13,4 +13,8 @@ public interface PatientRepository {
     void deleteById(int id) throws WrongCredentials;
 
     List<Patient> findPatientByDoctorId(int id);
+
+    List<Patient> findByNurseId(int id);
+
+    List<Patient> findByHealthProviderById(int id);
 }

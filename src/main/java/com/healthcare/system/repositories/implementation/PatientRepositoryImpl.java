@@ -65,4 +65,9 @@ public class PatientRepositoryImpl implements PatientRepository {
     public List<Patient> findPatientByDoctorId(int id) {
         return null;
     }
+
+    @Override
+    public List<Patient> findByNurseId(int id) {
+        return null;
+    }
 }

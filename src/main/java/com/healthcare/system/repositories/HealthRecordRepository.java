@@ -1,6 +1,5 @@
 package com.healthcare.system.repositories;
 
-import com.healthcare.system.entities.HealthProvider;
 import com.healthcare.system.entities.HealthRecord;
 import com.healthcare.system.exceptions.WrongCredentials;
 
@@ -16,4 +15,8 @@ public interface HealthRecordRepository {
     void update(HealthRecord healthRecord) throws WrongCredentials;
 
     List<HealthRecord> findAll();
+
+    HealthRecord findByPatientId(Integer patientId);
+
+    List<HealthRecord> findByHealthProviderById(int id);
 }

@@ -59,4 +59,9 @@ public class HealthRecordRepositoryImpl implements HealthRecordRepository {
         return healthRecordList.stream().toList();
     }
 
+    @Override
+    public HealthRecord findByPatientId(Integer patientId) {
+        return null;
+    }
+
 }
