@@ -23,4 +23,6 @@ public interface DoctorRepository {
     List<Doctor> findByNurseId(int id) throws ServerException, WrongCredentials;
 
     List<Doctor> findByHealthProviderById(int id) throws ServerException, WrongCredentials;
+
+    List<Doctor> findByPatientId(int id) throws ServerException,WrongCredentials;
 }

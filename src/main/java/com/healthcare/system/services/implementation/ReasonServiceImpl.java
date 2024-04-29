@@ -6,6 +6,8 @@ import com.healthcare.system.exceptions.WrongCredentials;
 import com.healthcare.system.repositories.ReasonRepository;
 import com.healthcare.system.services.ReasonService;
 
+import java.rmi.ServerException;
+
 import static com.healthcare.system.util.Verification.verifyCredentials;
 
 public class ReasonServiceImpl implements ReasonService {
@@ -17,13 +19,13 @@ public class ReasonServiceImpl implements ReasonService {
     }
 
     @Override
-    public void save(Reason reason) throws ValidationException, WrongCredentials {
+    public void save(Reason reason) throws ValidationException, WrongCredentials, ServerException {
         verifyCredentials(Reason.class,reason);
         reasonRepository.save(reason);
     }
 
     @Override
-    public Reason findById(int id) throws WrongCredentials {
+    public Reason findById(int id) throws WrongCredentials, ServerException {
         if(reasonRepository.findById(id) == null) {
             throw new WrongCredentials("Reason with id: " + id + " does not exist");
         }
@@ -31,7 +33,7 @@ public class ReasonServiceImpl implements ReasonService {
     }
 
     @Override
-    public void deleteById(int id) throws WrongCredentials {
+    public void deleteById(int id) throws WrongCredentials, ServerException {
         if(reasonRepository.findById(id) == null) {
             throw new WrongCredentials("Reason with id: " + id + " does not exist");
         }
@@ -39,7 +41,7 @@ public class ReasonServiceImpl implements ReasonService {
     }
 
     @Override
-    public void update(Reason reason) throws ValidationException, WrongCredentials {
+    public void update(Reason reason) throws ValidationException, WrongCredentials, ServerException {
         verifyCredentials(Reason.class,reason);
         reasonRepository.update(reason);
     }

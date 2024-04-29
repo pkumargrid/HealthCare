@@ -1,6 +1,9 @@
 package com.healthcare.system.repositories.implementation;
 
+import com.healthcare.system.entities.Doctor;
 import com.healthcare.system.entities.HealthProvider;
+import com.healthcare.system.entities.HealthRecord;
+import com.healthcare.system.entities.Patient;
 import com.healthcare.system.exceptions.WrongCredentials;
 import com.healthcare.system.repositories.*;
 
@@ -134,6 +137,30 @@ public class HealthProviderRepositoryImpl implements HealthProviderRepository {
         List<HealthProvider> healthProviders = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM health_care_provider")) {
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    HealthProvider healthProvider = createHealthProvider(resultSet);
+                    healthProviders.add(healthProvider);
+                }
+            } catch (SQLException e) {
+                throw new ServerException("Error accessing data: " + e.getMessage());
+            }
+        } catch (SQLException sqlException) {
+            if ("08001".equals(sqlException.getSQLState())) {
+                throw new ServerException("Could not connect to the postgres server.");
+            } else {
+                throw new ServerException("Error executing SQL query: " + sqlException.getMessage());
+            }
+        }
+        return healthProviders;
+    }
+
+    @Override
+    public List<HealthProvider> findByPatientId(int id) throws ServerException, WrongCredentials {
+        List<HealthProvider> healthProviders = new ArrayList<>();
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT health_care_provider.* from health_care_provider inner join patient_health_care_provider on patient_health_care_provider.health_care_provider_id = health_care_provider.id and patient_health_care_provider.patient_id = ?")) {
+            preparedStatement.setInt(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
                     HealthProvider healthProvider = createHealthProvider(resultSet);

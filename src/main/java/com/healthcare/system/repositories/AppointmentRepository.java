@@ -19,4 +19,6 @@ public interface AppointmentRepository {
     void save(Appointment appointment) throws ServerException, WrongCredentials;
 
     List<Appointment> findByDoctorId(int id) throws ServerException, WrongCredentials;
+
+    List<Appointment> findByPatientId(int id) throws ServerException, WrongCredentials;
 }

@@ -2,6 +2,7 @@ package com.healthcare.system.repositories.implementation;
 
 import com.healthcare.system.entities.Doctor;
 import com.healthcare.system.entities.HealthRecord;
+import com.healthcare.system.entities.Patient;
 import com.healthcare.system.exceptions.WrongCredentials;
 import com.healthcare.system.repositories.*;
 
@@ -173,8 +174,27 @@ public class HealthRecordRepositoryImpl implements HealthRecordRepository {
     }
 
     @Override
-    public HealthRecord findByPatientId(Integer patientId) {
-        return null;
+    public List<HealthRecord> findByPatientId(Integer patientId) throws WrongCredentials,ServerException {
+        List<HealthRecord> healthRecords = new ArrayList<>();
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * from health_record where patient_id = ?")) {
+            preparedStatement.setInt(1, patientId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    HealthRecord healthRecord = createHealthRecord(resultSet);
+                    healthRecords.add(healthRecord);
+                }
+            } catch (SQLException e) {
+                throw new ServerException("Error accessing data: " + e.getMessage());
+            }
+        } catch (SQLException sqlException) {
+            if ("08001".equals(sqlException.getSQLState())) {
+                throw new ServerException("Could not connect to the postgres server.");
+            } else {
+                throw new ServerException("Error executing SQL query: " + sqlException.getMessage());
+            }
+        }
+        return healthRecords;
     }
 
 

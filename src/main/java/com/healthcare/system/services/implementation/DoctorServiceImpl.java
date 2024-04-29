@@ -8,6 +8,7 @@ import com.healthcare.system.repositories.*;
 import com.healthcare.system.services.DoctorService;
 import com.healthcare.system.session.SessionManager;
 
+import java.rmi.ServerException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -41,7 +42,7 @@ public class DoctorServiceImpl implements DoctorService {
         this.healthRecordRepository = healthRecordRepository;
     }
     @Override
-    public void register(DoctorDTO doctorDTO) throws ValidationException, WrongCredentials {
+    public void register(DoctorDTO doctorDTO) throws ValidationException, WrongCredentials, ServerException {
         Doctor doctor = DoctorMapper.mapToDomain(doctorDTO,
                 healthProviderRepository);
         verifyPasswordWhileRegister(doctor.getPassword());
@@ -54,7 +55,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public Doctor getById(int id) throws WrongCredentials {
+    public Doctor getById(int id) throws WrongCredentials, ServerException {
         if(doctorRepository.getById(id) == null) {
             throw new WrongCredentials("Doctor with id: " + id + " does not exist");
         }
@@ -62,26 +63,25 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public Doctor deleteById(int id) throws WrongCredentials {
+    public void deleteById(int id) throws WrongCredentials, ServerException {
         if(doctorRepository.getById(id) == null) {
             throw new WrongCredentials("Doctor with id: " + id + " does not exist");
         }
-        return doctorRepository.deleteById(id);
     }
 
     @Override
-    public void update(Doctor doctor) throws ValidationException, WrongCredentials {
+    public void update(Doctor doctor) throws ValidationException, WrongCredentials, ServerException {
         verifyCredentials(Doctor.class,doctor);
         doctorRepository.update(doctor);
     }
 
     @Override
-    public List<Doctor> findAll() {
+    public List<Doctor> findAll() throws ServerException, WrongCredentials {
         return doctorRepository.findAll();
     }
 
     @Override
-    public void assignNurse(int id, Patient patient) throws WrongCredentials {
+    public void assignNurse(int id, Patient patient) throws WrongCredentials, ServerException {
         Doctor doctor = doctorRepository.getById(id);
         if (doctor == null ) {
             throw new IllegalArgumentException("Id is not correct");
@@ -115,7 +115,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public void notifyReasonForComplaint(Reason reason) throws ReasonTypeException, ResourceNotFoundException, WrongCredentials {
+    public void notifyReasonForComplaint(Reason reason) throws ReasonTypeException, ResourceNotFoundException, WrongCredentials, ServerException {
         reasonRepository.save(reason);
         int id = -1;
         if (reason.getType() instanceof Doctor doctor) {

@@ -12,7 +12,7 @@ public interface AppointmentService {
 
     void update(Appointment appointment) throws ValidationException, WrongCredentials, ServerException;
 
-    List<Appointment> findAll() throws ServerException;
+    List<Appointment> findAll() throws ServerException, WrongCredentials;
 
     void deleteById(int id) throws WrongCredentials, ServerException;
 

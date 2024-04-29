@@ -6,6 +6,7 @@ import com.healthcare.system.exceptions.WrongCredentials;
 import com.healthcare.system.repositories.HealthRecordRepository;
 import com.healthcare.system.services.HealthRecordService;
 
+import java.rmi.ServerException;
 import java.util.List;
 
 import static com.healthcare.system.util.Verification.verifyCredentials;
@@ -18,14 +19,14 @@ public class HealthRecordServiceImpl implements HealthRecordService {
         this.healthRecordRepository = healthRecordRepository;
     }
     @Override
-    public void save(HealthRecord healthRecord) throws ValidationException, WrongCredentials {
+    public void save(HealthRecord healthRecord) throws ValidationException, WrongCredentials, ServerException {
         verifyCredentials(HealthRecord.class,healthRecord);
         healthRecordRepository.save(healthRecord);
 
     }
 
     @Override
-    public HealthRecord getById(int id) throws WrongCredentials {
+    public HealthRecord getById(int id) throws WrongCredentials, ServerException {
         if(healthRecordRepository.getById(id) == null) {
             throw new WrongCredentials("HealthRecord with id: " + id + " does not exist");
         }
@@ -33,21 +34,20 @@ public class HealthRecordServiceImpl implements HealthRecordService {
     }
 
     @Override
-    public HealthRecord deleteById(int id) throws WrongCredentials {
+    public void deleteById(int id) throws WrongCredentials, ServerException {
         if(healthRecordRepository.getById(id) == null) {
             throw new WrongCredentials("HealthRecord with id: " + id + " does not exist");
         }
-        return healthRecordRepository.deleteById(id);
     }
 
     @Override
-    public void update(HealthRecord healthRecord) throws ValidationException, WrongCredentials {
+    public void update(HealthRecord healthRecord) throws ValidationException, WrongCredentials, ServerException {
         verifyCredentials(HealthRecord.class,healthRecord);
         healthRecordRepository.update(healthRecord);
     }
 
     @Override
-    public List<HealthRecord> findAll() {
+    public List<HealthRecord> findAll() throws ServerException, WrongCredentials {
         return healthRecordRepository.findAll();
     }
 }
