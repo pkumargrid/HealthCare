@@ -154,7 +154,7 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
         List<Appointment> appointments = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM appointment where doctor_id = ?")) {
-            preparedStatement.setInt(2, id);
+            preparedStatement.setInt(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
                     Appointment appointment = createAppointment(resultSet);

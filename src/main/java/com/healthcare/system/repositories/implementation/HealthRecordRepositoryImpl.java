@@ -121,7 +121,7 @@ public class HealthRecordRepositoryImpl implements HealthRecordRepository {
     }
 
     @Override
-    public List<HealthRecord> findAll() throws ServerException,WrongCredentials {
+    public List<HealthRecord> findAll() throws ServerException, WrongCredentials {
         List<HealthRecord> healthRecords = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM health_record")) {
@@ -141,6 +141,11 @@ public class HealthRecordRepositoryImpl implements HealthRecordRepository {
             }
         }
         return healthRecords;
+    }
+
+    @Override
+    public List<HealthRecord> findByHealthProviderId() {
+        return null;
     }
 
     private HealthRecord createHealthRecord(ResultSet resultSet) throws SQLException, ServerException, WrongCredentials {
@@ -166,4 +171,11 @@ public class HealthRecordRepositoryImpl implements HealthRecordRepository {
             throw new WrongCredentials(e.getMessage());
         }
     }
+
+    @Override
+    public HealthRecord findByPatientId(Integer patientId) {
+        return null;
+    }
+
+
 }

@@ -7,10 +7,11 @@ import com.healthcare.system.exceptions.AlreadyLoggedOutException;
 import com.healthcare.system.exceptions.ValidationException;
 import com.healthcare.system.exceptions.WrongCredentials;
 
+import java.rmi.ServerException;
 import java.util.List;
 
 public interface HealthProviderService {
-    void save(HealthProvider healthProvider) throws ValidationException, WrongCredentials;
+    void save(HealthProvider healthProvider) throws ValidationException, WrongCredentials, ServerException;
 
     HealthProvider getById(int id) throws WrongCredentials;
 
