@@ -40,7 +40,7 @@ public class Doctor {
     @OneToMany(mappedBy = "doctor")
     private List<Appointment> appointmentList;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "reason_id")
     private List<Reason> reasons;
 
