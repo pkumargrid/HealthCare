@@ -9,10 +9,9 @@ import java.util.List;
 @Setter
 @Getter
 public class Prescription {
-    private List<Medicine> medicines;
 
-    public Prescription() {
-        this.medicines = new ArrayList<>();
-    }
+    private int id;
+
+    private String medicine;
 
 }
