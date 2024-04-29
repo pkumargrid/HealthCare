@@ -67,7 +67,8 @@ public class HealthProviderServiceImpl implements HealthProviderService {
     }
 
     @Override
-    public void login(HealthProviderDTO healthProvider) throws ValidationException, AlreadyLoggedInException {
+    public void login(HealthProviderDTO healthProviderDTO) throws ValidationException, AlreadyLoggedInException {
+        HealthProvider healthProvider = HealthProviderMapper.mapToDomain(healthProviderDTO);
         if (SessionManager.isAuthenticated(healthProvider.getSessionId())) {
             throw new AlreadyLoggedInException("HealthProvider: " + healthProvider.getEmail() + " is already logged in");
         }

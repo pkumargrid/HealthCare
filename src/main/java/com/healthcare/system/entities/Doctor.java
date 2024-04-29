@@ -29,6 +29,7 @@ public class Doctor {
 
     private List<Reason> reasons;
 
+
     public Doctor() {
         this.patientList = new ArrayList<>();
         this.appointmentList = new ArrayList<>();

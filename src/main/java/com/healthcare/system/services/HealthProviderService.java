@@ -25,7 +25,7 @@ public interface HealthProviderService {
 
     List<HealthProvider> findAll();
 
-    void login(HealthProvider healthProvider) throws ValidationException, AlreadyLoggedInException;
+    void login(HealthProviderDTO healthProviderDTO) throws ValidationException, AlreadyLoggedInException;
     void logout(String sessionId) throws AlreadyLoggedOutException;
     void register(HealthProviderDTO healthProviderDTO) throws ValidationException, WrongCredentials;
 
