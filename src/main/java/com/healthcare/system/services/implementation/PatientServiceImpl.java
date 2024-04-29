@@ -8,6 +8,7 @@ import com.healthcare.system.repositories.*;
 import com.healthcare.system.services.PatientService;
 import com.healthcare.system.session.SessionManager;
 
+import java.rmi.ServerException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -35,7 +36,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public Patient findById(int id) throws WrongCredentials {
+    public Patient findById(int id) throws WrongCredentials, ServerException {
         if(patientRepository.findById(id) == null) {
             throw new WrongCredentials("Patient with id: " + id + " does not exist");
         }
@@ -43,31 +44,31 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public List<Patient> findAll() {
+    public List<Patient> findAll() throws ServerException, WrongCredentials {
         return patientRepository.findAll();
     }
 
     @Override
-    public void savePatient(Patient patient) throws ValidationException, WrongCredentials {
+    public void savePatient(Patient patient) throws ValidationException, WrongCredentials, ServerException {
         verifyCredentials(Patient.class,patient);
         patientRepository.save(patient);
     }
 
     @Override
-    public void updatePatient(Patient patient) throws ValidationException, WrongCredentials {
+    public void updatePatient(Patient patient) throws ValidationException, WrongCredentials, ServerException {
         verifyCredentials(Patient.class,patient);
         patientRepository.update(patient);
     }
 
     @Override
-    public void deletePatientById(int id) throws WrongCredentials {
+    public void deletePatientById(int id) throws WrongCredentials, ServerException {
         if(patientRepository.findById(id) == null) {
             throw new WrongCredentials("Patient with id: " + id + " does not exist");
         }
         patientRepository.deleteById(id);
     }
 
-    public void bookAppointments(Appointment appointment) throws AppointmentTimeException, WrongCredentials {
+    public void bookAppointments(Appointment appointment) throws AppointmentTimeException, WrongCredentials, ServerException {
         List<Appointment> doctorAppointmentList = appointment.getPatient().getAppointmentList();
         int[] range = new int[601];
         for(var doctorAppointment : doctorAppointmentList) {
@@ -114,7 +115,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public void createComplaint(Complaint complaint, String type, int id) throws WrongCredentials {
+    public void createComplaint(Complaint complaint, String type, int id) throws WrongCredentials, ServerException {
         complaint.getPatient().getComplaintList().add(complaint);
         if(type.equals("Doctor")) {
             Doctor doctor = doctorRepository.getById(id);
@@ -139,7 +140,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public void login(PatientDTO patient) throws ValidationException, AlreadyLoggedInException {
+    public void login(PatientDTO patient) throws ValidationException, AlreadyLoggedInException, ServerException, WrongCredentials {
         if (SessionManager.isAuthenticated(patient.getSessionId())) {
             throw new AlreadyLoggedInException("Patient: " + patient.getEmail() + " is already logged in");
         }
@@ -159,7 +160,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public void register(PatientDTO patientDTO) throws ValidationException, WrongCredentials {
+    public void register(PatientDTO patientDTO) throws ValidationException, WrongCredentials, ServerException {
         Patient patient = PatientMapper.mapToDomain(patientDTO);
         verifyPasswordWhileRegister(patient.getPassword());
         List<Patient> patients = patientRepository.findAll();
@@ -171,7 +172,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public List<HealthProvider> getHealthProviders(int patientId) throws WrongCredentials {
+    public List<HealthProvider> getHealthProviders(int patientId) throws WrongCredentials, ServerException {
         if(patientRepository.findById(patientId) == null) {
             throw new WrongCredentials("Patient with id: " + patientId + " does not exist");
         }
@@ -179,7 +180,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public List<Doctor> getDoctorList(int patientId) throws WrongCredentials {
+    public List<Doctor> getDoctorList(int patientId) throws WrongCredentials, ServerException {
         if(patientRepository.findById(patientId) == null) {
             throw new WrongCredentials("Patient with id: " + patientId + " does not exist");
         }
@@ -187,7 +188,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public List<HealthRecord> getHealthRecordList(int patientId) throws WrongCredentials {
+    public List<HealthRecord> getHealthRecordList(int patientId) throws WrongCredentials, ServerException {
         if(patientRepository.findById(patientId) == null) {
             throw new WrongCredentials("Patient with id: " + patientId + " does not exist");
         }

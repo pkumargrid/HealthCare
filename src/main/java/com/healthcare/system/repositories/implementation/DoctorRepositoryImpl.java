@@ -1,9 +1,11 @@
 package com.healthcare.system.repositories.implementation;
 
 import com.healthcare.system.entities.Doctor;
+import com.healthcare.system.entities.Patient;
 import com.healthcare.system.exceptions.WrongCredentials;
 import com.healthcare.system.repositories.*;
 
+import javax.print.Doc;
 import javax.sql.DataSource;
 import java.rmi.ServerException;
 import java.sql.Connection;
@@ -200,6 +202,30 @@ public class DoctorRepositoryImpl implements DoctorRepository {
         List<Doctor> doctors = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("SELECT doctor.* from doctor where doctor.health_care_provider.id = ?")) {
+            preparedStatement.setInt(1, id);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    Doctor doctor = createDoctor(resultSet);
+                    doctors.add(doctor);
+                }
+            } catch (SQLException e) {
+                throw new ServerException("Error accessing data: " + e.getMessage());
+            }
+        } catch (SQLException sqlException) {
+            if ("08001".equals(sqlException.getSQLState())) {
+                throw new ServerException("Could not connect to the postgres server.");
+            } else {
+                throw new ServerException("Error executing SQL query: " + sqlException.getMessage());
+            }
+        }
+        return doctors;
+    }
+
+    @Override
+    public List<Doctor> findByPatientId(int id) throws ServerException, WrongCredentials {
+        List<Doctor> doctors = new ArrayList<>();
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT doctor.* from doctor inner join patient_doctor on patient_doctor.doctor_id = doctor.id and patient_doctor.patient_id = ?")) {
             preparedStatement.setInt(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {

@@ -20,4 +20,5 @@ public interface HealthProviderRepository {
 
     List<HealthProvider> findAll() throws ServerException, WrongCredentials;
 
+    List<HealthProvider> findByPatientId(int id) throws ServerException,WrongCredentials;
 }

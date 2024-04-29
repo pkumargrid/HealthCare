@@ -173,6 +173,30 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
         return appointments;
     }
 
+    @Override
+    public List<Appointment> findByPatientId(int id) throws ServerException, WrongCredentials {
+        List<Appointment> appointments = new ArrayList<>();
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM appointment where patient_id = ?")) {
+            preparedStatement.setInt(1, id);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    Appointment appointment = createAppointment(resultSet);
+                    appointments.add(appointment);
+                }
+            } catch (SQLException e) {
+                throw new ServerException("Error accessing data: " + e.getMessage());
+            }
+        } catch (SQLException sqlException) {
+            if ("08001".equals(sqlException.getSQLState())) {
+                throw new ServerException("Could not connect to the postgres server.");
+            } else {
+                throw new ServerException("Error executing SQL query: " + sqlException.getMessage());
+            }
+        }
+        return appointments;
+    }
+
     private void configureAppointment(Appointment appointment, PreparedStatement preparedStatement) throws SQLException, WrongCredentials {
         preparedStatement.setBoolean(1, appointment.isStatus());
         preparedStatement.setObject(2, appointment.getStartTime());
