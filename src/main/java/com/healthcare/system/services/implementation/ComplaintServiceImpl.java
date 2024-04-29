@@ -6,6 +6,7 @@ import com.healthcare.system.exceptions.WrongCredentials;
 import com.healthcare.system.repositories.ComplaintRepository;
 import com.healthcare.system.services.ComplaintService;
 
+import java.rmi.ServerException;
 import java.util.List;
 
 import static com.healthcare.system.util.Verification.verifyCredentials;
@@ -18,7 +19,7 @@ public class ComplaintServiceImpl implements ComplaintService {
         this.complaintRepository = complaintRepository;
     }
     @Override
-    public Complaint findById(int id) throws WrongCredentials {
+    public Complaint findById(int id) throws WrongCredentials, ServerException {
         if(complaintRepository.findById(id) == null) {
             throw new WrongCredentials("Complaint with id: " + id + " does not exist");
         }
@@ -26,7 +27,7 @@ public class ComplaintServiceImpl implements ComplaintService {
     }
 
     @Override
-    public void deleteById(int id) throws WrongCredentials {
+    public void deleteById(int id) throws WrongCredentials, ServerException {
         if(complaintRepository.findById(id) == null) {
             throw new WrongCredentials("Complaint with id: " + id + " does not exist");
         }
@@ -34,18 +35,18 @@ public class ComplaintServiceImpl implements ComplaintService {
     }
 
     @Override
-    public void update(Complaint complaint) throws ValidationException, WrongCredentials {
+    public void update(Complaint complaint) throws ValidationException, WrongCredentials, ServerException {
         verifyCredentials(Complaint.class,complaint);
         complaintRepository.update(complaint);
     }
 
     @Override
-    public List<Complaint> findAll() {
+    public List<Complaint> findAll() throws ServerException, WrongCredentials {
         return complaintRepository.findAll();
     }
 
     @Override
-    public void save(Complaint complaint) throws ValidationException, WrongCredentials {
+    public void save(Complaint complaint) throws ValidationException, WrongCredentials, ServerException {
         verifyCredentials(Complaint.class,complaint);
         complaintRepository.save(complaint);
     }

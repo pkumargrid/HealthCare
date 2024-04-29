@@ -8,6 +8,7 @@ import com.healthcare.system.exceptions.ValidationException;
 import com.healthcare.system.exceptions.WrongCredentials;
 import com.healthcare.system.services.NurseService;
 
+import java.rmi.ServerException;
 import java.util.List;
 
 public class NurseController {
@@ -28,11 +29,19 @@ public class NurseController {
             throw new RuntimeException(e);
         } catch (WrongCredentials w) {
             return new ResponseCrudDTO<Void>("Failed to Save!\n Reason: " + w.getMessage(), 401,null);
+        } catch ( ServerException e) {
+            return new ResponseCrudDTO<Void>("Failed to Save!\n Reason: " + e.getMessage(), 500,null);
         }
     }
 
     public ResponseCrudDTO<List<Nurse>> findAll() {
-        List<Nurse> nurses = nurseService.findAll();
-        return new ResponseCrudDTO<>("Fetched Nurses Successfully!", 200, nurses);
+        try{
+            List<Nurse> nurses = nurseService.findAll();
+            return new ResponseCrudDTO<>("Fetched Nurses Successfully!", 200, nurses);
+        } catch (WrongCredentials w) {
+            return new ResponseCrudDTO<>("Failed to Retrieve!\n Reason: " + w.getMessage(), 401,null);
+        } catch (ServerException e) {
+            return new ResponseCrudDTO<>("Failed to Retrieve!\n Reason: " + e.getMessage(), 500,null);
+        }
     }
 }

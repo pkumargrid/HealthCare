@@ -40,7 +40,7 @@ public class HealthProviderServiceImpl implements HealthProviderService {
     }
 
     @Override
-    public HealthProvider getById(int id) throws WrongCredentials {
+    public HealthProvider getById(int id) throws WrongCredentials, ServerException {
         if(healthProviderRepository.getById(id) == null) {
             throw new WrongCredentials("HealthProvider with id: " + id + " does not exist");
         }
@@ -48,30 +48,29 @@ public class HealthProviderServiceImpl implements HealthProviderService {
     }
 
     @Override
-    public HealthProvider deleteById(int id) throws WrongCredentials {
+    public void deleteById(int id) throws WrongCredentials, ServerException {
         if(healthProviderRepository.getById(id) == null) {
             throw new WrongCredentials("HealthProvider with id: " + id + " does not exist");
         }
-        return healthProviderRepository.deleteById(id);
     }
 
     @Override
-    public void update(HealthProvider healthProvider) throws ValidationException, WrongCredentials {
+    public void update(HealthProvider healthProvider) throws ValidationException, WrongCredentials, ServerException {
         verifyCredentials(HealthProvider.class,healthProvider);
         healthProviderRepository.update(healthProvider);
     }
 
     @Override
-    public List<HealthProvider> findAll() {
+    public List<HealthProvider> findAll() throws ServerException, WrongCredentials {
         return healthProviderRepository.findAll();
     }
 
     @Override
-    public void login(HealthProviderDTO healthProviderDTO) throws ValidationException, AlreadyLoggedInException {
-        HealthProvider healthProvider = HealthProviderMapper.mapToDomain(healthProviderDTO);
-        if (SessionManager.isAuthenticated(healthProvider.getSessionId())) {
-            throw new AlreadyLoggedInException("HealthProvider: " + healthProvider.getEmail() + " is already logged in");
+    public void login(HealthProviderDTO healthProviderDTO) throws ValidationException, AlreadyLoggedInException, ServerException, WrongCredentials {
+        if (SessionManager.isAuthenticated(healthProviderDTO.getSessionId())) {
+            throw new AlreadyLoggedInException("HealthProvider: " + healthProviderDTO.getEmail() + " is already logged in");
         }
+        HealthProvider healthProvider = HealthProviderMapper.mapToDomain(healthProviderDTO);
         List<HealthProvider> healthProviders = healthProviderRepository.findAll();
         verifyEmailWhileLogin(healthProviders, healthProvider.getEmail());
         HealthProvider healthProvider1 = healthProviders.stream().filter(h -> h.getEmail().equals(healthProvider.getEmail())).findFirst().get();
@@ -88,7 +87,7 @@ public class HealthProviderServiceImpl implements HealthProviderService {
     }
 
     @Override
-    public void register(HealthProviderDTO healthProviderDTO) throws ValidationException, WrongCredentials {
+    public void register(HealthProviderDTO healthProviderDTO) throws ValidationException, WrongCredentials, ServerException {
         HealthProvider healthProvider = HealthProviderMapper.mapToDomain(healthProviderDTO);
         verifyPasswordWhileRegister(healthProvider.getPassword());
         List<HealthProvider> healthProviders = healthProviderRepository.findAll();
@@ -100,7 +99,7 @@ public class HealthProviderServiceImpl implements HealthProviderService {
     }
 
     @Override
-    public void registerPatient(int healthProviderId, int patientId) throws WrongCredentials {
+    public void registerPatient(int healthProviderId, int patientId) throws WrongCredentials, ServerException {
         HealthProvider healthProvider = healthProviderRepository.getById(healthProviderId);
         if (healthProvider == null) {
             throw new WrongCredentials("Provided id for Health provider is wrong");
@@ -114,7 +113,7 @@ public class HealthProviderServiceImpl implements HealthProviderService {
     }
 
     @Override
-    public List<Doctor> getDoctors(int healthProviderId) throws WrongCredentials {
+    public List<Doctor> getDoctors(int healthProviderId) throws WrongCredentials, ServerException {
         if(healthProviderRepository.getById(healthProviderId) == null) {
             throw new WrongCredentials("HealthProvider with id: " + healthProviderId + " does not exist");
         }
@@ -122,7 +121,7 @@ public class HealthProviderServiceImpl implements HealthProviderService {
     }
 
     @Override
-    public List<Nurse> getNurse(int healthProviderId) throws WrongCredentials {
+    public List<Nurse> getNurse(int healthProviderId) throws WrongCredentials, ServerException {
         if(healthProviderRepository.getById(healthProviderId) == null) {
             throw new WrongCredentials("HealthProvider with id: " + healthProviderId + " does not exist");
         }
@@ -130,7 +129,7 @@ public class HealthProviderServiceImpl implements HealthProviderService {
     }
 
     @Override
-    public List<Complaint> getComplaints(int healthProviderId) throws WrongCredentials {
+    public List<Complaint> getComplaints(int healthProviderId) throws WrongCredentials, ServerException {
         if(healthProviderRepository.getById(healthProviderId) == null) {
             throw new WrongCredentials("HealthProvider with id: " + healthProviderId + " does not exist");
         }
@@ -138,7 +137,7 @@ public class HealthProviderServiceImpl implements HealthProviderService {
     }
 
     @Override
-    public List<HealthRecord> getHealthRecords(int healthProviderId) throws WrongCredentials {
+    public List<HealthRecord> getHealthRecords(int healthProviderId) throws WrongCredentials, ServerException {
         if(healthProviderRepository.getById(healthProviderId) == null) {
             throw new WrongCredentials("HealthProvider with id: " + healthProviderId + " does not exist");
         }
@@ -146,7 +145,7 @@ public class HealthProviderServiceImpl implements HealthProviderService {
     }
 
     @Override
-    public List<Appointment> getAppointments(int healthProviderId) throws WrongCredentials {
+    public List<Appointment> getAppointments(int healthProviderId) throws WrongCredentials, ServerException {
         if(healthProviderRepository.getById(healthProviderId) == null) {
             throw new WrongCredentials("HealthProvider with id: " + healthProviderId + " does not exist");
         }
@@ -154,7 +153,7 @@ public class HealthProviderServiceImpl implements HealthProviderService {
     }
 
     @Override
-    public List<Reason> getReasons(int healthProviderId) throws WrongCredentials {
+    public List<Reason> getReasons(int healthProviderId) throws WrongCredentials, ServerException {
         if(healthProviderRepository.getById(healthProviderId) == null) {
             throw new WrongCredentials("HealthProvider with id: " + healthProviderId + " does not exist");
         }
@@ -162,7 +161,7 @@ public class HealthProviderServiceImpl implements HealthProviderService {
     }
 
     @Override
-    public List<HealthProvider> getByName(String name) {
+    public List<HealthProvider> getByName(String name) throws ServerException, WrongCredentials {
         return healthProviderRepository.getByName(name);
     }
 }

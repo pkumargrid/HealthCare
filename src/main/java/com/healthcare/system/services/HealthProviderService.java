@@ -13,33 +13,34 @@ import java.util.List;
 public interface HealthProviderService {
     void save(HealthProvider healthProvider) throws ValidationException, WrongCredentials, ServerException;
 
-    HealthProvider getById(int id) throws WrongCredentials;
+    HealthProvider getById(int id) throws WrongCredentials, ServerException;
 
-    HealthProvider deleteById(int id) throws WrongCredentials;
+    void deleteById(int id) throws WrongCredentials, ServerException;
 
-    List<HealthProvider> getByName(String name);
-
-
-    void update(HealthProvider healthProvider) throws ValidationException, WrongCredentials;
+    List<HealthProvider> getByName(String name) throws ServerException, WrongCredentials;
 
 
-    List<HealthProvider> findAll();
+    void update(HealthProvider healthProvider) throws ValidationException, WrongCredentials, ServerException;
 
-    void login(HealthProviderDTO healthProviderDTO) throws ValidationException, AlreadyLoggedInException;
+
+    List<HealthProvider> findAll() throws ServerException, WrongCredentials;
+
+    void login(HealthProviderDTO healthProvider) throws ValidationException, AlreadyLoggedInException, ServerException, WrongCredentials;
+
     void logout(String sessionId) throws AlreadyLoggedOutException;
-    void register(HealthProviderDTO healthProviderDTO) throws ValidationException, WrongCredentials;
+    void register(HealthProviderDTO healthProviderDTO) throws ValidationException, WrongCredentials, ServerException;
 
-    void registerPatient(int healthProviderId, int patientId) throws WrongCredentials;
+    void registerPatient(int healthProviderId, int patientId) throws WrongCredentials, ServerException;
 
-    List<Doctor> getDoctors(int healthProviderId) throws WrongCredentials;
+    List<Doctor> getDoctors(int healthProviderId) throws WrongCredentials, ServerException;
 
-    List<Nurse> getNurse(int healthProviderId) throws WrongCredentials;
+    List<Nurse> getNurse(int healthProviderId) throws WrongCredentials, ServerException;
 
-    List<Complaint> getComplaints(int healthProviderId) throws WrongCredentials;
+    List<Complaint> getComplaints(int healthProviderId) throws WrongCredentials, ServerException;
 
-    List<HealthRecord> getHealthRecords(int healthProviderId) throws WrongCredentials;
+    List<HealthRecord> getHealthRecords(int healthProviderId) throws WrongCredentials, ServerException;
 
-    List<Appointment> getAppointments(int healthProviderId) throws WrongCredentials;
+    List<Appointment> getAppointments(int healthProviderId) throws WrongCredentials, ServerException;
 
-    List<Reason> getReasons(int healthProviderId) throws WrongCredentials;
+    List<Reason> getReasons(int healthProviderId) throws WrongCredentials, ServerException;
 }

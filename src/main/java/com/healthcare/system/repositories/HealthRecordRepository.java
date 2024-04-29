@@ -16,7 +16,7 @@ public interface HealthRecordRepository {
     void update(HealthRecord healthRecord) throws WrongCredentials,ServerException;
 
 
-    HealthRecord findByPatientId(Integer patientId);
+    List<HealthRecord> findByPatientId(Integer patientId) throws WrongCredentials,ServerException;
 
     List<HealthRecord> findAll() throws WrongCredentials,ServerException;
 

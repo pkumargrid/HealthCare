@@ -149,7 +149,7 @@ public class NurseRepositoryImpl implements NurseRepository {
     }
 
     @Override
-    public HealthRecord accessPatientRecord(Integer patientId) {
+    public List<HealthRecord> accessPatientRecord(Integer patientId) throws ServerException, WrongCredentials {
         return healthRecordRepository.findByPatientId(patientId);
     }
 

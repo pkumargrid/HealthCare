@@ -32,7 +32,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public List<Appointment> findAll() throws ServerException {
+    public List<Appointment> findAll() throws ServerException, WrongCredentials {
         return appointmentRepository.findAll();
     }
 

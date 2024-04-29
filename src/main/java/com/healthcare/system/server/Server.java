@@ -4,6 +4,7 @@ import com.healthcare.system.dependency.injection.Context;
 import com.healthcare.system.server.request.handlers.*;
 import com.sun.net.httpserver.HttpServer;
 
+import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -14,6 +15,7 @@ public class Server {
 
         ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         Context.inject();
+        DataSource dataSource = Context.dataSource;
         server.createContext("/doctor/register", new DoctorRegisterHandler());
         server.createContext("/healthProvider/register", new HealthProviderRegisterHandler());
         server.createContext("/patient/register", new PatientRegisterHandler());

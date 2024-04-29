@@ -15,6 +15,7 @@ import com.healthcare.system.repositories.ReportRepository;
 import com.healthcare.system.services.NurseService;
 import com.healthcare.system.session.SessionManager;
 
+import java.rmi.ServerException;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -35,7 +36,7 @@ public class NurseServiceImpl implements NurseService {
     }
 
     @Override
-    public Nurse findById(int id) throws WrongCredentials {
+    public Nurse findById(int id) throws WrongCredentials, ServerException {
         if(nurseRepository.findById(id) == null) {
             throw new WrongCredentials("Nurse with id: " + id + " does not exist");
         }
@@ -43,31 +44,31 @@ public class NurseServiceImpl implements NurseService {
     }
 
     @Override
-    public List<Nurse> findAll() {
+    public List<Nurse> findAll() throws ServerException, WrongCredentials {
         return nurseRepository.findAll();
     }
 
     @Override
-    public void saveNurse(Nurse nurse) throws ValidationException, WrongCredentials {
+    public void saveNurse(Nurse nurse) throws ValidationException, WrongCredentials, ServerException {
         verifyCredentials(Nurse.class,nurse);
         nurseRepository.saveNurse(nurse);
     }
 
     @Override
-    public void updateNurse(Nurse nurse) throws ValidationException, WrongCredentials {
+    public void updateNurse(Nurse nurse) throws ValidationException, WrongCredentials, ServerException {
         verifyCredentials(Nurse.class,nurse);
         nurseRepository.updateNurse(nurse);
     }
 
     @Override
-    public void deleteNurseById(int id) throws WrongCredentials {
+    public void deleteNurseById(int id) throws WrongCredentials, ServerException {
         if(nurseRepository.findById(id) == null) {
             throw new WrongCredentials("Nurse with id: " + id + " does not exist");
         }
         nurseRepository.deleteNurseById(id);
     }
     @Override
-    public void login(NurseDTO nurse) throws ValidationException, AlreadyLoggedInException {
+    public void login(NurseDTO nurse) throws ValidationException, AlreadyLoggedInException, ServerException, WrongCredentials {
         if (SessionManager.isAuthenticated(nurse.getSessionId())) {
             throw new AlreadyLoggedInException("Nurse: " + nurse.getEmail() + " is already logged in");
         }
@@ -87,7 +88,7 @@ public class NurseServiceImpl implements NurseService {
     }
 
     @Override
-    public void register(NurseDTO nurseDTO) throws ValidationException, WrongCredentials {
+    public void register(NurseDTO nurseDTO) throws ValidationException, WrongCredentials, ServerException {
         Nurse nurse = NurseMapper.mapToDomain(nurseDTO,healthProviderRepository);
         verifyPasswordWhileRegister(nurse.getPassword());
         List<Nurse> nurses = nurseRepository.findAll();
@@ -98,7 +99,7 @@ public class NurseServiceImpl implements NurseService {
         nurseRepository.saveNurse(nurse);
     }
     @Override
-    public void addBiometricData(int healthRecordId, Report report) throws WrongCredentials {
+    public void addBiometricData(int healthRecordId, Report report) throws WrongCredentials, ServerException {
         if(healthRecordRepository.getById(healthRecordId) == null) {
             throw new WrongCredentials("HealthRecord with id: " + healthRecordId + " does not exist");
         }
@@ -108,12 +109,12 @@ public class NurseServiceImpl implements NurseService {
         reportRepository.save(report);
     }
 
-    public HealthRecord accessPatientRecord(Patient patient) {
-        return nurseRepository.accessPatientRecord(patient);
+    public List<HealthRecord> accessPatientRecord(Patient patient) throws ServerException, WrongCredentials {
+        return nurseRepository.accessPatientRecord(patient.getId());
     }
 
     @Override
-    public List<Reason> getReasons(int nurseId) throws WrongCredentials {
+    public List<Reason> getReasons(int nurseId) throws WrongCredentials, ServerException {
         if(nurseRepository.findById(nurseId) == null) {
             throw new WrongCredentials("Nurse with id: " + nurseId + " does not exist");
         }
@@ -121,7 +122,7 @@ public class NurseServiceImpl implements NurseService {
     }
 
     @Override
-    public List<Complaint> getComplaints(int nurseId) throws WrongCredentials {
+    public List<Complaint> getComplaints(int nurseId) throws WrongCredentials, ServerException {
         if(nurseRepository.findById(nurseId) == null) {
             throw new WrongCredentials("Nurse with id: " + nurseId + " does not exist");
         }
