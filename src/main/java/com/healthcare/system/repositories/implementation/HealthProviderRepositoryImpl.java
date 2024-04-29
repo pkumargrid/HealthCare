@@ -1,9 +1,6 @@
 package com.healthcare.system.repositories.implementation;
 
-import com.healthcare.system.entities.Doctor;
 import com.healthcare.system.entities.HealthProvider;
-import com.healthcare.system.entities.HealthRecord;
-import com.healthcare.system.entities.Patient;
 import com.healthcare.system.exceptions.WrongCredentials;
 import com.healthcare.system.repositories.*;
 
@@ -49,7 +46,7 @@ public class HealthProviderRepositoryImpl implements HealthProviderRepository {
             getById(healthProvider.getId());
         } catch (WrongCredentials wrongCredentials ) {
             try(Connection connection = dataSource.getConnection()) {
-                String sql = "insert into healh_care_provider (name, email, password, id) values(?, ?, ?, ? ,? ,?)";
+                String sql = "insert into health_care_provider (name, email, password, id) values(?, ?, ?, ?)";
                 try(PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
                     configureHealthProvider(healthProvider, preparedStatement);
                 } catch (SQLException e) {

@@ -27,6 +27,8 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
         this.doctorRepository = doctorRepository;
         this.patientRepository = patientRepository;
     }
+
+
     @Override
     public Appointment findById(int id) throws WrongCredentials, ServerException {
         try (Connection connection = dataSource.getConnection()) {

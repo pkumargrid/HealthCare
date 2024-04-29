@@ -66,10 +66,10 @@ public class HealthProviderServiceImpl implements HealthProviderService {
     }
 
     @Override
-    public void login(HealthProviderDTO healthProvider) throws ValidationException, AlreadyLoggedInException, ServerException, WrongCredentials {
-        if (SessionManager.isAuthenticated(healthProvider.getSessionId())) {
-            throw new AlreadyLoggedInException("HealthProvider: " + healthProvider.getEmail() + " is already logged in");
-        }
+    public void login(HealthProviderDTO healthProviderDTO) throws ValidationException, AlreadyLoggedInException, ServerException, WrongCredentials {
+        if (SessionManager.isAuthenticated(healthProviderDTO.getSessionId())) {
+            throw new AlreadyLoggedInException("HealthProvider: " + healthProviderDTO.getEmail() + " is already logged in");
+        HealthProvider healthProvider = HealthProviderMapper.mapToDomain(healthProviderDTO);
         List<HealthProvider> healthProviders = healthProviderRepository.findAll();
         verifyEmailWhileLogin(healthProviders, healthProvider.getEmail());
         HealthProvider healthProvider1 = healthProviders.stream().filter(h -> h.getEmail().equals(healthProvider.getEmail())).findFirst().get();

@@ -13,7 +13,7 @@ public interface DoctorService {
     Doctor getById(int id) throws WrongCredentials, ServerException;
     void deleteById(int id) throws WrongCredentials, ServerException;
 
-    List<Doctor> getByName(String name);
+    List<Doctor> getByName(String name) throws ServerException, WrongCredentials;
 
     void update(Doctor doctor) throws ValidationException, WrongCredentials, ServerException;
 
@@ -21,25 +21,25 @@ public interface DoctorService {
 
     void assignNurse(int id, Patient patient) throws WrongCredentials, ServerException;
 
-    void confirmAppointment(int id);
+    void confirmAppointment(int id) throws ServerException, WrongCredentials;
 
     void notifyReasonForComplaint(Reason reason) throws ReasonTypeException, ResourceNotFoundException, WrongCredentials, ServerException;
 
-    void login(Doctor doctor) throws ValidationException, AlreadyLoggedInException;
+    void login(DoctorDTO doctorDTO) throws ValidationException, AlreadyLoggedInException, ServerException, WrongCredentials;
 
-    void save(Doctor doctor) throws ValidationException, WrongCredentials;
+    void save(Doctor doctor) throws ValidationException, WrongCredentials, ServerException;
 
     void logout(String sessionId) throws AlreadyLoggedOutException;
 
-    List<Appointment> getAppointments(int doctorId) throws WrongCredentials;
+    List<Appointment> getAppointments(int doctorId) throws WrongCredentials, ServerException;
 
-    List<Complaint> getComplaints(int doctorId) throws WrongCredentials;
+    List<Complaint> getComplaints(int doctorId) throws WrongCredentials, ServerException;
 
-    List<Reason> getReasons(int doctorId) throws WrongCredentials;
+    List<Reason> getReasons(int doctorId) throws WrongCredentials, ServerException;
 
-    List<Patient> getPatients(int doctorId) throws WrongCredentials;
+    List<Patient> getPatients(int doctorId) throws WrongCredentials, ServerException;
 
-    void prescribePrescription(int doctorId, int patientId, Prescription prescription) throws ValidationException, WrongCredentials;
+    void prescribePrescription(int doctorId, int patientId, String prescription) throws ValidationException, WrongCredentials, ServerException;
 
-    void updatePrescription(int healthRecordId, Prescription prescription) throws ValidationException, WrongCredentials;
+    void updatePrescription(int healthRecordId, String prescription) throws ValidationException, WrongCredentials, ServerException;
 }

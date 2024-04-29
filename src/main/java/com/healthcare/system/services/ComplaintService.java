@@ -14,7 +14,7 @@ public interface ComplaintService {
 
     void update(Complaint complaint) throws ValidationException, WrongCredentials, ServerException;
 
-    List<Complaint> findAll() throws ServerException;
+    List<Complaint> findAll() throws ServerException, WrongCredentials;
 
     void save(Complaint complaint) throws ValidationException, WrongCredentials, ServerException;
 }

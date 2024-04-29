@@ -21,7 +21,7 @@ public interface NurseService {
     void logout(String sessionId) throws AlreadyLoggedOutException;
     void register(NurseDTO nurseDTO) throws ValidationException, AlreadyLoggedInException, WrongCredentials, ServerException;
     void addBiometricData(int healthRecordId, Report report) throws WrongCredentials, ServerException;
-    HealthRecord accessPatientRecord(Patient patient);
+    List<HealthRecord> accessPatientRecord(Patient patient) throws ServerException, WrongCredentials;
 
     List<Reason> getReasons(int nurseId) throws WrongCredentials, ServerException;
     List<Complaint> getComplaints(int nurseId) throws WrongCredentials, ServerException;

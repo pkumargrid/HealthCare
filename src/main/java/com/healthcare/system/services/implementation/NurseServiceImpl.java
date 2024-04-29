@@ -109,7 +109,8 @@ public class NurseServiceImpl implements NurseService {
         reportRepository.save(report);
     }
 
-    public HealthRecord accessPatientRecord(Patient patient) {
+
+    public List<HealthRecord> accessPatientRecord(Patient patient) throws ServerException, WrongCredentials {
         return nurseRepository.accessPatientRecord(patient.getId());
     }
 

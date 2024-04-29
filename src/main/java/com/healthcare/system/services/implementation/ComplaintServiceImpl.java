@@ -41,7 +41,7 @@ public class ComplaintServiceImpl implements ComplaintService {
     }
 
     @Override
-    public List<Complaint> findAll() throws ServerException {
+    public List<Complaint> findAll() throws ServerException, WrongCredentials {
         return complaintRepository.findAll();
     }
 

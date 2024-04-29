@@ -90,7 +90,7 @@ public class ComplaintRepositoryImpl implements ComplaintRepository {
     }
 
     @Override
-    public List<Complaint> findAll() throws ServerException {
+    public List<Complaint> findAll() throws ServerException, WrongCredentials {
         List<Complaint> complaints = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM complaint")) {
@@ -137,7 +137,7 @@ public class ComplaintRepositoryImpl implements ComplaintRepository {
     }
 
     @Override
-    public List<Complaint> findComplainant(int id, String tableName) throws ServerException {
+    public List<Complaint> findComplainant(int id, String tableName) throws ServerException, WrongCredentials {
         List<Complaint> complaints = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM complaint where table_name=? and type = ? ")) {
@@ -161,7 +161,7 @@ public class ComplaintRepositoryImpl implements ComplaintRepository {
         return complaints;
     }
 
-    private Complaint createComplaint(ResultSet resultSet) throws SQLException {
+    private Complaint createComplaint(ResultSet resultSet) throws SQLException, ServerException, WrongCredentials {
         Complaint complaint = new Complaint();
         complaint.setText(resultSet.getString("text"));
         complaint.setId(resultSet.getInt("id"));

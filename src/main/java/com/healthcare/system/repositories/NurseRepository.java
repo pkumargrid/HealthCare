@@ -13,7 +13,7 @@ public interface NurseRepository {
     void saveNurse(Nurse nurse) throws WrongCredentials, ServerException;
     void updateNurse(Nurse nurse) throws WrongCredentials, ServerException;
     void deleteNurseById(int id) throws WrongCredentials, ServerException;
-    HealthRecord accessPatientRecord(Integer patientId);
+    List<HealthRecord> accessPatientRecord(Integer patientId) throws ServerException, WrongCredentials;
 
     List<Nurse> findByHealthProviderId(int id) throws ServerException, WrongCredentials;
 }
