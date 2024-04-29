@@ -118,12 +118,10 @@ public class DoctorServiceImpl implements DoctorService {
     public void notifyReasonForComplaint(Reason reason) throws ReasonTypeException, ResourceNotFoundException, WrongCredentials {
         reasonRepository.save(reason);
         int id = -1;
-        if (reason.getType() instanceof Doctor doctor) {
-            id = doctor.getId();
-            doctorRepository.getById(id).getReasons().add(reason);
+        if (reason.getTableName().equals("doctor")) {
+            doctorRepository.getById(reason.getId()).getReasons().add(reason);
         }
-        else if (reason.getType() instanceof Nurse nurse) {
-            id = nurse.getId();
+        else if (reason.getTableName().equals("nurse")) {
             nurseRepository.findById(id).getReasons().add(reason);
         }
         else {
