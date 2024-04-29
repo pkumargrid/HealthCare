@@ -17,6 +17,7 @@ import com.healthcare.system.repositories.PatientRepository;
 import com.healthcare.system.services.HealthProviderService;
 import com.healthcare.system.session.SessionManager;
 
+import java.rmi.ServerException;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -33,7 +34,7 @@ public class HealthProviderServiceImpl implements HealthProviderService {
         this.patientRepository = patientRepository;
     }
     @Override
-    public void save(HealthProvider healthProvider) throws ValidationException, WrongCredentials {
+    public void save(HealthProvider healthProvider) throws ValidationException, WrongCredentials, ServerException {
         verifyCredentials(HealthProvider.class,healthProvider);
         healthProviderRepository.save(healthProvider);
     }

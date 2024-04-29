@@ -195,6 +195,30 @@ public class DoctorRepositoryImpl implements DoctorRepository {
         return doctors;
     }
 
+    @Override
+    public List<Doctor> findByHealthProviderById(int id) throws ServerException, WrongCredentials {
+        List<Doctor> doctors = new ArrayList<>();
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT doctor.* from doctor where doctor.health_care_provider.id = ?")) {
+            preparedStatement.setInt(1, id);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    Doctor doctor = createDoctor(resultSet);
+                    doctors.add(doctor);
+                }
+            } catch (SQLException e) {
+                throw new ServerException("Error accessing data: " + e.getMessage());
+            }
+        } catch (SQLException sqlException) {
+            if ("08001".equals(sqlException.getSQLState())) {
+                throw new ServerException("Could not connect to the postgres server.");
+            } else {
+                throw new ServerException("Error executing SQL query: " + sqlException.getMessage());
+            }
+        }
+        return doctors;
+    }
+
 
     private Doctor createDoctor(ResultSet resultSet) throws SQLException, ServerException, WrongCredentials {
         Doctor doctor = new Doctor();

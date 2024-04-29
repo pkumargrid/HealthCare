@@ -12,7 +12,7 @@ public interface HealthProviderRepository {
 
     HealthProvider getById(int id) throws ServerException, WrongCredentials;
 
-    HealthProvider deleteById(int id) throws WrongCredentials, ServerException;
+    void deleteById(int id) throws WrongCredentials, ServerException;
 
     List<HealthProvider> getByName(String name) throws ServerException, WrongCredentials;
 

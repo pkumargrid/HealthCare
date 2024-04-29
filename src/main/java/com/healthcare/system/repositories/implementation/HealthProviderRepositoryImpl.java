@@ -1,8 +1,6 @@
 package com.healthcare.system.repositories.implementation;
 
-import com.healthcare.system.entities.Doctor;
 import com.healthcare.system.entities.HealthProvider;
-import com.healthcare.system.entities.HealthRecord;
 import com.healthcare.system.exceptions.WrongCredentials;
 import com.healthcare.system.repositories.*;
 
@@ -92,7 +90,7 @@ public class HealthProviderRepositoryImpl implements HealthProviderRepository {
 
 
     @Override
-    public HealthProvider deleteById(int id) throws WrongCredentials, ServerException {
+    public void deleteById(int id) throws WrongCredentials, ServerException {
         try (Connection connection = dataSource.getConnection()) {
             try(PreparedStatement preparedStatement = connection.prepareStatement("delete from health_care_provider where id = ?")){
                 preparedStatement.setInt(1,id);
@@ -185,7 +183,7 @@ public class HealthProviderRepositoryImpl implements HealthProviderRepository {
         healthProvider.setName(resultSet.getString("name"));
         healthProvider.setPassword(resultSet.getString("password"));
         healthProvider.setReasons(reasonRepository.findReasonByType(resultSet.getInt("id"), "health_care_provider"));
-        healthProvider.setHealthRecords(healthRecordRepository.findByHealthProviderById(resultSet.getInt("id")));
+        healthProvider.setHealthRecords(healthRecordRepository.findByHealthProviderId());
         healthProvider.setPatientList(patientRepository.findByHealthProviderById(resultSet.getInt("id")));
         healthProvider.setDoctorList(doctorRepository.findByHealthProviderById(resultSet.getInt("id")));
         healthProvider.setAppointmentList(appointmentRepository.findAll());

@@ -3,20 +3,22 @@ package com.healthcare.system.repositories;
 import com.healthcare.system.entities.HealthRecord;
 import com.healthcare.system.exceptions.WrongCredentials;
 
+import java.rmi.ServerException;
 import java.util.List;
 
 public interface HealthRecordRepository {
-    void save(HealthRecord healthRecord) throws WrongCredentials;
+    void save(HealthRecord healthRecord) throws WrongCredentials, ServerException;
 
-    HealthRecord getById(int id);
+    HealthRecord getById(int id) throws WrongCredentials,ServerException;
 
-    HealthRecord deleteById(int id) throws WrongCredentials;
+    void deleteById(int id) throws WrongCredentials,ServerException;
 
-    void update(HealthRecord healthRecord) throws WrongCredentials;
+    void update(HealthRecord healthRecord) throws WrongCredentials,ServerException;
 
-    List<HealthRecord> findAll();
 
     HealthRecord findByPatientId(Integer patientId);
 
-    List<HealthRecord> findByHealthProviderById(int id);
+    List<HealthRecord> findAll() throws WrongCredentials,ServerException;
+
+    List<HealthRecord> findByHealthProviderId();
 }

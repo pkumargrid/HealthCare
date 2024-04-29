@@ -10,7 +10,7 @@ public class HealthRecord {
     private HealthProvider healthProvider;
     private Doctor doctor;
     private Patient patient;
-    private Prescription prescription;
+    private String prescription;
     private Report report;
 
 }
