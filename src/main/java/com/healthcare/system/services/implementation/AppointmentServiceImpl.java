@@ -7,6 +7,7 @@ import com.healthcare.system.repositories.AppointmentRepository;
 import com.healthcare.system.services.AppointmentService;
 import org.springframework.stereotype.Service;
 
+import java.rmi.ServerException;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,13 +29,13 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public void update(Appointment appointment) throws ValidationException, WrongCredentials {
+    public void update(Appointment appointment) throws ValidationException, WrongCredentials, ServerException {
         verifyCredentials(Appointment.class,appointment);
         appointmentRepository.save(appointment);
     }
 
     @Override
-    public List<Appointment> findAll() {
+    public List<Appointment> findAll() throws ServerException {
         return appointmentRepository.findAll();
     }
 
@@ -47,7 +48,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public void save(Appointment appointment) throws ValidationException, WrongCredentials {
+    public void save(Appointment appointment) throws ValidationException, WrongCredentials, ServerException {
         verifyCredentials(Appointment.class,appointment);
         appointmentRepository.save(appointment);
     }

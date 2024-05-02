@@ -50,16 +50,15 @@ public class HealthProvider {
     @JoinColumn(name = "health_care_provider_id")
     private List<Reason> reasons;
 
+
     @OneToMany(mappedBy = "healthProvider", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
     @JsonManagedReference
     private List<Nurse> nurseList;
 
-    @OneToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
+    @OneToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST},fetch = FetchType.LAZY)
     @JoinColumn(name = "health_care_provider_id")
     @JsonManagedReference
     private List<Complaint> complaintList;
-
-
     public HealthProvider() {
         this.healthRecords = new ArrayList<>();
         this.doctorList = new ArrayList<>();

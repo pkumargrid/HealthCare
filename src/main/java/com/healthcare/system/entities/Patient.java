@@ -21,6 +21,7 @@ public class Patient {
     private String password;
     private String role;
 
+
     @ManyToMany(mappedBy = "patientList", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
     @JsonBackReference
     private List<HealthProvider> healthProviderList;
@@ -36,15 +37,16 @@ public class Patient {
     @JsonManagedReference
     private Nurse nurse;
 
+
     @OneToMany(mappedBy = "patient", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
     @JsonManagedReference
     private List<HealthRecord> healthRecordList;
 
-    @OneToMany(mappedBy = "patient", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
+    @OneToMany(mappedBy = "patient", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST},fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<Appointment> appointmentList;
 
-    @OneToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
+    @OneToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST},fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id")
     @JsonManagedReference
     private List<Complaint> complaintList;

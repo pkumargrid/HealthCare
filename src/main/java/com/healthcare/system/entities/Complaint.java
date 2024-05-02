@@ -21,4 +21,7 @@ public class Complaint {
     @JsonBackReference
     private Patient patient;
 
+    private int type;
+    private String tableName;
+
 }

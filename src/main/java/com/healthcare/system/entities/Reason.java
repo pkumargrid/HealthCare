@@ -10,6 +10,10 @@ import lombok.Setter;
 @Getter
 public class Reason {
 
+    private int type;
+
+    private String tableName;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;

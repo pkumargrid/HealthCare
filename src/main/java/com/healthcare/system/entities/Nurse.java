@@ -33,7 +33,7 @@ public class Nurse {
     @JsonBackReference
     private HealthProvider healthProvider;
 
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST},fetch = FetchType.LAZY)
     @JoinTable(name = "nurse_doctor", joinColumns = @JoinColumn(name = "nurse_id"), inverseJoinColumns = @JoinColumn(name = "doctor_id"))
     @JsonBackReference
     private List<Doctor> doctorList;
@@ -41,13 +41,12 @@ public class Nurse {
     @OneToMany(mappedBy = "nurse", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
     @JsonBackReference
     private List<Patient> patientList;
-    @OneToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
+    @OneToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST},fetch = FetchType.LAZY)
     @JoinColumn(name = "nurse_id")
     @JsonManagedReference
     private List<Reason> reasons;
 
     private String email;
-
     public Nurse(){
         this.complaintList = new ArrayList<>();
         this.doctorList = new ArrayList<>();

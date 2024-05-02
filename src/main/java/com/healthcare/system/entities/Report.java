@@ -12,7 +12,6 @@ import lombok.Setter;
 @Getter
 @Entity
 public class Report {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;

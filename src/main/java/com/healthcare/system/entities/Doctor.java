@@ -27,7 +27,8 @@ public class Doctor {
 
     private String role;
 
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
+
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST},fetch = FetchType.LAZY)
     @JoinTable(name = "patient_doctor", joinColumns = @JoinColumn(name = "doctor_id"),
             inverseJoinColumns = @JoinColumn(name = "patient_id"))
     @JsonManagedReference
@@ -38,8 +39,7 @@ public class Doctor {
     @JsonBackReference
     private HealthProvider healthProvider;
 
-
-    @OneToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
+    @OneToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST},fetch = FetchType.LAZY)
     @JoinColumn(name = "complaint_id")
     @JsonManagedReference
     private List<Complaint> complaintList;
@@ -56,6 +56,7 @@ public class Doctor {
     @OneToMany(mappedBy = "doctor")
     @JsonManagedReference
     private List<HealthRecord> healthRecords;
+
 
     @ManyToMany(mappedBy = "doctorList")
     @JsonManagedReference
