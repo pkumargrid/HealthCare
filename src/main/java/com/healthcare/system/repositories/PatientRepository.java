@@ -14,4 +14,6 @@ public interface PatientRepository extends JpaRepository<Patient,Integer> {
 
     @Query("select h from HealthRecord h where h.patient.id = :id")
     HealthRecord findHealthRecordById(@Param("id") Integer id);
+
+    Patient findByEmail(String email);
 }

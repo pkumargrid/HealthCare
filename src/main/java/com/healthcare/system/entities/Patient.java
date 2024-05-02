@@ -17,6 +17,7 @@ public class Patient {
     private Integer id;
     private String name;
     private String password;
+    private String role;
 
     @ManyToMany(mappedBy = "patientList", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
     private List<HealthProvider> healthProviderList;

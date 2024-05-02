@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface HealthProviderRepository extends JpaRepository<HealthProvider,Integer> {
 
 
+    HealthProvider findByEmail(String email);
 }

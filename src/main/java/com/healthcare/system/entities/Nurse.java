@@ -19,6 +19,8 @@ public class Nurse {
     private String name;
     private String password;
 
+    private String role;
+
     @OneToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinColumn(name = "nurse_id")
     private List<Complaint> complaintList;

@@ -21,6 +21,8 @@ public class HealthProvider {
 
     private String password;
 
+    private String role;
+
     @OneToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinColumn(name = "health_care_provider_id")
     private List<Appointment> appointmentList;
