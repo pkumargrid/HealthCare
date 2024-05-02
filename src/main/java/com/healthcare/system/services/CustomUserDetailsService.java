@@ -8,23 +8,28 @@ import com.healthcare.system.repositories.DoctorRepository;
 import com.healthcare.system.repositories.HealthProviderRepository;
 import com.healthcare.system.repositories.NurseRepository;
 import com.healthcare.system.repositories.PatientRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final DoctorRepository doctorRepository;
+    @Autowired
+    private  DoctorRepository doctorRepository;
 
-    private final NurseRepository nurseRepository;
-    private final HealthProviderRepository healthProviderRepository;
-    private final PatientRepository patientRepository;
+    @Autowired
+    private  NurseRepository nurseRepository;
 
-    public CustomUserDetailsService(DoctorRepository doctorRepository, NurseRepository nurseRepository, HealthProviderRepository healthProviderRepository, PatientRepository patientRepository) {
-        this.doctorRepository = doctorRepository;
-        this.nurseRepository = nurseRepository;
-        this.healthProviderRepository = healthProviderRepository;
-        this.patientRepository = patientRepository;
+    @Autowired
+    private  HealthProviderRepository healthProviderRepository;
+
+    @Autowired
+    private  PatientRepository patientRepository;
+
+    public CustomUserDetailsService() {
     }
 
     @Override
