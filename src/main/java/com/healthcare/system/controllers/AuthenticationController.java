@@ -11,8 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 @RestController
-@RequestMapping("/api/v1/login")
+@RequestMapping("/api/v1")
 public class AuthenticationController {
 
     private final AuthenticationManager authenticationManager;
@@ -23,10 +24,11 @@ public class AuthenticationController {
         this.jwtService = jwtService;
     }
 
-    @PostMapping("/")
+    @PostMapping("/login")
     public String login(@RequestBody AuthRequest authRequest) {
         Authentication authentication =
                 authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
+        System.out.println("hello2");
         if(authentication.isAuthenticated()) {
             return jwtService.generateToken(authRequest.getEmail());
         }
