@@ -1,8 +1,7 @@
 package com.healthcare.system.entities;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +9,8 @@ import java.util.List;
 @Setter
 @Getter
 @Entity
+@Builder
+@AllArgsConstructor
 public class Medicine {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

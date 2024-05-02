@@ -1,28 +1,31 @@
 package com.healthcare.system.controllers;
 
+import com.healthcare.system.entities.Nurse;
 import com.healthcare.system.exceptions.AlreadyLoggedInException;
 import com.healthcare.system.exceptions.ValidationException;
 import com.healthcare.system.exceptions.WrongCredentials;
-import com.healthcare.system.services.HealthProviderService;
 import com.healthcare.system.services.NurseService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 
 @AutoConfigureMockMvc
-@WebMvcTest(NurseController.class)
+@SpringBootTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class NurseControllerTest {
 
@@ -36,6 +39,7 @@ class NurseControllerTest {
     private NurseService nurseService;
 
     @Test
+    @WithMockUser(username = "pkumar@gmail.com", password = "1234Aa#pra", roles = {"healthProvider"})
     public void testRegister_Success() throws Exception {
         doNothing().when(nurseService).register(any());
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/nurses/")
@@ -48,6 +52,7 @@ class NurseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "pkumar@gmail.com", password = "1234Aa#pra", roles = {"healthProvider"})
     public void testRegisterValidationException() throws Exception {
         doThrow(new ValidationException("Validation failed")).when(nurseService).register(any());
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/nurses/")
@@ -59,6 +64,7 @@ class NurseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "pkumar@gmail.com", password = "1234Aa#pra", roles = {"healthProvider"})
     public void testRegisterAlreadyLoggedInException() throws Exception {
         doThrow(new AlreadyLoggedInException("Already Logged in")).when(nurseService).register(any());
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/nurses/")
@@ -70,6 +76,7 @@ class NurseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "pkumar@gmail.com", password = "1234Aa#pra", roles = {"healthProvider"})
     public void testRegisterWrongCredentialsException() throws Exception {
         doThrow(new WrongCredentials("Wrong Credentials")).when(nurseService).register(any());
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/nurses/")
@@ -78,5 +85,19 @@ class NurseControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isUnauthorized())
                 .andExpect(MockMvcResultMatchers.content().string("Wrong Credentials"));
+    }
+
+    @Test
+    @WithMockUser(username = "pkumar@gmail.com", password = "1234Aa#pra")
+    public void testFindAll() throws Exception {
+        Nurse nurse1 = Nurse.builder().id(1).name("ansh").email("a@gmail.com").password("1234#aAprat").build();
+        Nurse nurse2 = Nurse.builder().id(2).name("pratik").email("p@gmail.com").password("18901#aAprat").build();
+        given(nurseService.findAll()).willReturn(List.of(nurse1, nurse2));
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/nurses/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(2))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.objects[0].email").value("a@gmail.com"));
     }
 }

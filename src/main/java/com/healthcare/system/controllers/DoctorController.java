@@ -8,6 +8,7 @@ import com.healthcare.system.exceptions.WrongCredentials;
 import com.healthcare.system.services.DoctorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +25,7 @@ public class DoctorController {
     }
 
     @PostMapping("/")
+    @PreAuthorize("hasRole('healthProvider')")
     public ResponseEntity<String> register(@RequestBody DoctorDTO doctorDTO) {
         try{
             doctorService.register(doctorDTO);

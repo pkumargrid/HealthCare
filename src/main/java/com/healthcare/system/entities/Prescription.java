@@ -2,8 +2,7 @@ package com.healthcare.system.entities;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +10,8 @@ import java.util.List;
 @Setter
 @Getter
 @Entity
+@Builder
+@AllArgsConstructor
 public class Prescription {
 
     @Id
