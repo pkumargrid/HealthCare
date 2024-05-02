@@ -1,5 +1,6 @@
 package com.healthcare.system.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +19,7 @@ public class Prescription {
 
     @OneToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinColumn(name = "prescription_id")
+    @JsonManagedReference
     private List<Medicine> medicines;
 
     public Prescription() {

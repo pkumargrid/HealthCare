@@ -1,5 +1,7 @@
 package com.healthcare.system.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,25 +22,31 @@ public class Patient {
     private String role;
 
     @ManyToMany(mappedBy = "patientList", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
+    @JsonBackReference
     private List<HealthProvider> healthProviderList;
 
     @ManyToMany(mappedBy = "patientList", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
+    @JsonBackReference
     private List<Doctor> doctorList;
+
     private String email;
 
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinColumn(name = "nurse_id")
+    @JsonManagedReference
     private Nurse nurse;
 
     @OneToMany(mappedBy = "patient", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
+    @JsonManagedReference
     private List<HealthRecord> healthRecordList;
-    private String sessionId;
 
     @OneToMany(mappedBy = "patient", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
+    @JsonManagedReference
     private List<Appointment> appointmentList;
 
     @OneToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinColumn(name = "patient_id")
+    @JsonManagedReference
     private List<Complaint> complaintList;
 
 
