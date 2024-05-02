@@ -158,36 +158,10 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-<<<<<<< HEAD
     public HealthRecord accessPatientRecord(Patient patient) {
         return null;
     }
 
-<<<<<<< HEAD
-    @Override
-    public void login(Patient patient) throws ValidationException, AlreadyLoggedInException {
-=======
-    public void login(PatientDTO patient) throws ValidationException, AlreadyLoggedInException {
->>>>>>> 0d0b0e05f28cc077e7d42a1a22f542fe7df0398b
-        if (SessionManager.isAuthenticated(patient.getSessionId())) {
-            throw new AlreadyLoggedInException("Patient: " + patient.getEmail() + " is already logged in");
-        }
-        List<Patient> patients = patientRepository.findAll();
-        verifyEmailWhileLogin(patients, patient.getEmail());
-        Patient patient1 = patients.stream().filter(p -> p.getEmail().equals(patient.getEmail())).findFirst().get();
-        verifyPasswordWhileLogin(patient1.getPassword(), patient.getPassword());
-        SessionManager.generateSessionId(patient.getEmail());
-    }
-
-    @Override
-    public void logout(String sessionId) throws AlreadyLoggedOutException {
-        if(!SessionManager.isAuthenticated(sessionId)) {
-            throw new AlreadyLoggedOutException("You are already logged out");
-        }
-        SessionManager.removeSessionId(sessionId);
-    }
-=======
->>>>>>> 2d492300d731caddcb0bf3cfa538274a9ca97b06
 
     @Override
     public void register(PatientDTO patientDTO) throws ValidationException, WrongCredentials {

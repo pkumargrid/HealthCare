@@ -21,13 +21,8 @@ public class AppointmentServiceImpl implements AppointmentService {
         this.appointmentRepository = appointmentRepository;
     }
     @Override
-<<<<<<< HEAD
     public Appointment findById(int id) throws WrongCredentials {
         if(appointmentRepository.findById(id).equals(Optional.empty())) {
-=======
-    public Appointment findById(int id) throws WrongCredentials, ServerException {
-        if(appointmentRepository.findById(id) == null) {
->>>>>>> 0d0b0e05f28cc077e7d42a1a22f542fe7df0398b
             throw new WrongCredentials("Appointment with id: " + id + " does not exist");
         }
         return appointmentRepository.findById(id).get();
@@ -45,13 +40,8 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-<<<<<<< HEAD
     public void deleteById(int id) throws WrongCredentials {
         if(appointmentRepository.findById(id).equals(Optional.empty())) {
-=======
-    public void deleteById(int id) throws WrongCredentials, ServerException {
-        if(appointmentRepository.findById(id) == null) {
->>>>>>> 0d0b0e05f28cc077e7d42a1a22f542fe7df0398b
             throw new WrongCredentials("Appointment with id: " + id + " does not exist");
         }
         appointmentRepository.deleteById(id);

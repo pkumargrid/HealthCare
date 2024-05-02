@@ -68,29 +68,6 @@ public class NurseServiceImpl implements NurseService {
         nurseRepository.deleteById(id);
     }
     @Override
-<<<<<<< HEAD
-    public void login(NurseDTO nurse) throws ValidationException, AlreadyLoggedInException {
-        if (SessionManager.isAuthenticated(nurse.getSessionId())) {
-            throw new AlreadyLoggedInException("Nurse: " + nurse.getEmail() + " is already logged in");
-        }
-        List<Nurse> nurses = nurseRepository.findAll();
-        verifyEmailWhileLogin(nurses, nurse.getEmail());
-        Nurse nurse1 = nurses.stream().filter(n -> n.getEmail().equals(nurse.getEmail())).findFirst().get();
-        verifyPasswordWhileLogin(nurse1.getPassword(), nurse.getPassword());
-        SessionManager.generateSessionId(nurse.getEmail());
-    }
-
-    @Override
-    public void logout(String sessionId) throws AlreadyLoggedOutException {
-        if(!SessionManager.isAuthenticated(sessionId)) {
-            throw new AlreadyLoggedOutException("You are already logged out");
-        }
-        SessionManager.removeSessionId(sessionId);
-    }
-
-    @Override
-=======
->>>>>>> 2d492300d731caddcb0bf3cfa538274a9ca97b06
     public void register(NurseDTO nurseDTO) throws ValidationException, WrongCredentials {
         Nurse nurse = NurseMapper.INSTANCE.dtoToEntity(nurseDTO);
         verifyPasswordWhileRegister(nurse.getPassword());

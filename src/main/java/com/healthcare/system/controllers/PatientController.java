@@ -6,7 +6,10 @@ import com.healthcare.system.entities.Patient;
 import com.healthcare.system.exceptions.ValidationException;
 import com.healthcare.system.exceptions.WrongCredentials;
 import com.healthcare.system.services.PatientService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,14 +25,15 @@ public class PatientController {
         this.patientService = patientService;
     }
 
-    public ResponseCrudDTO<Void> save(PatientDTO patientDTO) {
+    @PostMapping("/")
+    public ResponseEntity<String> save(PatientDTO patientDTO) {
         try{
             patientService.register(patientDTO);
-            return new ResponseCrudDTO<Void>("Saved Patient Successfully!",201,null);
+            return new ResponseEntity<>("Saved Patient Successfully!", HttpStatus.CREATED);
         } catch (ValidationException v) {
-            return new ResponseCrudDTO<Void>("Failed to Save!\n Reason: " + v.getMessage(),403,null);
+            return new ResponseEntity<>(v.getMessage(),HttpStatus.BAD_REQUEST);
         } catch (WrongCredentials w) {
-            return new ResponseCrudDTO<Void>("Failed to Save!\n Reason: " + w.getMessage(), 401,null);
+            return new ResponseEntity<>(w.getMessage(),HttpStatus.UNAUTHORIZED);
         }
     }
 

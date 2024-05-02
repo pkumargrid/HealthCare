@@ -137,30 +137,6 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-<<<<<<< HEAD
-    public void login(DoctorDTO doctor) throws ValidationException, AlreadyLoggedInException {
-        if (SessionManager.isAuthenticated(doctor.getSessionId())) {
-            throw new AlreadyLoggedInException("Doctor: " + doctor.getEmail() + " is already logged in");
-        }
-        List<Doctor> doctors = doctorRepository.findAll();
-        verifyEmailWhileLogin(doctors, doctor.getEmail());
-        Doctor doctor1 = doctors.stream().filter(d -> d.getEmail().equals(doctor.getEmail())).findFirst().get();
-        verifyPasswordWhileLogin(doctor1.getPassword(), doctor.getPassword());
-        SessionManager.generateSessionId(doctor.getEmail());
-    }
-
-
-    @Override
-    public void logout(String sessionId) throws AlreadyLoggedOutException {
-        if(!SessionManager.isAuthenticated(sessionId)) {
-            throw new AlreadyLoggedOutException("You are already logged out");
-        }
-        SessionManager.removeSessionId(sessionId);
-    }
-
-    @Override
-=======
->>>>>>> 2d492300d731caddcb0bf3cfa538274a9ca97b06
     public List<Appointment> getAppointments(int doctorId) throws WrongCredentials {
         if(doctorRepository.findById(doctorId).equals(Optional.empty())) {
             throw new WrongCredentials("Doctor with id: " + doctorId + " does not exist");
