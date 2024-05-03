@@ -7,6 +7,8 @@ import com.healthcare.system.exceptions.AlreadyLoggedInException;
 import com.healthcare.system.exceptions.ValidationException;
 import com.healthcare.system.exceptions.WrongCredentials;
 import com.healthcare.system.services.NurseService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,6 +22,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/nurses")
+@Tag(name = "nurseController", description = "Crud Operations for Nurses")
 public class NurseController {
 
     private final NurseService nurseService;
@@ -30,6 +33,7 @@ public class NurseController {
 
     @PostMapping("/")
     @PreAuthorize("hasRole('healthProvider')")
+    @Operation(summary = "Save a Doctor", description = "Takes NurseDTO to register the nurse")
     public ResponseEntity<String> save(NurseDTO nurseDTO) {
         try{
             nurseService.register(nurseDTO);
@@ -44,6 +48,7 @@ public class NurseController {
     }
 
     @GetMapping("/")
+    @Operation(summary = "FindAll Nurses", description = "Finds all the nurses in the health care system")
     public ResponseCrudDTO<List<Nurse>> findAll() {
         List<Nurse> nurses = nurseService.findAll();
         return new ResponseCrudDTO<>("Fetched Nurses Successfully!", 200, nurses);

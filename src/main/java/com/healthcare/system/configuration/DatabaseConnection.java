@@ -1,4 +1,4 @@
-package com.healthcare.system.database;
+package com.healthcare.system.configuration;
 
 import com.zaxxer.hikari.HikariConfig;
 
