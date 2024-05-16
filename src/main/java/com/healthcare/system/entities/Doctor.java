@@ -7,6 +7,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 @Setter
@@ -71,4 +72,15 @@ public class Doctor {
         this.healthRecords = new ArrayList<>();
     }
 
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof Doctor doctor)) return false;
+        return Objects.equals(getId(), doctor.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
+    }
 }
