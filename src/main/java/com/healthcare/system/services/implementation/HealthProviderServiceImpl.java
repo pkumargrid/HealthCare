@@ -33,13 +33,13 @@ public class HealthProviderServiceImpl implements HealthProviderService {
     }
     @Override
     public void save(HealthProvider healthProvider) throws ValidationException, WrongCredentials {
-        verifyCredentials(HealthProvider.class,healthProvider);
+        verifyCredentials(HealthProvider.class, healthProvider);
         healthProviderRepository.save(healthProvider);
     }
 
     @Override
     public HealthProvider getById(int id) throws WrongCredentials {
-        if(healthProviderRepository.findById(id).equals(Optional.empty())) {
+        if (healthProviderRepository.findById(id).equals(Optional.empty())) {
             throw new WrongCredentials("HealthProvider with id: " + id + " does not exist");
         }
         return healthProviderRepository.findById(id).get();
@@ -47,7 +47,7 @@ public class HealthProviderServiceImpl implements HealthProviderService {
 
     @Override
     public void deleteById(int id) throws WrongCredentials {
-        if(healthProviderRepository.findById(id).equals(Optional.empty())) {
+        if (healthProviderRepository.findById(id).equals(Optional.empty())) {
             throw new WrongCredentials("HealthProvider with id: " + id + " does not exist");
         }
         healthProviderRepository.deleteById(id);
@@ -55,7 +55,7 @@ public class HealthProviderServiceImpl implements HealthProviderService {
 
     @Override
     public void update(HealthProvider healthProvider) throws ValidationException, WrongCredentials {
-        verifyCredentials(HealthProvider.class,healthProvider);
+        verifyCredentials(HealthProvider.class, healthProvider);
         healthProviderRepository.save(healthProvider);
     }
 
@@ -78,7 +78,7 @@ public class HealthProviderServiceImpl implements HealthProviderService {
         List<String> usedEmails = healthProviders.stream().flatMap(h -> Stream.of(h.getEmail())).toList();
         verifyEmailWhileRegister(usedEmails, healthProvider.getEmail());
         verifyUserName(healthProvider.getEmail());
-        healthProvider.setId(healthProviders.stream().flatMap(h -> Stream.of(h.getId())).reduce(0,Integer::max) + 1);
+        healthProvider.setId(healthProviders.stream().flatMap(h -> Stream.of(h.getId())).reduce(0, Integer::max) + 1);
         healthProviderRepository.save(healthProvider);
     }
 
@@ -89,7 +89,7 @@ public class HealthProviderServiceImpl implements HealthProviderService {
             throw new WrongCredentials("Provided id for Health provider is wrong");
         }
         Patient patient = patientRepository.findById(patientId).orElse(null);
-        if(patient == null) {
+        if (patient == null) {
             throw new WrongCredentials("Provided id for Patient is wrong");
         }
         healthProvider.getPatientList().add(patient);
@@ -98,7 +98,7 @@ public class HealthProviderServiceImpl implements HealthProviderService {
 
     @Override
     public List<Doctor> getDoctors(int healthProviderId) throws WrongCredentials {
-        if(healthProviderRepository.findById(healthProviderId).equals(Optional.empty())) {
+        if (healthProviderRepository.findById(healthProviderId).equals(Optional.empty())) {
             throw new WrongCredentials("HealthProvider with id: " + healthProviderId + " does not exist");
         }
         return healthProviderRepository.findById(healthProviderId).get().getDoctorList();
@@ -106,7 +106,7 @@ public class HealthProviderServiceImpl implements HealthProviderService {
 
     @Override
     public List<Nurse> getNurse(int healthProviderId) throws WrongCredentials {
-        if(healthProviderRepository.findById(healthProviderId).equals(Optional.empty())) {
+        if (healthProviderRepository.findById(healthProviderId).equals(Optional.empty())) {
             throw new WrongCredentials("HealthProvider with id: " + healthProviderId + " does not exist");
         }
         return healthProviderRepository.findById(healthProviderId).get().getNurseList();
@@ -114,7 +114,7 @@ public class HealthProviderServiceImpl implements HealthProviderService {
 
     @Override
     public List<Complaint> getComplaints(int healthProviderId) throws WrongCredentials {
-        if(healthProviderRepository.findById(healthProviderId).equals(Optional.empty())) {
+        if (healthProviderRepository.findById(healthProviderId).equals(Optional.empty())) {
             throw new WrongCredentials("HealthProvider with id: " + healthProviderId + " does not exist");
         }
         return healthProviderRepository.findById(healthProviderId).get().getComplaintList();
@@ -122,7 +122,7 @@ public class HealthProviderServiceImpl implements HealthProviderService {
 
     @Override
     public List<HealthRecord> getHealthRecords(int healthProviderId) throws WrongCredentials {
-        if(healthProviderRepository.findById(healthProviderId).equals(Optional.empty())) {
+        if (healthProviderRepository.findById(healthProviderId).equals(Optional.empty())) {
             throw new WrongCredentials("HealthProvider with id: " + healthProviderId + " does not exist");
         }
         return healthProviderRepository.findById(healthProviderId).get().getHealthRecords();
@@ -130,7 +130,7 @@ public class HealthProviderServiceImpl implements HealthProviderService {
 
     @Override
     public List<Appointment> getAppointments(int healthProviderId) throws WrongCredentials {
-        if(healthProviderRepository.findById(healthProviderId).equals(Optional.empty())) {
+        if (healthProviderRepository.findById(healthProviderId).equals(Optional.empty())) {
             throw new WrongCredentials("HealthProvider with id: " + healthProviderId + " does not exist");
         }
         return healthProviderRepository.findById(healthProviderId).get().getAppointmentList();
@@ -138,7 +138,7 @@ public class HealthProviderServiceImpl implements HealthProviderService {
 
     @Override
     public List<Reason> getReasons(int healthProviderId) throws WrongCredentials {
-        if(healthProviderRepository.findById(healthProviderId).equals(Optional.empty())) {
+        if (healthProviderRepository.findById(healthProviderId).equals(Optional.empty())) {
             throw new WrongCredentials("HealthProvider with id: " + healthProviderId + " does not exist");
         }
         return healthProviderRepository.findById(healthProviderId).get().getReasons();

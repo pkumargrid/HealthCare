@@ -33,13 +33,13 @@ public class PatientController {
     @PreAuthorize("hasRole('healthProvider')")
     @Operation(summary = "Save a Nurse", description = "Takes PatientDTO to register the patient")
     public ResponseEntity<String> save(PatientDTO patientDTO) {
-        try{
+        try {
             patientService.register(patientDTO);
             return new ResponseEntity<>("Saved Patient Successfully!", HttpStatus.CREATED);
         } catch (ValidationException v) {
-            return new ResponseEntity<>(v.getMessage(),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(v.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (WrongCredentials w) {
-            return new ResponseEntity<>(w.getMessage(),HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(w.getMessage(), HttpStatus.UNAUTHORIZED);
         }
     }
 

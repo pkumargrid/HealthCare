@@ -1,6 +1,6 @@
 package com.healthcare.system.exceptions;
 
-public class AppointmentTimeException extends Exception{
+public class AppointmentTimeException extends Exception {
 
     private int status;
 

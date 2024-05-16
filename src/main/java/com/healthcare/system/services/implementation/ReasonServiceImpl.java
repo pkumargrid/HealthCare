@@ -22,13 +22,13 @@ public class ReasonServiceImpl implements ReasonService {
 
     @Override
     public void save(Reason reason) throws ValidationException, WrongCredentials {
-        verifyCredentials(Reason.class,reason);
+        verifyCredentials(Reason.class, reason);
         reasonRepository.save(reason);
     }
 
     @Override
     public Reason findById(int id) throws WrongCredentials {
-        if(reasonRepository.findById(id).equals(Optional.empty())) {
+        if (reasonRepository.findById(id).equals(Optional.empty())) {
             throw new WrongCredentials("Reason with id: " + id + " does not exist");
         }
         return reasonRepository.findById(id).get();
@@ -36,7 +36,7 @@ public class ReasonServiceImpl implements ReasonService {
 
     @Override
     public void deleteById(int id) throws WrongCredentials {
-        if(reasonRepository.findById(id).equals(Optional.empty())) {
+        if (reasonRepository.findById(id).equals(Optional.empty())) {
             throw new WrongCredentials("Reason with id: " + id + " does not exist");
         }
         reasonRepository.deleteById(id);
@@ -44,7 +44,7 @@ public class ReasonServiceImpl implements ReasonService {
 
     @Override
     public void update(Reason reason) throws ValidationException, WrongCredentials {
-        verifyCredentials(Reason.class,reason);
+        verifyCredentials(Reason.class, reason);
         reasonRepository.save(reason);
     }
 }

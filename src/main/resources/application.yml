@@ -10,8 +10,15 @@ logging:
   level:
     org.hibernate.SQL: trace
     org.hibernate.orm.jdbc.bind: TRACE
+    root: info
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql=TRACE:
 server:
   port: 9090
+
 
 ---
 
@@ -50,6 +57,10 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+#    properties:
+#      hibernate:
+#        generate_statistics: true
 springdoc:
   api-docs:
     path: /api-docs
+

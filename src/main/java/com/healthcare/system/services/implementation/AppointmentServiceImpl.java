@@ -22,7 +22,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
     @Override
     public Appointment findById(int id) throws WrongCredentials {
-        if(appointmentRepository.findById(id).equals(Optional.empty())) {
+        if (appointmentRepository.findById(id).equals(Optional.empty())) {
             throw new WrongCredentials("Appointment with id: " + id + " does not exist");
         }
         return appointmentRepository.findById(id).get();
@@ -30,7 +30,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public void update(Appointment appointment) throws ValidationException, WrongCredentials, ServerException {
-        verifyCredentials(Appointment.class,appointment);
+        verifyCredentials(Appointment.class, appointment);
         appointmentRepository.save(appointment);
     }
 
@@ -41,7 +41,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public void deleteById(int id) throws WrongCredentials {
-        if(appointmentRepository.findById(id).equals(Optional.empty())) {
+        if (appointmentRepository.findById(id).equals(Optional.empty())) {
             throw new WrongCredentials("Appointment with id: " + id + " does not exist");
         }
         appointmentRepository.deleteById(id);
@@ -49,7 +49,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public void save(Appointment appointment) throws ValidationException, WrongCredentials, ServerException {
-        verifyCredentials(Appointment.class,appointment);
+        verifyCredentials(Appointment.class, appointment);
         appointmentRepository.save(appointment);
     }
 }

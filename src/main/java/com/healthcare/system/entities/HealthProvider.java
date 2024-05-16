@@ -56,7 +56,7 @@ public class HealthProvider {
     @JsonManagedReference
     private List<Nurse> nurseList;
 
-    @OneToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST},fetch = FetchType.LAZY)
+    @OneToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinColumn(name = "health_care_provider_id")
     @JsonManagedReference
     private List<Complaint> complaintList;

@@ -27,7 +27,11 @@ public class NurseServiceImpl implements NurseService {
 
     public final PatientRepository patientRepository;
 
-    public NurseServiceImpl(NurseRepository nurseRepository, HealthRecordRepository healthRecordRepository, HealthProviderRepository healthProviderRepository, ReportRepository reportRepository, PatientRepository patientRepository) {
+    public NurseServiceImpl(NurseRepository nurseRepository,
+                            HealthRecordRepository healthRecordRepository,
+                            HealthProviderRepository healthProviderRepository,
+                            ReportRepository reportRepository,
+                            PatientRepository patientRepository) {
         this.nurseRepository = nurseRepository;
         this.healthRecordRepository = healthRecordRepository;
         this.healthProviderRepository = healthProviderRepository;
@@ -37,7 +41,7 @@ public class NurseServiceImpl implements NurseService {
 
     @Override
     public Nurse findById(int id) throws WrongCredentials {
-        if(nurseRepository.findById(id).equals(Optional.empty())) {
+        if (nurseRepository.findById(id).equals(Optional.empty())) {
             throw new WrongCredentials("Nurse with id: " + id + " does not exist");
         }
         return nurseRepository.findById(id).get();
@@ -50,19 +54,19 @@ public class NurseServiceImpl implements NurseService {
 
     @Override
     public void saveNurse(Nurse nurse) throws ValidationException, WrongCredentials {
-        verifyCredentials(Nurse.class,nurse);
+        verifyCredentials(Nurse.class, nurse);
         nurseRepository.save(nurse);
     }
 
     @Override
     public void updateNurse(Nurse nurse) throws ValidationException, WrongCredentials {
-        verifyCredentials(Nurse.class,nurse);
+        verifyCredentials(Nurse.class, nurse);
         nurseRepository.save(nurse);
     }
 
     @Override
     public void deleteNurseById(int id) throws WrongCredentials {
-        if(nurseRepository.findById(id).equals(Optional.empty())) {
+        if (nurseRepository.findById(id).equals(Optional.empty())) {
             throw new WrongCredentials("Nurse with id: " + id + " does not exist");
         }
         nurseRepository.deleteById(id);
@@ -80,7 +84,7 @@ public class NurseServiceImpl implements NurseService {
     }
     @Override
     public void addBiometricData(int healthRecordId, Report report) throws WrongCredentials {
-        if(healthRecordRepository.findById(healthRecordId).equals(Optional.empty())) {
+        if (healthRecordRepository.findById(healthRecordId).equals(Optional.empty())) {
             throw new WrongCredentials("HealthRecord with id: " + healthRecordId + " does not exist");
         }
         healthRecordRepository.getById(healthRecordId).setReport(report);
@@ -95,7 +99,7 @@ public class NurseServiceImpl implements NurseService {
 
     @Override
     public List<Reason> getReasons(int nurseId) throws WrongCredentials {
-        if(nurseRepository.findById(nurseId).equals(Optional.empty())) {
+        if (nurseRepository.findById(nurseId).equals(Optional.empty())) {
             throw new WrongCredentials("Nurse with id: " + nurseId + " does not exist");
         }
         return nurseRepository.findById(nurseId).get().getReasons();
@@ -103,7 +107,7 @@ public class NurseServiceImpl implements NurseService {
 
     @Override
     public List<Complaint> getComplaints(int nurseId) throws WrongCredentials {
-        if(nurseRepository.findById(nurseId).equals(Optional.empty())) {
+        if (nurseRepository.findById(nurseId).equals(Optional.empty())) {
             throw new WrongCredentials("Nurse with id: " + nurseId + " does not exist");
         }
         return nurseRepository.findById(nurseId).get().getComplaintList();

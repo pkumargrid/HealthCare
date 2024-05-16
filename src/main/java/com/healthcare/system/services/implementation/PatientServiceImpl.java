@@ -10,7 +10,6 @@ import com.healthcare.system.repositories.*;
 import com.healthcare.system.services.PatientService;
 import org.springframework.stereotype.Service;
 
-import javax.print.Doc;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -30,7 +29,11 @@ public class PatientServiceImpl implements PatientService {
 
     private final HealthProviderRepository healthProviderRepository;
 
-    public PatientServiceImpl(PatientRepository patientRepository, AppointmentRepository appointmentRepository, DoctorRepository doctorRepository, NurseRepository nurseRepository, ComplaintRepository complaintRepository, HealthProviderRepository healthProviderRepository) {
+    public PatientServiceImpl(PatientRepository patientRepository,
+                              AppointmentRepository appointmentRepository,
+                              DoctorRepository doctorRepository, NurseRepository nurseRepository,
+                              ComplaintRepository complaintRepository,
+                              HealthProviderRepository healthProviderRepository) {
         this.patientRepository = patientRepository;
         this.appointmentRepository = appointmentRepository;
         this.doctorRepository = doctorRepository;
@@ -41,7 +44,7 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public Patient findById(int id) throws WrongCredentials {
-        if(patientRepository.findById(id).equals(Optional.empty())) {
+        if (patientRepository.findById(id).equals(Optional.empty())) {
             throw new WrongCredentials("Patient with id: " + id + " does not exist");
         }
         return patientRepository.findById(id).get();
@@ -53,20 +56,20 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public void savePatient(Patient patient) throws ValidationException, WrongCredentials {
-        verifyCredentials(Patient.class,patient);
+    public void savePatient(Patient patient) throws ValidationException {
+        verifyCredentials(Patient.class, patient);
         patientRepository.save(patient);
     }
 
     @Override
-    public void updatePatient(Patient patient) throws ValidationException, WrongCredentials {
-        verifyCredentials(Patient.class,patient);
+    public void updatePatient(Patient patient) throws ValidationException {
+        verifyCredentials(Patient.class, patient);
         patientRepository.save(patient);
     }
 
     @Override
     public void deletePatientById(int id) throws WrongCredentials {
-        if(patientRepository.findById(id).equals(Optional.empty())) {
+        if (patientRepository.findById(id).equals(Optional.empty())) {
             throw new WrongCredentials("Patient with id: " + id + " does not exist");
         }
         patientRepository.deleteById(id);
@@ -76,44 +79,44 @@ public class PatientServiceImpl implements PatientService {
         Appointment appointment = AppointmentMapper.INSTANCE.dtoToEntity(appointmentDTO);
         Patient patient = patientRepository.findById(appointmentDTO.getId()).orElse(null);
         Doctor doctor = doctorRepository.findById(appointmentDTO.getId()).orElse(null);
-        if(patient == null) {
+        if (patient == null) {
             throw new WrongCredentials("Patient with " + appointmentDTO.getPatientId() + " does not exist");
         }
-        if(doctor == null) {
+        if (doctor == null) {
             throw new WrongCredentials("Doctor with " + appointmentDTO.getDoctorId() + " does not exist");
         }
         appointment.setPatient(patient);
         appointment.setDoctor(doctor);
         List<Appointment> doctorAppointmentList = appointment.getPatient().getAppointmentList();
         int[] range = new int[601];
-        for(var doctorAppointment : doctorAppointmentList) {
+        for (var doctorAppointment : doctorAppointmentList) {
             LocalDateTime start = doctorAppointment.getStartTime();
             int startHour = start.getHour();
             int startMinute = start.getMinute();
-            int difference = (startHour-10)*60 + startMinute;
+            int difference = (startHour - 10) * 60 + startMinute;
             range[difference] += 1;
-            if(difference+15 <= 600)
-                range[difference+15] -= 1;
+            if (difference + 15 <= 600)
+                range[difference + 15] -= 1;
             else
                 range[600] -= 1;
         }
 
-        for(int i=1;i<=600;i++) {
-            range[i] = range[i-1]+range[i];
+        for (int i = 1; i <= 600; i++) {
+            range[i] = range[i - 1] + range[i];
         }
         int startTime = -1;
-        for(int i = 0;i<=585;i++) {
-            if(range[i]==0&&range[i+15]==0) {
+        for (int i = 0; i <= 585; i++) {
+            if(range[i] == 0 && range[i + 15] == 0) {
                 startTime = i;
             }
         }
-        if(startTime!=-1) {
+        if (startTime != -1) {
             LocalDate currentDate = LocalDate.now();
-            LocalTime start = LocalTime.of(startTime/60+10,startTime%60);
-            int endTime = startTime+15;
-            LocalTime end = LocalTime.of(endTime/60 + 10,endTime%60);
-            appointment.setStartTime(LocalDateTime.of(currentDate,start));
-            appointment.setEndTime(LocalDateTime.of(currentDate,end));
+            LocalTime start = LocalTime.of(startTime / 60 + 10,startTime % 60);
+            int endTime = startTime + 15;
+            LocalTime end = LocalTime.of(endTime / 60 + 10,endTime % 60);
+            appointment.setStartTime(LocalDateTime.of(currentDate, start));
+            appointment.setEndTime(LocalDateTime.of(currentDate, end));
             doctor.getAppointmentList().add(appointment);
             doctor.getPatientList().add(patient);
             patient.getDoctorList().add(doctor);
@@ -122,7 +125,7 @@ public class PatientServiceImpl implements PatientService {
             doctorRepository.save(doctor);
             doctor.getHealthProvider().getAppointmentList().add(appointment);
             doctor.getHealthProvider().getPatientList().add(patient);
-            appointment.setId(appointmentRepository.findAll().stream().flatMap(a ->Stream.of(a.getId())).reduce(0, Integer::max) + 1);
+            appointment.setId(appointmentRepository.findAll().stream().flatMap(a -> Stream.of(a.getId())).reduce(0, Integer::max) + 1);
             healthProviderRepository.save(appointment.getDoctor().getHealthProvider());
             appointmentRepository.save(appointment);
         }
@@ -135,7 +138,7 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public void createComplaint(Complaint complaint, String type, int id) throws WrongCredentials {
         complaint.getPatient().getComplaintList().add(complaint);
-        if(type.equals("Doctor")) {
+        if (type.equals("Doctor")) {
             Doctor doctor = doctorRepository.getById(id);
             doctor.getComplaintList().add(complaint);
             HealthProvider healthProvider = doctor.getHealthProvider();
@@ -143,7 +146,7 @@ public class PatientServiceImpl implements PatientService {
             doctorRepository.save(doctor);
             healthProviderRepository.save(healthProvider);
         }
-        else if(type.equals("Nurse")) {
+        else if (type.equals("Nurse")) {
             Nurse nurse = nurseRepository.findById(id).get();
             nurse.getComplaintList().add(complaint);
             nurse.getHealthProvider().getComplaintList().add(complaint);
@@ -153,7 +156,7 @@ public class PatientServiceImpl implements PatientService {
             healthProviderRepository.save(healthProvider);
         }
         List<Complaint> complaints = complaintRepository.findAll();
-        complaint.setId(complaints.stream().flatMap(c -> Stream.of(c.getId())).reduce(0,Integer::max) + 1);
+        complaint.setId(complaints.stream().flatMap(c -> Stream.of(c.getId())).reduce(0, Integer::max) + 1);
         complaintRepository.save(complaint);
     }
 
@@ -171,13 +174,13 @@ public class PatientServiceImpl implements PatientService {
         List<String> usedEmails = patients.stream().flatMap(d -> Stream.of(d.getEmail())).toList();
         verifyEmailWhileRegister(usedEmails, patient.getEmail());
         verifyUserName(patient.getEmail());
-        patient.setId(patients.stream().flatMap(d -> Stream.of(d.getId())).reduce(0,Integer::max) + 1);
+        patient.setId(patients.stream().flatMap(d -> Stream.of(d.getId())).reduce(0, Integer::max) + 1);
         patientRepository.save(patient);
     }
 
     @Override
     public List<HealthProvider> getHealthProviders(int patientId) throws WrongCredentials {
-        if(patientRepository.findById(patientId).equals(Optional.empty())) {
+        if (patientRepository.findById(patientId).equals(Optional.empty())) {
             throw new WrongCredentials("Patient with id: " + patientId + " does not exist");
         }
         return patientRepository.findById(patientId).get().getHealthProviderList();
@@ -185,7 +188,7 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public List<Doctor> getDoctorList(int patientId) throws WrongCredentials {
-        if(patientRepository.findById(patientId).equals(Optional.empty())) {
+        if (patientRepository.findById(patientId).equals(Optional.empty())) {
             throw new WrongCredentials("Patient with id: " + patientId + " does not exist");
         }
         return patientRepository.findById(patientId).get().getDoctorList();
@@ -193,7 +196,7 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public List<HealthRecord> getHealthRecordList(int patientId) throws WrongCredentials {
-        if(patientRepository.findById(patientId).equals(Optional.empty())) {
+        if (patientRepository.findById(patientId).equals(Optional.empty())) {
             throw new WrongCredentials("Patient with id: " + patientId + " does not exist");
         }
         return patientRepository.findById(patientId).get().getHealthRecordList();

@@ -23,7 +23,7 @@ public class ComplaintServiceImpl implements ComplaintService {
     }
     @Override
     public Complaint findById(int id) throws WrongCredentials {
-        if(complaintRepository.findById(id).equals(Optional.empty())) {
+        if (complaintRepository.findById(id).equals(Optional.empty())) {
             throw new WrongCredentials("Complaint with id: " + id + " does not exist");
         }
         return complaintRepository.findById(id).get();
@@ -31,7 +31,7 @@ public class ComplaintServiceImpl implements ComplaintService {
 
     @Override
     public void deleteById(int id) throws WrongCredentials {
-        if(complaintRepository.findById(id).equals(Optional.empty())) {
+        if (complaintRepository.findById(id).equals(Optional.empty())) {
             throw new WrongCredentials("Complaint with id: " + id + " does not exist");
         }
         complaintRepository.deleteById(id);
@@ -39,7 +39,7 @@ public class ComplaintServiceImpl implements ComplaintService {
 
     @Override
     public void update(Complaint complaint) throws ValidationException, WrongCredentials {
-        verifyCredentials(Complaint.class,complaint);
+        verifyCredentials(Complaint.class, complaint);
         complaintRepository.save(complaint);
     }
 
@@ -50,7 +50,7 @@ public class ComplaintServiceImpl implements ComplaintService {
 
     @Override
     public void save(Complaint complaint) throws ValidationException, WrongCredentials {
-        verifyCredentials(Complaint.class,complaint);
+        verifyCredentials(Complaint.class, complaint);
         complaintRepository.save(complaint);
     }
 }

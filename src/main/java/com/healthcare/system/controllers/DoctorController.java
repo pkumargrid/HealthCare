@@ -31,7 +31,7 @@ public class DoctorController {
     @PreAuthorize("hasRole('healthProvider')")
     @Operation(summary = "Save a Doctor", description = "Takes DoctorDTO to register the doctor")
     public ResponseEntity<String> register(@RequestBody DoctorDTO doctorDTO) {
-        try{
+        try {
             doctorService.register(doctorDTO);
             return new ResponseEntity<>("Saved Doctor successfully!", HttpStatus.CREATED);
         } catch (ValidationException v) {

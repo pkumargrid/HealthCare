@@ -22,14 +22,14 @@ public class HealthRecordServiceImpl implements HealthRecordService {
     }
     @Override
     public void save(HealthRecord healthRecord) throws ValidationException, WrongCredentials {
-        verifyCredentials(HealthRecord.class,healthRecord);
+        verifyCredentials(HealthRecord.class, healthRecord);
         healthRecordRepository.save(healthRecord);
 
     }
 
     @Override
     public HealthRecord getById(int id) throws WrongCredentials {
-        if(healthRecordRepository.findById(id).equals(Optional.empty())) {
+        if (healthRecordRepository.findById(id).equals(Optional.empty())) {
             throw new WrongCredentials("HealthRecord with id: " + id + " does not exist");
         }
         return healthRecordRepository.findById(id).get();
@@ -37,7 +37,7 @@ public class HealthRecordServiceImpl implements HealthRecordService {
 
     @Override
     public void deleteById(int id) throws WrongCredentials {
-        if(healthRecordRepository.findById(id).equals(Optional.empty())) {
+        if (healthRecordRepository.findById(id).equals(Optional.empty())) {
             throw new WrongCredentials("HealthRecord with id: " + id + " does not exist");
         }
         healthRecordRepository.deleteById(id);
@@ -45,7 +45,7 @@ public class HealthRecordServiceImpl implements HealthRecordService {
 
     @Override
     public void update(HealthRecord healthRecord) throws ValidationException, WrongCredentials {
-        verifyCredentials(HealthRecord.class,healthRecord);
+        verifyCredentials(HealthRecord.class, healthRecord);
         healthRecordRepository.save(healthRecord);
     }
 

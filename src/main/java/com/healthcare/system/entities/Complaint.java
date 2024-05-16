@@ -19,9 +19,10 @@ public class Complaint {
     private String text;
 
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
-    @JoinColumn(name ="patient_id")
+    @JoinColumn(name = "patient_id")
     @JsonBackReference
     private Patient patient;
+
 
     private int type;
     private String tableName;

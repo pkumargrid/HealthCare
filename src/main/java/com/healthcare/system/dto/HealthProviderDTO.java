@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class HealthProviderDTO{
+public class HealthProviderDTO {
     private Integer id;
     private String name;
     private String password;
