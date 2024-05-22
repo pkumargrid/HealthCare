@@ -7,6 +7,11 @@ import com.healthcare.system.exceptions.ValidationException;
 import com.healthcare.system.exceptions.WrongCredentials;
 import com.healthcare.system.services.DoctorService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +35,13 @@ public class DoctorController {
     @PostMapping("/")
     @PreAuthorize("hasRole('healthProvider')")
     @Operation(summary = "Save a Doctor", description = "Takes DoctorDTO to register the doctor")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", content = { @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = String.class)) }),
+            @ApiResponse(responseCode = "400", description = "Incorrect credentials",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = String.class))}),
+            @ApiResponse(responseCode = "400", description = "User not authorized",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = String.class))})})
     public ResponseEntity<String> register(@RequestBody DoctorDTO doctorDTO) {
         try {
             doctorService.register(doctorDTO);
@@ -43,6 +55,8 @@ public class DoctorController {
 
     @GetMapping("/")
     @Operation(summary = "FindAll Doctors", description = "Finds all the doctors in the health care system")
+    @ApiResponse(responseCode = "200", content = { @Content(mediaType = "application/json",
+            array = @ArraySchema(schema = @Schema(implementation = Doctor.class))) })
     public ResponseCrudDTO<List<Doctor>> findAll() {
         List<Doctor> doctors = doctorService.findAll();
         return new ResponseCrudDTO<>("Fetched Doctors Successfully!", 200, doctors);

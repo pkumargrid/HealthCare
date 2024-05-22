@@ -3,6 +3,9 @@ package com.healthcare.system.controllers;
 import com.healthcare.system.dto.AuthRequest;
 import com.healthcare.system.services.JwtService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,6 +30,8 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     @Operation(summary = "Logins a User", description = "Takes AuthRequest containing credentials to login a user")
+    @ApiResponse(responseCode = "200", content = { @Content(mediaType = "application/json",
+            schema = @Schema(implementation = String.class)) })
     public String login(@RequestBody AuthRequest authRequest) {
         Authentication authentication =
                 authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
@@ -39,6 +44,8 @@ public class AuthenticationController {
     }
 
     @GetMapping("/user")
+    @ApiResponse(responseCode = "200", content = { @Content(mediaType = "application/json",
+            schema = @Schema(implementation = Object.class)) })
     @Operation(summary = "Gets a User", description = "Helps in getting the logged in user")
     public Object getUser() {
         return  SecurityContextHolder.getContext().getAuthentication().getPrincipal();

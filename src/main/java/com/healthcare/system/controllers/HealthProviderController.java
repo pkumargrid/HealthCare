@@ -7,6 +7,11 @@ import com.healthcare.system.exceptions.ValidationException;
 import com.healthcare.system.exceptions.WrongCredentials;
 import com.healthcare.system.services.HealthProviderService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +33,13 @@ public class HealthProviderController {
     @PostMapping("/")
     @PreAuthorize("hasRole('healthProvider')")
     @Operation(summary = "Save a HealthProvider", description = "Takes HealthProviderDTO to register the doctor")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", content = { @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = String.class)) }),
+            @ApiResponse(responseCode = "400", description = "Incorrect credentials",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = String.class))}),
+            @ApiResponse(responseCode = "400", description = "User not authorized",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = String.class))})})
     public ResponseEntity<String> register(@RequestBody HealthProviderDTO healthProviderDTO) {
         try {
             healthProviderService.register(healthProviderDTO);
@@ -41,6 +53,8 @@ public class HealthProviderController {
 
     @GetMapping("/")
     @Operation(summary = "FindAll HealthProviders", description = "Finds all the healthProviders in the health care system")
+    @ApiResponse(responseCode = "200", content = { @Content(mediaType = "application/json",
+            array = @ArraySchema(schema = @Schema(implementation = HealthProvider.class))) })
     public ResponseCrudDTO<List<HealthProvider>> findAll() {
         List<HealthProvider> healthProviders = healthProviderService.findAll();
         return new ResponseCrudDTO<>("Fetched HealthProviders Successfully!", 200, healthProviders);

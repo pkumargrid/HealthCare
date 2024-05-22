@@ -84,10 +84,8 @@ public class AlongWithJpaSaveChild {
     void testMergeChildWithParentPresentInDatabase() {
         Complaint complaint = Complaint.builder().id(1).text("hello").tableName("doctor").type(1).build();
         Patient patient = Patient.builder().id(1).name("Ansh Makkar").email("pat@gmail.com").build();
-        System.out.println(patient.getId());
-        entityManager.merge(patient);
-        System.out.println(patient.getId());
-        complaint.setPatient(patient);
+        Patient patient1 = entityManager.merge(patient);
+        complaint.setPatient(patient1);
         entityManager.merge(complaint);
         List<Patient> patients = entityManager.createQuery("select p from Patient p", Patient.class).getResultList();
         patients.forEach(p -> System.out.println(p.getId() + " " + p.getName() + " " + p.getEmail()));
